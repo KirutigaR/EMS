@@ -8,6 +8,6 @@ namespace EMS.Repository
     public class CommonRepo
     {
 
-
+        int a;
     }
 }

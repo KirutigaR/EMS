@@ -9,5 +9,6 @@ namespace EMS.Controllers
 {
     public class CommonController : ApiController
     {
+        public string name;
     }
 }

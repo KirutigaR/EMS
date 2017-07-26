@@ -7,6 +7,5 @@ namespace EMS.Repository
 {
     public class CommonRepo
     {
-
     }
 }

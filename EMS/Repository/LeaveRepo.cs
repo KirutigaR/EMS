@@ -28,26 +28,6 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static decimal GetYearleave(string Leavetype)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from lt in datacontext.Leave_type
-                            where lt.type_name == Leavetype
-                            select lt.days_per_year;
-                return query.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                return 0;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
+       
     }
 }

@@ -28,15 +28,28 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/ApplyLeave")]
-        public HttpResponseMessage ApplyLeave()
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                Leave_type leave_type = new Leave_type();
+        //[Route("api/ApplyLeave")]
+        //[HttpPost]
+        //public HttpResponseMessage ApplyLeave(int id, string leave_type = "", DateTime? from_date = null, DateTime? to_date = null)
+        //{
+        //    HttpResponseMessage response = null;
+        //    try
+        //    {
+        //        Employee employee = EmployeeRepo.GetEmployeeById(id);
+        //        string gender = employee.gender;
+        //        if (from_date < DateTime.Now || to_date < DateTime.Now || to_date < from_date)
+        //        {
+        //            //ViewData["Date"] = "Your date is past date. so please select valid Date";
+        //            response = Request.CreateResponse(HttpStatusCode.OK, "Your date is past date. so please select valid Date");
+        //        }
+        //        else
+        //        {
+        //            if(gender == "male")
+        //            {
 
-            }
-        }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

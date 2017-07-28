@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TimeSheetController.cs" />
     <Compile Include="Employee.cs">
@@ -153,6 +154,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CommonRepo.cs" />
     <Compile Include="Repository\EmployeeRepo.cs" />
+    <Compile Include="Repository\LeaveRepo.cs" />
     <Compile Include="Repository\ProjectRepo.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>

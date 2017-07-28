@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\user\Documents\Visual Studio 2017\Projects\EMS\EMS\EMSModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\User1\Source\Repos\EMS\EMS\EMSModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

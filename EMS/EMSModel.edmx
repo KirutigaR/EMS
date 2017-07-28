@@ -28,6 +28,7 @@
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
           <Property Name="Year_of_experence" Type="decimal" Precision="3" Scale="1" Nullable="false" />
+          <Property Name="gender" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -425,6 +426,7 @@
           <NavigationProperty Name="Project_role" Relationship="Self.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
           <NavigationProperty Name="Timesheets" Relationship="Self.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
           <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -828,6 +830,7 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="EMSModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="Year_of_experence" ColumnName="Year_of_experence" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />

@@ -23,6 +23,7 @@ namespace EMS
         public int id { get; set; }
         public string client_name { get; set; }
         public string client_type { get; set; }
+        public int is_active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Project> Projects { get; set; }

@@ -34,6 +34,7 @@ namespace EMS
         public int user_id { get; set; }
         public int reporting_to { get; set; }
         public decimal Year_of_experence { get; set; }
+        public string gender { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employee1 { get; set; }

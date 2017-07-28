@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="EMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="id" />
@@ -12,6 +12,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="client_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="client_type" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -26,6 +27,7 @@
           <Property Name="contact_no" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
+          <Property Name="Year_of_experence" Type="decimal" Precision="3" Scale="1" Nullable="false" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -388,8 +390,7 @@
             <End Role="User_role" EntitySet="User_role" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="EMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -401,6 +402,7 @@
           <Property Name="client_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="client_type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Projects" Relationship="Self.FK__Project__client___34C8D9D1" FromRole="Client" ToRole="Project" />
+          <Property Name="is_active" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -422,6 +424,7 @@
           <NavigationProperty Name="Leavebalance_sheet" Relationship="Self.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
           <NavigationProperty Name="Project_role" Relationship="Self.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
           <NavigationProperty Name="Timesheets" Relationship="Self.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
+          <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -815,6 +818,7 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="EMSModel.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="client_name" ColumnName="client_name" />
                 <ScalarProperty Name="client_type" ColumnName="client_type" />
@@ -824,6 +828,7 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="EMSModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Year_of_experence" ColumnName="Year_of_experence" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />
                 <ScalarProperty Name="last_name" ColumnName="last_name" />
@@ -970,7 +975,6 @@
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 
@@ -15,21 +16,29 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Route("api/employee/create")]
-        public HttpResponseMessage CreateNewEmployee(Employee Details)
+        public HttpResponseMessage CreateNewEmployee(Employee employee)
         {
             HttpResponseMessage Response = null;
             
             try
             {
-                if(Details!=null)
+                if(employee!=null)
                 {
-                    User user_details = new User();
-                    user_details.user_name = Details.email;
-                    user_details.password = Details.first_name+"jaishu"; 
-                    EmployeeRepo.CreateNewUser(user_details);
-                    Details.user_id = user_details.id;
-                    EmployeeRepo.CreateNewEmployee(Details);
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
+                    Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
+                    if (existingInstance == null)
+                    {
+                        User user = new User();
+                        user.user_name = employee.email;
+                        user.password = employee.first_name + "jaishu";
+                        EmployeeRepo.CreateNewUser(user);
+                        employee.user_id = user.id;
+                        EmployeeRepo.CreateNewEmployee(employee);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
+                    }
+                    else
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Employee ID already exists", "Employee ID already exists"));
+                    }
                 }
                 else
                 {
@@ -45,13 +54,13 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/list")]
+        [Route("api/employee/get/list")]
         public HttpResponseMessage GetEmployeeList()
         {
             HttpResponseMessage Response = null;
             try
             {
-                List<Employee> Emp_List = EmployeeRepo.GetEmployeeList();
+                List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList();
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Emp_List));
             }
             catch (Exception exception)
@@ -63,7 +72,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/{e_id?}")]
+        [Route("api/employee/get/{e_id?}")]
         public HttpResponseMessage GetEmployeeById(int e_id)
         {
             HttpResponseMessage Response = null;
@@ -71,8 +80,15 @@ namespace EMS.Controllers
             {
                 if(e_id!=0)
                 {
-                    Employee employee = EmployeeRepo.GetEmployeeById(e_id);
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", employee));
+                    EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsById(e_id);
+                    if (existingInstance != null)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existingInstance));
+                    }
+                    else
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Employee ID doesnot exists", "Employee ID doesnot exists"));
+                    }
                 }
                 else
                 {
@@ -88,30 +104,40 @@ namespace EMS.Controllers
             return Response;
         }
 
+        [HttpPost]
         [Route("api/employee/edit")]
-        public HttpResponseMessage EditEmployee(int e_id)
+        public HttpResponseMessage EditEmployee(Employee employee)
         {
-            HttpResponseMessage Response = null;
+            HttpResponseMessage response = null;
             try
             {
-                if(e_id!=0)
+                if (employee != null )
                 {
-                    Employee employee_details = EmployeeRepo.GetEmployeeById(e_id);
-                    EmployeeRepo.EditEmployee(employee_details);
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee details Updated successfully!"));
+                    Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
+                    if (existingInstance != null)
+                    {
+                        employee.user_id = existingInstance.user_id;
+                        EmployeeRepo.EditEmployee(employee);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee details Updated successfully!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Employee ID", "Invalid Employee ID"));
+                    }
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
                 }
             }
             catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
-            return Response;
+            return response;
         }
+        
     }
 }

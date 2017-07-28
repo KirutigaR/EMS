@@ -143,6 +143,7 @@
     <Compile Include="Leave_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
@@ -169,6 +170,7 @@
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utility\EMSResponseMessage.cs" />
+    <Compile Include="Utility\PasswordGenerator.cs" />
     <Compile Include="Utility\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -189,7 +191,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 
@@ -12,6 +13,7 @@ namespace EMS.Controllers
 {
     public class ProjectController : ApiController
     {
+        [HttpPost]
         [Route("api/create/client")]
         public HttpResponseMessage CreateNewClient(Client client)
         {
@@ -20,21 +22,32 @@ namespace EMS.Controllers
             {
                 if(client != null)
                 {
-                    ProjectRepo.CreateNewClient(client);
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client added successfully"));
+                    Client existingInstance = ProjectRepo.GetClientById(client.id);
+                    if(existingInstance == null)
+                    {
+                        ProjectRepo.CreateNewClient(client);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client added successfully"));
+                    }
+                    else
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Client ID already exists", "Client ID already exists"));
+                    }
                 }
                 else
                 {
                     Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
             return Response;
         }
+
+        [HttpPost]
         [Route("api/create/project")]
         public HttpResponseMessage CreateNewProject(Project project)
         {
@@ -43,20 +56,231 @@ namespace EMS.Controllers
             {
                 if (project != null)
                 {
-                    ProjectRepo.CreateNewProject(project);
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project added successfully"));
+                    Project existingInstance = ProjectRepo.GetProjectById(project.id);
+                    if (existingInstance == null)
+                    {
+                        ProjectRepo.CreateNewProject(project);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project added successfully"));                    
+                    }
+                    else
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Project ID already exists", "Project ID already exists"));
+                    }
                 }
                 else
                 {
                     Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
             return Response;
+        }
+
+        [Route("api/get/project/list")]
+        public HttpResponseMessage GetProjectList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ProjectModel> Project_List = ProjectRepo.GetProjectList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/get/client/list")]
+        public HttpResponseMessage GetClientList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ClientModel> Client_List = ProjectRepo.GetClientList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Client_List));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/get/client/{c_id?}")]
+        public HttpResponseMessage GetClientById(int c_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(c_id!=0)
+                {
+                    ClientModel existinginstance = ProjectRepo.GetClientDetailsById(c_id);
+                    if(existinginstance != null)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existinginstance));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Client ID doesnot exists", "Client ID doesnot exists"));
+                    }
+                }
+                else
+                {
+                   response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/get/project/{p_id?}")]
+        public HttpResponseMessage GetProjectById(int p_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (p_id != 0)
+                {
+                    ProjectModel existinginstance = ProjectRepo.GetProjectDetailsById(p_id);
+                    if (existinginstance != null)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existinginstance));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Project ID doesnot exists", "Project ID doesnot exists"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [HttpPost]
+        [Route("api/project/edit")]
+        public HttpResponseMessage EditProjectDetails(Project project)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (project != null)
+                {
+                    Project existingInstance = ProjectRepo.GetProjectById(project.id);
+                    if (existingInstance != null)
+                    {
+                        ProjectRepo.EditProject(project);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project details Updated successfully!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Project ID", "Invalid Project ID"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [HttpPost]
+        [Route("api/client/edit")]
+        public HttpResponseMessage EditClientDetails(Client client)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (client != null)
+                {
+                    Client existingInstance = ProjectRepo.GetClientById(client.id);
+                    if (existingInstance != null)
+                    {
+                        ProjectRepo.EditClient(client);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details Updated successfully!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("api/client/drop/{c_id}")]
+        public HttpResponseMessage DropClient(int c_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(c_id!=0)
+                {
+                    Client existinginstace = ProjectRepo.GetClientById(c_id);
+                    if(existinginstace != null)
+                    {
+                        ProjectRepo.DropClient(c_id);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details dropped!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
         }
     }
 }

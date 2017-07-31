@@ -97,7 +97,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
-                return null;
+                throw exception;
             }
             finally
             {
@@ -130,7 +130,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
-                return null;
+                throw exception;
             }
             finally
             {
@@ -152,7 +152,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
-                return null;
+                throw exception;
             }
             finally
             {
@@ -179,6 +179,59 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        
+        public static void InvalidEmployee(Employee existinginstance)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                //var query = from employee in datacontext.Employees
+                //            join user in datacontext.Users
+                //            on employee.user_id equals user.id
+                //            where employee.id == e_id && user.is_active ==1
+                //            select user;
+                var query = from user in datacontext.Users
+                            where existinginstance.user_id == user.id && user.is_active==1
+                            select user;
+                User user_details = query.FirstOrDefault();
+                user_details.is_active = 0;
+                datacontext.Entry(user_details).State = EntityState.Modified;
+                datacontext.SaveChanges();
+                //datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;
+                //datacontext.SaveChanges();
+            }
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void AssignEmployeeRole(User_role user_role)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.User_role.Add(user_role);
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
             }
             finally
             {

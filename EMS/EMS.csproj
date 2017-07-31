@@ -171,6 +171,7 @@
     <Compile Include="User_role.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Constants.cs" />
     <Compile Include="Utility\EMSResponseMessage.cs" />
     <Compile Include="Utility\PasswordGenerator.cs" />
     <Compile Include="Utility\Utils.cs" />

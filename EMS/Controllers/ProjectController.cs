@@ -6,18 +6,27 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using EMS.Repository;
+using EMS.Utility;
 
 namespace EMS.Controllers
 {
     public class ProjectController : ApiController
     {
-        [Route("api/CreateNewClient")]
-        public HttpResponseMessage CreateNewClient()
+        [Route("api/create/client")]
+        public HttpResponseMessage CreateNewClient(Client client)
         {
             HttpResponseMessage Response = null;
             try
             {
-                ProjectRepo.CreateNewClient();
+                if(client != null)
+                {
+                    ProjectRepo.CreateNewClient(client);
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client added successfully"));
+                }
+                else
+                {
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
+                }
             }
             catch (Exception e)
             {
@@ -26,13 +35,21 @@ namespace EMS.Controllers
             }
             return Response;
         }
-        [Route("api/CreateNewProject")]
-        public HttpResponseMessage CreateNewProject()
+        [Route("api/create/project")]
+        public HttpResponseMessage CreateNewProject(Project project)
         {
             HttpResponseMessage Response = null;
             try
             {
-                ProjectRepo.CreateNewProject();
+                if (project != null)
+                {
+                    ProjectRepo.CreateNewProject(project);
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project added successfully"));
+                }
+                else
+                {
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
+                }
             }
             catch (Exception e)
             {

@@ -28,15 +28,15 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/ApplyLeave")]
-        public HttpResponseMessage ApplyLeave()
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                Leave_type leave_type = new Leave_type();
+        //[Route("api/ApplyLeave")]
+        //public HttpResponseMessage ApplyLeave()
+        //{
+        //    HttpResponseMessage response = null;
+        //    try
+        //    {
+        //        Leave_type leave_type = new Leave_type();
 
-            }
-        }
+        //    }
+        //}
     }
 }

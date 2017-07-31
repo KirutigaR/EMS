@@ -30,9 +30,18 @@ namespace EMS.Controllers
                         User user = new User();
                         user.user_name = employee.email;
                         user.password = employee.first_name + "jaishu";
+                        user.is_active = 1;
                         EmployeeRepo.CreateNewUser(user);
                         employee.user_id = user.id;
                         EmployeeRepo.CreateNewEmployee(employee);
+                        if(employee.gender == "male" )
+                        {
+                            EmployeeRepo.InsertLeaveBalance(employee, Constants.male_leave_type);
+                        }
+                        else
+                        {
+                            EmployeeRepo.InsertLeaveBalance(employee, Constants.female_leave_type);
+                        }
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
                     }
                     else
@@ -54,7 +63,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/get/list")]
+        [Route("api/get/employee/list")]
         public HttpResponseMessage GetEmployeeList()
         {
             HttpResponseMessage Response = null;
@@ -72,7 +81,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/get/{e_id?}")]
+        [Route("api/get/employee/{e_id?}")]
         public HttpResponseMessage GetEmployeeById(int e_id)
         {
             HttpResponseMessage Response = null;

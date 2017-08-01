@@ -110,6 +110,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\TimeSheetController.cs" />
     <Compile Include="Employee.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
@@ -144,7 +145,10 @@
     <Compile Include="Leave_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\NewEmployee.cs" />
+    <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
@@ -156,6 +160,7 @@
     <Compile Include="Repository\EmployeeRepo.cs" />
     <Compile Include="Repository\LeaveRepo.cs" />
     <Compile Include="Repository\ProjectRepo.cs" />
+    <Compile Include="Repository\RoleRepo.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>

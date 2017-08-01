@@ -16,14 +16,25 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Route("api/employee/create")]
-        public HttpResponseMessage CreateNewEmployee(Employee employee)
+        public HttpResponseMessage CreateNewEmployee(NewEmployee new_employee)
         {
             HttpResponseMessage Response = null;
             
             try
             {
-                if(employee!=null)
+                if(new_employee!=null)
                 {
+                    Employee employee = new Employee();
+                    employee.id = new_employee.id;
+                    employee.first_name = new_employee.first_name;
+                    employee.last_name = new_employee.last_name;
+                    employee.email = new_employee.email;
+                    employee.date_of_birth = new_employee.date_of_birth;
+                    employee.date_of_joining = new_employee.date_of_joining;
+                    employee.contact_no = new_employee.contact_no;
+                    employee.reporting_to = new_employee.reporting_to;
+                    employee.Year_of_experence = new_employee.Year_of_experence;
+                
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
                     if (existingInstance == null)
                     {
@@ -34,6 +45,10 @@ namespace EMS.Controllers
                         EmployeeRepo.CreateNewUser(user);
                         employee.user_id = user.id;
                         EmployeeRepo.CreateNewEmployee(employee);
+                        User_role user_role = new User_role();
+                        user_role.user_id = user.id;
+                        user_role.role_id = new_employee.role_id;
+                        EmployeeRepo.AssignEmployeeRole(user_role);
                         if(employee.gender == "male" )
                         {
                             EmployeeRepo.InsertLeaveBalance(employee, Constants.male_leave_type);
@@ -148,5 +163,38 @@ namespace EMS.Controllers
             return response;
         }
         
+        [HttpGet]
+        [Route("api/employee/invalid/{e_id?}")]
+        public HttpResponseMessage InvalidEmployee(int e_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(e_id !=0 )
+                {
+                    Employee existinginstance = EmployeeRepo.GetEmployeeById(e_id);
+                    if(existinginstance != null)
+                    {
+                        EmployeeRepo.InvalidEmployee(existinginstance);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee accounts closed!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Employee ID", "Invalid Employee ID"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

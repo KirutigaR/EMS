@@ -28,7 +28,7 @@ namespace EMS
         public string status { get; set; }
         public string po { get; set; }
         public string project_description { get; set; }
-        public Nullable<int> client_id { get; set; }
+        public int client_id { get; set; }
     
         public virtual Client Client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

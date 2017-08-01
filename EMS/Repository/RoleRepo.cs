@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using EMS.Models;
 
 namespace EMS.Repository
 {
     public class RoleRepo
     {
-        public static List<Role> GetRoleList()
+        public static List<RoleList> GetRoleList()
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from roles in datacontext.Roles
-                            select roles;
+                            select new RoleList
+                            {
+                                id = roles.id,
+                                role_name = roles.role_name,
+                                role_description = roles.role_description,
+                                role_type = roles.role_type
+                            };
                 return query.ToList();
             }
             catch(Exception exception)

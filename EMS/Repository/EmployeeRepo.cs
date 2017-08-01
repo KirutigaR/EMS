@@ -238,5 +238,28 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static int GetEmployeeStatusByID(int e_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from empl in datacontext.Employees
+                            join user in datacontext.Users
+                            on empl.user_id equals user.id
+                            select user.is_active;
+                return query.FirstOrDefault();
+            }
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

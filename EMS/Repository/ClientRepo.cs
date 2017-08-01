@@ -8,14 +8,14 @@ using EMS.Models;
 
 namespace EMS.Repository
 {
-	public class ProjectRepo
+	public class ClientRepo
 	{
-        public static void CreateNewProject(Project project)
+        public static void CreateNewClient(Client client)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                datacontext.Projects.Add(project);
+                datacontext.Clients.Add(client);
                 datacontext.SaveChanges();
             }
             catch (Exception exception)
@@ -28,15 +28,16 @@ namespace EMS.Repository
             {
                 datacontext.Dispose();
             }
+
         }
 
-        public static Project GetProjectById(int p_id)
+        public static Client GetClientById(int c_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from x in datacontext.Projects
-                            where x.id == p_id
+                var query = from x in datacontext.Clients
+                            where x.id == c_id
                             select x;
                 return query.FirstOrDefault();
             }
@@ -52,22 +53,18 @@ namespace EMS.Repository
             }
         }
 
-        public static ProjectModel GetProjectDetailsById(int p_id)
+        public static ClientModel GetClientDetailsById(int c_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from project in datacontext.Projects
-                            where project.id == p_id
-                            select new ProjectModel
+                var query = from client in datacontext.Clients
+                            where client.id == c_id
+                            select new ClientModel
                             {
-                                project_name = project.project_name,
-                                start_date = project.start_date,
-                                end_date = project.end_date,
-                                status = project.status,
-                                po = project.po,
-                                project_description = project.project_description,
-                                client_id = (int)project.client_id
+                                client_name = client.client_name,
+                                client_type = client.client_type,
+                                is_active = client.is_active
                             };
                 return query.FirstOrDefault();
             }
@@ -83,25 +80,21 @@ namespace EMS.Repository
             }
         }
 
-        public static List<ProjectModel> GetProjectList()
+        public static List<ClientModel> GetClientList()
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from project in datacontext.Projects
-                            select new ProjectModel
+                var query = from client in datacontext.Clients
+                            select new ClientModel
                             {
-                                project_name = project.project_name,
-                                start_date = project.start_date,
-                                end_date = project.end_date,
-                                status = project.status,
-                                po = project.po,
-                                project_description = project.project_description,
-                                client_id = (int)project.client_id
+                                client_name = client.client_name,
+                                client_type = client.client_type,
+                                is_active = client.is_active
                             };
                 return query.ToList();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
@@ -112,13 +105,12 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-
-        public static void EditProject(Project project)
+        public static void EditClient(Client client)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                datacontext.Entry(project).State = EntityState.Modified;
+                datacontext.Entry(client).State = EntityState.Modified;
                 datacontext.SaveChanges();
             }
             catch (Exception exception)
@@ -132,16 +124,20 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-       
-        public static void ProjectRoleAssignment(Project_role prj_role)
+
+        public static void DropClient(int c_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                datacontext.Project_role.Add(prj_role);
+                var query = from client in datacontext.Clients
+                            where client.id == c_id
+                            select client;
+                query.FirstOrDefault().is_active = 0;
+                datacontext.Entry(query.FirstOrDefault()).State = EntityState.Modified;
                 datacontext.SaveChanges();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());

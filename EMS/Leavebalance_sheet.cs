@@ -17,7 +17,7 @@ namespace EMS
         public int id { get; set; }
         public int employee_id { get; set; }
         public int leavetype_id { get; set; }
-        public int no_of_days { get; set; }
+        public Nullable<decimal> no_of_days { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual Leave_type Leave_type { get; set; }

@@ -16,24 +16,24 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Route("api/employee/create")]
-        public HttpResponseMessage CreateNewEmployee(NewEmployee new_employee)
+        public HttpResponseMessage CreateNewEmployee(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
             
             try
             {
-                if(new_employee!=null)
+                if(employee_details != null)
                 {
                     Employee employee = new Employee();
-                    employee.id = new_employee.id;
-                    employee.first_name = new_employee.first_name;
-                    employee.last_name = new_employee.last_name;
-                    employee.email = new_employee.email;
-                    employee.date_of_birth = new_employee.date_of_birth;
-                    employee.date_of_joining = new_employee.date_of_joining;
-                    employee.contact_no = new_employee.contact_no;
-                    employee.reporting_to = new_employee.reporting_to;
-                    employee.Year_of_experence = new_employee.Year_of_experence;
+                    employee.id = employee_details.id;
+                    employee.first_name = employee_details.first_name;
+                    employee.last_name = employee_details.last_name;
+                    employee.email = employee_details.email;
+                    employee.date_of_birth = employee_details.date_of_birth;
+                    employee.date_of_joining = employee_details.date_of_joining;
+                    employee.contact_no = employee_details.contact_no;
+                    employee.reporting_to = employee_details.reporting_to;
+                    employee.Year_of_experence = employee_details.Year_of_experence;
                 
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
                     if (existingInstance == null)
@@ -47,7 +47,7 @@ namespace EMS.Controllers
                         EmployeeRepo.CreateNewEmployee(employee);
                         User_role user_role = new User_role();
                         user_role.user_id = user.id;
-                        user_role.role_id = new_employee.role_id;
+                        user_role.role_id = employee_details.role_id;
                         EmployeeRepo.AssignEmployeeRole(user_role);
                         if(employee.gender == "male" )
                         {

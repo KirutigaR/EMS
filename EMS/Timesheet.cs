@@ -16,10 +16,10 @@ namespace EMS
     {
         public int id { get; set; }
         public int employee_id { get; set; }
-        public int work_hours { get; set; }
         public int task_id { get; set; }
         public System.DateTime work_date { get; set; }
         public int work_hour { get; set; }
+        public int project_id { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual Task Task { get; set; }

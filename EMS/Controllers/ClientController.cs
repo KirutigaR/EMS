@@ -11,27 +11,26 @@ using EMS.Utility;
 
 namespace EMS.Controllers
 {
-    public class ProjectController : ApiController
+    public class ClientController : ApiController
     {
-        
         [HttpPost]
-        [Route("api/project/create")]
-        public HttpResponseMessage CreateNewProject(Project project)
+        [Route("api/create/client")]
+        public HttpResponseMessage CreateNewClient(Client client)
         {
             HttpResponseMessage Response = null;
             try
             {
-                if (project != null)
+                if (client != null)
                 {
-                    Project existingInstance = ProjectRepo.GetProjectById(project.id);
+                    Client existingInstance = ClientRepo.GetClientById(client.id);
                     if (existingInstance == null)
                     {
-                        ProjectRepo.CreateNewProject(project);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project added successfully"));                    
+                        ClientRepo.CreateNewClient(client);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client added successfully"));
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Project ID already exists", "Project ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Client ID already exists", "Client ID already exists"));
                     }
                 }
                 else
@@ -48,14 +47,15 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/project/list")]
-        public HttpResponseMessage GetProjectList()
+
+        [Route("api/get/client/list")]
+        public HttpResponseMessage GetClientList()
         {
             HttpResponseMessage response = null;
             try
             {
-                List<ProjectModel> Project_List = ProjectRepo.GetProjectList();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
+                List<ClientModel> Client_List = ClientRepo.GetClientList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Client_List));
             }
             catch (Exception exception)
             {
@@ -66,23 +66,22 @@ namespace EMS.Controllers
             return response;
         }
 
-        
-        [Route("api/get/project/{p_id?}")]
-        public HttpResponseMessage GetProjectById(int p_id)
+        [Route("api/get/client/{c_id?}")]
+        public HttpResponseMessage GetClientById(int c_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                if (p_id != 0)
+                if (c_id != 0)
                 {
-                    ProjectModel existinginstance = ProjectRepo.GetProjectDetailsById(p_id);
+                    ClientModel existinginstance = ClientRepo.GetClientDetailsById(c_id);
                     if (existinginstance != null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existinginstance));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Project ID doesnot exists", "Project ID doesnot exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Client ID doesnot exists", "Client ID doesnot exists"));
                     }
                 }
                 else
@@ -100,23 +99,23 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/project/edit")]
-        public HttpResponseMessage EditProjectDetails(Project project)
+        [Route("api/client/edit")]
+        public HttpResponseMessage EditClientDetails(Client client)
         {
             HttpResponseMessage response = null;
             try
             {
-                if (project != null)
+                if (client != null)
                 {
-                    Project existingInstance = ProjectRepo.GetProjectById(project.id);
+                    Client existingInstance = ClientRepo.GetClientById(client.id);
                     if (existingInstance != null)
                     {
-                        ProjectRepo.EditProject(project);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project details Updated successfully!"));
+                        ClientRepo.EditClient(client);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details Updated successfully!"));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Project ID", "Invalid Project ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
                     }
                 }
                 else
@@ -133,24 +132,25 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/assign/project/role")]
-        public HttpResponseMessage AssignEmployeeProjectRole(Project_role project_role)
+
+        [HttpGet]
+        [Route("api/client/drop/{c_id}")]
+        public HttpResponseMessage DropClient(int c_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                if(project_role !=null)
+                if (c_id != 0)
                 {
-                    int empl_status = EmployeeRepo.GetEmployeeStatusByID(project_role.employee_id);
-                    ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
-                    if ((empl_status == 1) && (proj != null))
+                    Client existinginstace = ClientRepo.GetClientById(c_id);
+                    if (existinginstace != null)
                     {
-                        ProjectRepo.ProjectRoleAssignment(project_role);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project Role Assigned to the Employee Succesfully"));
+                        ClientRepo.DropClient(c_id);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details dropped!"));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "failure", "Check Project details and employee status"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
                     }
                 }
                 else

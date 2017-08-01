@@ -4,35 +4,35 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1">
-        <EntityTypeShape EntityType="EMSModel.Client" Width="1.5" PointX="1.5" PointY="12.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Employee" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Holiday_List" Width="1.5" PointX="5.75" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="5.25" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Leave_type" Width="1.5" PointX="3" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Leavebalance_sheet" Width="1.5" PointX="8.25" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Project_role" Width="1.5" PointX="8.25" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Role" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Task" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.Timesheet" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.User_role" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EMSModel.User" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
-        <AssociationConnector Association="EMSModel.FK__Project__client___34C8D9D1" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Employee__report__31EC6D26" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Employee__user_i__30F848ED" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Leave__employee___4316F928" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Leavebala__emplo__46E78A0C" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Project_r__emplo__37A5467C" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Timesheet__emplo__3F466844" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Leave__leavetype__440B1D61" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Leavebala__leave__47DBAE45" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Project_r__proje__38996AB5" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Task__project_id__3C69FB99" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Project_r__role___398D8EEE" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__User_role__role___2E1BDC42" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__Timesheet__task___403A8C7D" ManuallyRouted="false" />
-        <AssociationConnector Association="EMSModel.FK__User_role__user___2D27B809" ManuallyRouted="false" />
+      <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1" ZoomLevel="78">
+        <EntityTypeShape EntityType="EMSModel.Client" Width="1.5" PointX="0.75" PointY="15.875" />
+        <EntityTypeShape EntityType="EMSModel.Employee" Width="1.5" PointX="3" PointY="9.625" />
+        <EntityTypeShape EntityType="EMSModel.Holiday_List" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="8.25" PointY="10.5" />
+        <EntityTypeShape EntityType="EMSModel.Leave_type" Width="1.5" PointX="3" PointY="2.75" />
+        <EntityTypeShape EntityType="EMSModel.Leavebalance_sheet" Width="1.5" PointX="5.25" PointY="7.75" />
+        <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="3" PointY="15.25" />
+        <EntityTypeShape EntityType="EMSModel.Project_role" Width="1.5" PointX="5.25" PointY="10.625" />
+        <EntityTypeShape EntityType="EMSModel.Role" Width="1.5" PointX="0.75" PointY="5" />
+        <EntityTypeShape EntityType="EMSModel.Task" Width="1.5" PointX="3" PointY="19.75" />
+        <EntityTypeShape EntityType="EMSModel.Timesheet" Width="1.5" PointX="5.25" PointY="14.5" />
+        <EntityTypeShape EntityType="EMSModel.User_role" Width="1.5" PointX="3" PointY="6.125" />
+        <EntityTypeShape EntityType="EMSModel.User" Width="1.5" PointX="0.75" PointY="8" />
+        <AssociationConnector Association="EMSModel.FK__Project__client___34C8D9D1" />
+        <AssociationConnector Association="EMSModel.FK__Employee__report__31EC6D26" />
+        <AssociationConnector Association="EMSModel.FK__Employee__user_i__30F848ED" />
+        <AssociationConnector Association="EMSModel.FK__Leave__employee___4316F928" />
+        <AssociationConnector Association="EMSModel.FK__Leavebala__emplo__46E78A0C" />
+        <AssociationConnector Association="EMSModel.FK__Project_r__emplo__37A5467C" />
+        <AssociationConnector Association="EMSModel.FK__Timesheet__emplo__3F466844" />
+        <AssociationConnector Association="EMSModel.FK__Leave__leavetype__440B1D61" />
+        <AssociationConnector Association="EMSModel.FK__Leavebala__leave__47DBAE45" />
+        <AssociationConnector Association="EMSModel.FK__Project_r__proje__38996AB5" />
+        <AssociationConnector Association="EMSModel.FK__Task__project_id__3C69FB99" />
+        <AssociationConnector Association="EMSModel.FK__Project_r__role___398D8EEE" />
+        <AssociationConnector Association="EMSModel.FK__User_role__role___2E1BDC42" />
+        <AssociationConnector Association="EMSModel.FK__Timesheet__task___403A8C7D" />
+        <AssociationConnector Association="EMSModel.FK__User_role__user___2D27B809" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

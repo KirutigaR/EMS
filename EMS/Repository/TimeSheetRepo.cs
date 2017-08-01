@@ -8,17 +8,20 @@ using EMS.Models;
 
 namespace EMS.Repository
 {
-	public class ProjectRepo
+	public class TimeSheetRepo
 	{
-        public static void CreateNewProject(Project project)
+        public static void AddTimeSheetRecord(List<Timesheet> sheetrecord)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                datacontext.Projects.Add(project);
+                foreach(Timesheet items in sheetrecord)
+                {
+                    datacontext.Timesheets.Add(items);
+                }
                 datacontext.SaveChanges();
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
@@ -30,44 +33,20 @@ namespace EMS.Repository
             }
         }
 
-        public static Project GetProjectById(int p_id)
+        public static TimeSheetModel GetSheetById(int s_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from x in datacontext.Projects
-                            where x.id == p_id
-                            select x;
-                return query.FirstOrDefault();
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                throw exception;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
-        public static ProjectModel GetProjectDetailsById(int p_id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from project in datacontext.Projects
-                            where project.id == p_id
-                            select new ProjectModel
-                            {
-                                project_name = project.project_name,
-                                start_date = project.start_date,
-                                end_date = project.end_date,
-                                status = project.status,
-                                po = project.po,
-                                project_description = project.project_description,
-                                client_id = (int)project.client_id
+                var query = from sheet in datacontext.Timesheets
+                            where sheet.id == s_id
+                            select new TimeSheetModel {
+                                id = sheet.id,
+                                employee_id = sheet.employee_id,
+                                task_id = sheet.task_id,
+                                project_id = sheet.project_id,
+                                work_date = sheet.work_date,
+                                work_hour = sheet.work_hour
                             };
                 return query.FirstOrDefault();
             }
@@ -83,25 +62,45 @@ namespace EMS.Repository
             }
         }
 
-        public static List<ProjectModel> GetProjectList()
+        public static void UpdateTimeSheetRecord(Timesheet sheetdetails)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from project in datacontext.Projects
-                            select new ProjectModel
+                datacontext.Entry(sheetdetails).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<TimeSheetModel> GetSheetByEmpId(int e_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from sheet in datacontext.Timesheets
+                            where sheet.employee_id == e_id
+                            select new TimeSheetModel
                             {
-                                project_name = project.project_name,
-                                start_date = project.start_date,
-                                end_date = project.end_date,
-                                status = project.status,
-                                po = project.po,
-                                project_description = project.project_description,
-                                client_id = (int)project.client_id
+                                id = sheet.id,
+                                employee_id = sheet.employee_id,
+                                task_id = sheet.task_id,
+                                project_id = sheet.project_id,
+                                work_date = sheet.work_date,
+                                work_hour = sheet.work_hour
                             };
                 return query.ToList();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
@@ -113,13 +112,23 @@ namespace EMS.Repository
             }
         }
 
-        public static void EditProject(Project project)
+        public static List<TimeSheetModel> GetSheetByProjId(int p_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                datacontext.Entry(project).State = EntityState.Modified;
-                datacontext.SaveChanges();
+                var query = from sheet in datacontext.Timesheets
+                            where sheet.project_id == p_id
+                            select new TimeSheetModel
+                            {
+                                id = sheet.id,
+                                employee_id = sheet.employee_id,
+                                task_id = sheet.task_id,
+                                project_id = sheet.project_id,
+                                work_date = sheet.work_date,
+                                work_hour = sheet.work_hour
+                            };
+                return query.ToList();
             }
             catch (Exception exception)
             {
@@ -132,16 +141,19 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-       
-        public static void ProjectRoleAssignment(Project_role prj_role)
+        
+        public static void DeleteTimeSheetRecord(int s_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                datacontext.Project_role.Add(prj_role);
+                var query = from sheet in datacontext.Timesheets
+                            where sheet.id == s_id
+                            select sheet;
+                datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;
                 datacontext.SaveChanges();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());

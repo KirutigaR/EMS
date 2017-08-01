@@ -75,9 +75,9 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from lbs in datacontext.Leavebalance_sheet
-                            where lbs.leavetype_id == id
-                            select lbs.no_of_days;
+                var query = from lbs in datacontext.Leave_type
+                            where lbs.id == id
+                            select lbs.days_per_year;
                 return query.FirstOrDefault();
             }
             catch (Exception e)
@@ -239,6 +239,27 @@ namespace EMS.Repository
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
                 return 0;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static string GetLeaveTypeById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from lv in datacontext.Leave_type
+                            where lv.id == id
+                            select lv.type_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
             }
             finally
             {

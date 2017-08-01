@@ -90,9 +90,8 @@ namespace EMS.Controllers
         {
             HttpResponseMessage response = null;
             try
-            {
-                Holiday_List existingInstance = LeaveRepo.GetHolidayById(holiday_list.id);
-                if(existingInstance != null)
+            {               
+                if (holiday_list != null)
                 {
                     LeaveRepo.CreateHoliday(holiday_list);
                     response = Request.CreateResponse(HttpStatusCode.OK, "Holiday successfully added");
@@ -111,55 +110,79 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/apply/leave")]
         [HttpPost]
-        public HttpResponseMessage ApplyLeave(int id, string leave_type = "", DateTime? from_date = null, DateTime? to_date = null)
+        [Route("api/apply/leave")]
+        public HttpResponseMessage ApplyLeave(Leave leave)
         {
             HttpResponseMessage response = null;
             try
             {
-                Employee employee = EmployeeRepo.GetEmployeeById(id);
-                string gender = employee.gender;
-                Leavebalance_sheet leave_balance = new Leavebalance_sheet();
-                if(leave_type != "" && from_date != null && to_date != null)
+                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
+                string gender = employee_instance.gender;
+                
+                if (leave.from_date < DateTime.Now || (leave.to_date < DateTime.Now && leave.to_date != DateTime.MinValue) || (leave.to_date < leave.from_date && leave.to_date != DateTime.MinValue))
                 {
-                    if (from_date < DateTime.Now || to_date < DateTime.Now || to_date < from_date)
+                    response = Request.CreateResponse(HttpStatusCode.OK, "Your date is past date. so please select valid Date");
+                }
+                else 
+                {
+                    Leavebalance_sheet leave_balance = new Leavebalance_sheet();
+                    string leave_type1 = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                    if (leave_type1 == "ML")
                     {
-                        
-                        response = Request.CreateResponse(HttpStatusCode.OK, "Your date is past date. so please select valid Date");
+                        int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
+                        decimal Ml_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
+                        if (Ml_leave_type != 0)
+                        {
+                            DateTime MLnoofdays = ((DateTime)leave.from_date).AddDays(182);
+                            //leave.maternity_leave = 0;
+                            leave.no_of_days = 182;
+                            leave.to_date = MLnoofdays;
+                            LeaveRepo.EditLeaveHistory(leave);
+                            //LMSRepo.EditEmployeeLeaveByApplyLeave(leave.employee_id, LeaveType, FromDate, MLnoofdays, 182);
+                            //ViewData["MlMessage"] = "Leave successfully Applied";
+                            response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
+                        }
+                        else
+                        {
+                            //ViewData["MLError"] = "you already applied Maternity Leave";
+                            response = Request.CreateResponse(HttpStatusCode.OK, "you already applied Maternity Leave");
+                        }
                     }
-                    else
+                    else if (leave.leavetype_id != 0 && leave.from_date != null && leave.to_date != null)
                     {
                         if (gender == "male")
                         {
                             List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
-                            decimal noofdays = (decimal)Utils.DaysLeft(from_date, to_date, true, holiday);
-                            Leave leave = new Leave();
+                            decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
+                            string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                            Leave leave_instance = new Leave();
                             if (leave_type == "CL")
                             {
                                 int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
                                 decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
                                 if (noofdays > 3)
                                 {
-                                    
+
                                     response = Request.CreateResponse(HttpStatusCode.OK, "CL can't be more than three days");
                                 }
                                 else if (noofdays <= 3)
                                 {
                                     if (Cl_leave_type < noofdays)
                                     {
-                                        
+
                                         response = Request.CreateResponse(HttpStatusCode.OK, "Applied Leave more than Casual Leave. Choose Another LeaveType");
                                     }
                                     else if (Cl_leave_type >= noofdays)
                                     {
                                         Cl_leave_type = Cl_leave_type - noofdays;
                                         //leave.LOP = 0;
+                                        leave.no_of_days = (int)noofdays;
                                         LeaveRepo.EditLeaveHistory(leave);
                                         if (noofdays != 0)
                                         {
-                                            
-                                            response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
+
+                                            response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
                                         }
                                     }
                                 }
@@ -174,19 +197,21 @@ namespace EMS.Controllers
                                     El_leave_type = noofdays - El_leave_type;
                                     LOP_leave_type_id = Math.Abs(LOP_leave_type_id + El_leave_type);
                                     El_leave_type = 0;
+                                    leave.no_of_days = (int)noofdays;
                                     LeaveRepo.EditLeaveHistory(leave);
                                 }
                                 else if (El_leave_type >= noofdays)
                                 {
                                     El_leave_type = El_leave_type - noofdays;
                                     LOP_leave_type_id = 0;
+                                    leave.no_of_days = (int)noofdays;
                                     LeaveRepo.EditLeaveHistory(leave);
                                     if (noofdays != 0)
                                     {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
+
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
                                     }
-                                    
+
 
                                 }
                             }
@@ -199,142 +224,27 @@ namespace EMS.Controllers
                                 if (Cl_leave_type == 0 && El_leave_type == 0)
                                 {
                                     LOP_leave_type_id = LOP_leave_type_id + noofdays;
+                                    leave.no_of_days = (int)noofdays;
                                     LeaveRepo.EditLeaveHistory(leave);
                                     if (noofdays != 0)
                                     {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
-                                    }
-                                }
-                                else if (Cl_leave_type == 0 && El_leave_type > 0)
-                                {
-                                    
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "you can apply the Leave in 'EL'");
-                                }
-                                else if (El_leave_type == 0 && Cl_leave_type > 0)
-                                {
-                                    
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "you can apply the Leave in 'CL'");
-                                }
-                                else if (Cl_leave_type > 0 && El_leave_type > 0)
-                                {
-                                    
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "You have CL, EL leave balance");
-                                }
-                            }
-                            else if(leave_type == "WFH")
-                            {
-                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
-                                decimal WFH_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
-                                if (noofdays <= 2)
-                                {
-                                    LeaveRepo.EditLeaveHistory(leave);
-                                    if (noofdays != 0)
-                                    {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
-                                    }
-                                    else
-                                    {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "applied leave on holiday date");
-                                    }
-                                }
-                                else if (noofdays > 2)
-                                {
-                                    
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "you can apply only two days");
-                                }
-                            }
-                        }
-                        else if(gender == "female")
-                        {
-                            List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
-                            decimal noofdays = (decimal)Utils.DaysLeft(from_date, to_date, true, holiday);
-                            Leave leave = new Leave();
-                            if (leave_type == "CL")
-                            {
-                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
-                                decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
-                                if (noofdays > 3)
-                                {
-                                    
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "CL can't be more than three days");
-                                }
-                                else if (noofdays <= 3)
-                                {
-                                    if (Cl_leave_type < noofdays)
-                                    {
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Applied Leave more than Casual Leave. Choose Another LeaveType");
-                                    }
-                                    else if (Cl_leave_type >= noofdays)
-                                    {
-                                        Cl_leave_type = Cl_leave_type - noofdays;
-                                        //leave.LOP = 0;
-                                        LeaveRepo.EditLeaveHistory(leave);
-                                        if (noofdays != 0)
-                                        {
-                                            
-                                            response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
-                                        }
-                                    }
-                                }
-                            }
-                            else if (leave_type == "EL")
-                            {
-                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
-                                decimal LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
-                                decimal El_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
-                                if (El_leave_type < noofdays)
-                                {
-                                    El_leave_type = noofdays - El_leave_type;
-                                    LOP_leave_type_id = Math.Abs(LOP_leave_type_id + El_leave_type);
-                                    El_leave_type = 0;
-                                    LeaveRepo.EditLeaveHistory(leave);
-                                }
-                                else if (El_leave_type >= noofdays)
-                                {
-                                    El_leave_type = El_leave_type - noofdays;
-                                    LOP_leave_type_id = 0;
-                                    LeaveRepo.EditLeaveHistory(leave);
-                                    if (noofdays != 0)
-                                    {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
-                                    }
-                                    
 
-                                }
-                            }
-                            else if (leave_type == "LOP")
-                            {
-                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
-                                decimal LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
-                                decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
-                                decimal El_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
-                                if (Cl_leave_type == 0 && El_leave_type == 0)
-                                {
-                                    LOP_leave_type_id = LOP_leave_type_id + noofdays;
-                                    LeaveRepo.EditLeaveHistory(leave);
-                                    if (noofdays != 0)
-                                    {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
                                     }
                                 }
                                 else if (Cl_leave_type == 0 && El_leave_type > 0)
                                 {
-                                    
+
                                     response = Request.CreateResponse(HttpStatusCode.OK, "you can apply the Leave in 'EL'");
                                 }
                                 else if (El_leave_type == 0 && Cl_leave_type > 0)
                                 {
-                                    
+
                                     response = Request.CreateResponse(HttpStatusCode.OK, "you can apply the Leave in 'CL'");
                                 }
                                 else if (Cl_leave_type > 0 && El_leave_type > 0)
                                 {
-                                    
+
                                     response = Request.CreateResponse(HttpStatusCode.OK, "You have CL, EL leave balance");
                                 }
                             }
@@ -344,50 +254,156 @@ namespace EMS.Controllers
                                 decimal WFH_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
                                 if (noofdays <= 2)
                                 {
+                                    leave.no_of_days = (int)noofdays;
                                     LeaveRepo.EditLeaveHistory(leave);
                                     if (noofdays != 0)
                                     {
-                                        
-                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
+
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
                                     }
                                     else
                                     {
-                                        
+
                                         response = Request.CreateResponse(HttpStatusCode.OK, "applied leave on holiday date");
                                     }
                                 }
                                 else if (noofdays > 2)
                                 {
-                                    
+
                                     response = Request.CreateResponse(HttpStatusCode.OK, "you can apply only two days");
                                 }
                             }
-                            else if(leave_type == "ML")
+                        }
+                        else if (gender == "female")
+                        {
+                            List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
+                            decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
+                            string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                            Leave leave_instance = new Leave();
+                            if (leave_type == "CL")
                             {
                                 int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
-                                decimal Ml_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
-                                if (Ml_leave_type != 0)
+                                decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
+                                if (noofdays > 3)
                                 {
-                                    DateTime MLnoofdays = ((DateTime)from_date).AddDays(182);                                   
-                                    //leave.maternity_leave = 0;
-                                    LeaveRepo.EditLeaveHistory(leave);
-                                    //LMSRepo.EditEmployeeLeaveByApplyLeave(leave.employee_id, LeaveType, FromDate, MLnoofdays, 182);
-                                    //ViewData["MlMessage"] = "Leave successfully Applied";
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
+
+                                    response = Request.CreateResponse(HttpStatusCode.OK, "CL can't be more than three days");
                                 }
-                                else
+                                else if (noofdays <= 3)
                                 {
-                                    //ViewData["MLError"] = "you already applied Maternity Leave";
-                                    response = Request.CreateResponse(HttpStatusCode.OK, "you already applied Maternity Leave");
+                                    if (Cl_leave_type < noofdays)
+                                    {
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Applied Leave more than Casual Leave. Choose Another LeaveType");
+                                    }
+                                    else if (Cl_leave_type >= noofdays)
+                                    {
+                                        Cl_leave_type = Cl_leave_type - noofdays;
+                                        //leave.LOP = 0;
+                                        leave.no_of_days = (int)noofdays;
+                                        LeaveRepo.EditLeaveHistory(leave);
+                                        if (noofdays != 0)
+                                        {
+
+                                            response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
+                                        }
+                                    }
                                 }
                             }
+                            else if (leave_type == "EL")
+                            {
+                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
+                                decimal LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
+                                decimal El_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
+                                if (El_leave_type < noofdays)
+                                {
+                                    El_leave_type = noofdays - El_leave_type;
+                                    LOP_leave_type_id = Math.Abs(LOP_leave_type_id + El_leave_type);
+                                    El_leave_type = 0;
+                                    leave.no_of_days = (int)noofdays;
+                                    LeaveRepo.EditLeaveHistory(leave);
+                                }
+                                else if (El_leave_type >= noofdays)
+                                {
+                                    El_leave_type = El_leave_type - noofdays;
+                                    LOP_leave_type_id = 0;
+                                    leave.no_of_days = (int)noofdays;
+                                    LeaveRepo.EditLeaveHistory(leave);
+                                    if (noofdays != 0)
+                                    {
+
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
+                                    }
+
+
+                                }
+                            }
+                            else if (leave_type == "LOP")
+                            {
+                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
+                                decimal LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
+                                decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
+                                decimal El_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
+                                if (Cl_leave_type == 0 && El_leave_type == 0)
+                                {
+                                    LOP_leave_type_id = LOP_leave_type_id + noofdays;
+                                    leave.no_of_days = (int)noofdays;
+                                    LeaveRepo.EditLeaveHistory(leave);
+                                    if (noofdays != 0)
+                                    {
+
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied");
+                                    }
+                                }
+                                else if (Cl_leave_type == 0 && El_leave_type > 0)
+                                {
+
+                                    response = Request.CreateResponse(HttpStatusCode.OK, "you can apply the Leave in 'EL'");
+                                }
+                                else if (El_leave_type == 0 && Cl_leave_type > 0)
+                                {
+
+                                    response = Request.CreateResponse(HttpStatusCode.OK, "you can apply the Leave in 'CL'");
+                                }
+                                else if (Cl_leave_type > 0 && El_leave_type > 0)
+                                {
+
+                                    response = Request.CreateResponse(HttpStatusCode.OK, "You have CL, EL leave balance");
+                                }
+                            }
+                            else if (leave_type == "WFH")
+                            {
+                                int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type);
+                                decimal WFH_leave_type = LeaveRepo.GetNoofDaysById(leave_type_id);
+                                if (noofdays <= 2)
+                                {
+                                    leave.no_of_days = (int)noofdays;
+                                    LeaveRepo.EditLeaveHistory(leave);
+                                    if (noofdays != 0)
+                                    {
+
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "Leave successfully Applied" + leave);
+                                    }
+                                    else
+                                    {
+
+                                        response = Request.CreateResponse(HttpStatusCode.OK, "applied leave on holiday date");
+                                    }
+                                }
+                                else if (noofdays > 2)
+                                {
+
+                                    response = Request.CreateResponse(HttpStatusCode.OK, "you can apply only two days");
+                                }
+                            }
+
                         }
+
                     }
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, "Dont Leave the fields");
-                }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, "dont leave the fields");
+                    }
+                }                
                 
             }
             catch (Exception exception)

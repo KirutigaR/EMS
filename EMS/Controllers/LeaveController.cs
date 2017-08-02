@@ -280,7 +280,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, "dont leave the fields");
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_114", "dont leave the fields", "dont leave the fields"));
                     }
                 }                
                 
@@ -332,14 +332,63 @@ namespace EMS.Controllers
             return response;
         }
         [HttpPost]
-        [Route("api/leavepage/balance leave")]
+        [Route("api/leavepage/balanceleave")]
         public HttpResponseMessage GetLeavePageBalanceLeave(Leave leave)
         {
             HttpResponseMessage response = null;
             try
             {
-                Leavebalance_sheet leave_balance_sheet = LeaveRepo.GetLeaveBalanceById(leave.employee_id);
+                List<LeaveBalanceModel> leavebalance = LeaveRepo.GetLeaveBalanceById(leave.employee_id);
+                //LeaveBalanceModel leavebalance = LeaveRepo.GetLeaveBalanceById(leave.employee_id);
+                //Leave_type leave_type = new Leave_type();
+                //leave_type.type_name = 
+                //lbs.leavetype_id = LeaveRepo.GetLeaveBalanceByLeaveId()
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leavebalance));
             }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+        [Route("api/changepassword")]
+        [HttpPost]
+        public HttpResponseMessage ChangePassword(Employee employee, string oldapassword, string new_password, string confirm_password)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                int user_id = LeaveRepo.GetUserIdById(employee.id);
+                User user_instance = LeaveRepo.GetUserById(user_id);
+                if(new_password == confirm_password)
+                {
+                    if(oldapassword == user_instance.password)
+                    {
+                        user_instance.password = new_password;
+                        LeaveRepo.EditUserPassword(user_instance);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Password sucessfully changed"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_115", "password not matched", "password mismatch"));
+                    }
+                    
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_116", "confirm password not match", "new password and confirm password doesnot match"));
+                }
+               
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
         }
         [Route("api/approval")]
         [HttpPost]
@@ -368,5 +417,6 @@ namespace EMS.Controllers
             }
             return response;
         }
+        public 
     }
 }

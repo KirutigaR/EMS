@@ -322,14 +322,65 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static Leavebalance_sheet GetLeaveBalanceById(int id)
+        public static List<LeaveBalanceModel> GetLeaveBalanceById(int id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from lbs in datacontext.Leavebalance_sheet
+                            join lt in datacontext.Leave_type
+                            on lbs.leavetype_id equals lt.id
                             where lbs.employee_id == id
-                            select lbs;
+                            select new LeaveBalanceModel
+                            {
+                                //leavetype_id = lbs.leavetype_id,
+                                type_name = lt.type_name,
+                                no_of_days = (decimal)lbs.no_of_days
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        
+        public static int GetUserIdById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from e in datacontext.Employees
+                            where e.id == id
+                            select e.user_id;
+                return query.FirstOrDefault();
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return 0;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static User GetUserById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from u in datacontext.Users
+                            where u.id == id
+                            select u;
                 return query.FirstOrDefault();
             }
             catch (Exception e)
@@ -337,6 +388,25 @@ namespace EMS.Repository
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
                 return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static void EditUserPassword(User user)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(user).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                
             }
             finally
             {

@@ -148,5 +148,40 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static List<ProjectModel> GetProjectListByClientId(int c_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Clients
+                            join y in datacontext.Projects
+                            on x.id equals y.client_id
+                            where x.id == c_id
+                            select new ProjectModel
+                            {
+                                project_name = y.project_name,
+                                project_description = y.project_description,
+                                start_date = y.start_date,
+                                end_date = y.end_date,
+                                status = y.status,
+                                po = y.po,
+                                client_id = x.id,
+                                client_name = x.client_name,
+                                client_type = x.client_type
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

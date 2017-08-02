@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Security;
 using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
@@ -34,13 +35,15 @@ namespace EMS.Controllers
                     employee.contact_no = employee_details.contact_no;
                     employee.reporting_to = employee_details.reporting_to;
                     employee.Year_of_experence = employee_details.Year_of_experence;
+                    employee.gender = employee_details.gender;
                 
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
                     if (existingInstance == null)
                     {
                         User user = new User();
                         user.user_name = employee.email;
-                        user.password = employee.first_name + "jaishu";
+                        //user.password = employee.first_name + "jaishu";
+                        user.password = Membership.GeneratePassword(8, 2);
                         user.is_active = 1;
                         EmployeeRepo.CreateNewUser(user);
                         employee.user_id = user.id;

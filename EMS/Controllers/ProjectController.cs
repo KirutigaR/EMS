@@ -141,7 +141,7 @@ namespace EMS.Controllers
             {
                 if(project_role !=null)
                 {
-                    int empl_status = EmployeeRepo.GetEmployeeStatusByID(project_role.employee_id);
+                    int empl_status = EmployeeRepo.GetEmployeeStatusById(project_role.employee_id);
                     ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
                     if ((empl_status == 1) && (proj != null))
                     {

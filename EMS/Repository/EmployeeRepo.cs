@@ -170,7 +170,7 @@ namespace EMS.Repository
                     Leavebalance_sheet leave_balance = new Leavebalance_sheet();
                     leave_balance.employee_id = employee.id;
                     leave_balance.leavetype_id = arr[i];
-                    leave_balance.no_of_days = (int)Utils.LeaveCalculationBasedDOJ(employee.date_of_joining, arr[i]);
+                    leave_balance.no_of_days = (decimal)Utils.LeaveCalculationBasedDOJ(employee.date_of_joining, arr[i]);
                     datacontext.Leavebalance_sheet.Add(leave_balance);
                 }
                 datacontext.SaveChanges();
@@ -239,7 +239,7 @@ namespace EMS.Repository
             }
         }
 
-        public static int GetEmployeeStatusByID(int e_id)
+        public static int GetEmployeeStatusById(int e_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try

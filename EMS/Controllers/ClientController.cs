@@ -166,5 +166,37 @@ namespace EMS.Controllers
             }
             return response;
         }
+
+        [Route("api/client/project/list/{c_id?}")]
+        public HttpResponseMessage GetProjectListByClientId(int c_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(c_id!=0)
+                {
+                    if(ClientRepo.GetClientById(c_id)!=null)
+                    {
+                        List<ProjectModel> project_list = ClientRepo.GetProjectListByClientId(c_id);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_list));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

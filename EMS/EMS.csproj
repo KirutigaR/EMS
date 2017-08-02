@@ -106,6 +106,9 @@
     <Compile Include="Client.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Client_type.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -114,6 +117,9 @@
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TimeSheetController.cs" />
+    <Compile Include="Designation.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Employee.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>

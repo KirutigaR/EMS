@@ -43,7 +43,7 @@ namespace EMS.Controllers
                         User user = new User();
                         user.user_name = employee.email;
                         //user.password = employee.first_name + "jaishu";
-                        user.password = Membership.GeneratePassword(8, 2);
+                        user.password = PasswordGenerator.GeneratePassword();
                         user.is_active = 1;
                         EmployeeRepo.CreateNewUser(user);
                         employee.user_id = user.id;

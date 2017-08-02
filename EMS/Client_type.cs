@@ -12,21 +12,19 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Client
+    public partial class Client_type
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Client()
+        public Client_type()
         {
-            this.Projects = new HashSet<Project>();
+            this.Clients = new HashSet<Client>();
         }
     
         public int id { get; set; }
-        public string client_name { get; set; }
-        public int is_active { get; set; }
-        public Nullable<int> type_id { get; set; }
+        public string type_name { get; set; }
+        public string type_description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Project> Projects { get; set; }
-        public virtual Client_type Client_type { get; set; }
+        public virtual ICollection<Client> Clients { get; set; }
     }
 }

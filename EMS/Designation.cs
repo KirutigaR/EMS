@@ -12,18 +12,10 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Project_role
+    public partial class Designation
     {
         public int id { get; set; }
-        public int employee_id { get; set; }
-        public int project_id { get; set; }
-        public int role_id { get; set; }
-        public Nullable<System.DateTime> start_date { get; set; }
-        public Nullable<System.DateTime> end_date { get; set; }
-        public Nullable<int> association { get; set; }
-    
-        public virtual Employee Employee { get; set; }
-        public virtual Project Project { get; set; }
-        public virtual Role Role { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
     }
 }

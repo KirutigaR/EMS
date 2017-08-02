@@ -37,11 +37,19 @@ namespace EMS.Utility
             }
             else if(Leavetype_id == 3)
             {
-                return 182;
+                return 180;
+            }
+            else if (Leavetype_id == 4)
+            {
+                return 0;
+            }
+            else if (Leavetype_id == 5)
+            {
+                return 0;
             }
             else
             {
-                return -999;
+                return -99;
             }
         }
         public static int DaysLeft(DateTime? startDate, DateTime? endDate, Boolean excludeWeekends, List<DateTime> excludeDates)

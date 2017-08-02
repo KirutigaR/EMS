@@ -38,5 +38,7 @@ namespace EMS
         public virtual DbSet<Timesheet> Timesheets { get; set; }
         public virtual DbSet<User_role> User_role { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Client_type> Client_type { get; set; }
+        public virtual DbSet<Designation> Designations { get; set; }
     }
 }

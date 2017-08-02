@@ -4,18 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1" ZoomLevel="78">
+      <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1" ZoomLevel="77">
         <EntityTypeShape EntityType="EMSModel.Client" Width="1.5" PointX="0.75" PointY="15.875" />
         <EntityTypeShape EntityType="EMSModel.Employee" Width="1.5" PointX="3" PointY="9.625" />
         <EntityTypeShape EntityType="EMSModel.Holiday_List" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="8.25" PointY="10.5" />
         <EntityTypeShape EntityType="EMSModel.Leave_type" Width="1.5" PointX="3" PointY="2.75" />
         <EntityTypeShape EntityType="EMSModel.Leavebalance_sheet" Width="1.5" PointX="5.25" PointY="7.75" />
-        <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="3" PointY="15.25" />
+        <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="4.625" PointY="16.125" />
         <EntityTypeShape EntityType="EMSModel.Project_role" Width="1.5" PointX="5.25" PointY="10.625" />
         <EntityTypeShape EntityType="EMSModel.Role" Width="1.5" PointX="0.75" PointY="5" />
         <EntityTypeShape EntityType="EMSModel.Task" Width="1.5" PointX="3" PointY="19.75" />
-        <EntityTypeShape EntityType="EMSModel.Timesheet" Width="1.5" PointX="5.25" PointY="14.5" />
+        <EntityTypeShape EntityType="EMSModel.Timesheet" Width="1.5" PointX="9.5" PointY="15" />
         <EntityTypeShape EntityType="EMSModel.User_role" Width="1.5" PointX="3" PointY="6.125" />
         <EntityTypeShape EntityType="EMSModel.User" Width="1.5" PointX="0.75" PointY="8" />
         <AssociationConnector Association="EMSModel.FK__Project__client___34C8D9D1" />
@@ -33,6 +33,9 @@
         <AssociationConnector Association="EMSModel.FK__User_role__role___2E1BDC42" />
         <AssociationConnector Association="EMSModel.FK__Timesheet__task___403A8C7D" />
         <AssociationConnector Association="EMSModel.FK__User_role__user___2D27B809" />
+        <EntityTypeShape EntityType="EMSModel.Client_type" Width="1.5" PointX="0.75" PointY="13.125" />
+        <EntityTypeShape EntityType="EMSModel.Designation" Width="1.5" PointX="5.375" PointY="3.75" />
+        <AssociationConnector Association="EMSModel.FK__Client__type_id__619B8048" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -97,7 +97,7 @@ namespace EMS.Repository
                                 status = project.status,
                                 po = project.po,
                                 project_description = project.project_description,
-                                client_id = (int)project.client_id
+                                client_id = project.client_id
                             };
                 return query.ToList();
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMS.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
@@ -70,14 +71,14 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static decimal GetNoofDaysById(int id)
+        public static decimal? GetNoofDaysById(int id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from lbs in datacontext.Leave_type
+                var query = from lbs in datacontext.Leavebalance_sheet
                             where lbs.id == id
-                            select lbs.days_per_year;
+                            select lbs.no_of_days;
                 return query.FirstOrDefault();
             }
             catch (Exception e)
@@ -253,6 +254,82 @@ namespace EMS.Repository
                 var query = from lv in datacontext.Leave_type
                             where lv.id == id
                             select lv.type_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<LeavehistoryModel> GetLeaveHistoryById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from e in datacontext.Employees
+                            join l in datacontext.Leaves
+                            on e.id equals l.employee_id
+                            join lt in datacontext.Leave_type
+                            on l.leavetype_id equals lt.id
+                            where l.employee_id == id
+                            select new LeavehistoryModel
+                            {
+                                id = e.id,
+                                first_name = e.first_name,
+                                last_name = e.last_name,
+                                type_name = lt.type_name,
+                                from_date = l.from_date,
+                                to_date = l.to_date,
+                                no_of_days = l.no_of_days
+                            };
+                return query.ToList();
+                             
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<Holiday_List> GetHolidayList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from hl in datacontext.Holiday_List
+                            select hl;
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static Leavebalance_sheet GetLeaveBalanceById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from lbs in datacontext.Leavebalance_sheet
+                            where lbs.employee_id == id
+                            select lbs;
                 return query.FirstOrDefault();
             }
             catch (Exception e)

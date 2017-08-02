@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="Models\ClientModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\LeavehistoryModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\RoleList.cs" />
     <Compile Include="Models\TaskList.cs" />

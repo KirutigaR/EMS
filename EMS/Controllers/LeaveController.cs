@@ -294,7 +294,7 @@ namespace EMS.Controllers
             return response;
         }
         [HttpPost]
-        [Route("api/leavepage/leavehistory")]
+        [Route("api/leavepage/leavehistory/approvepage")]
         public HttpResponseMessage GetLeaveHistoryById(Leave leave)
         {
             HttpResponseMessage response = null;
@@ -390,23 +390,30 @@ namespace EMS.Controllers
             }
             return response;
         }
+        
+        //[HttpPost]
         [Route("api/approval")]
-        [HttpPost]
-        public HttpResponseMessage Approval(bool b, int employee_id)
+        public HttpResponseMessage Approval(Leave leave)
         {
             HttpResponseMessage response = null;
             try
             {
-                if(b == true)
-                {                   
-                    Leave leave = LeaveRepo.GetLeaveById(employee_id);
-                    leave.is_approved = 1;
-                    LeaveRepo.ApproveLeave(leave);
-                    response = Request.CreateResponse(HttpStatusCode.OK, "Leave Approved");
+                if(leave.is_approved == 1)
+                {
+                    //Leavebalance_sheet leave_balance = new Leavebalance_sheet();
+                    Leave leave1 = LeaveRepo.GetLeaveById(leave.employee_id);
+                    leave1.is_approved = 1;
+                    LeaveRepo.ApproveLeave(leave1);
+                    Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave1.employee_id);
+                    
+                    decimal? no_of_days = LeaveRepo.GetNoofdaysByLeaveTypeId(leave1.leavetype_id);
+                    leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - (decimal)no_of_days;
+                    LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave Approved"));
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, "Leave cancel");
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_117", "Leave not approved", "Leave cancel"));
                 }
             }
             catch (Exception exception)
@@ -417,6 +424,25 @@ namespace EMS.Controllers
             }
             return response;
         }
-        public 
+        [Route("api/employeelist/byrole")]
+        public HttpResponseMessage EmployeeListByRole(Employee employee)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                Project_role project_role = LeaveRepo.GetProjectIdRoleId(employee.id);
+                string project_name = LeaveRepo.GetProjectName(project_role.project_id);
+                string role_name = LeaveRepo.GetProjectRole(project_role.role_id);
+                List<EmployeeListByRoleModel> employee_list_byrole = LeaveRepo.GetEmployeeListByRole(employee.id, project_name, role_name);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", employee_list_byrole));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

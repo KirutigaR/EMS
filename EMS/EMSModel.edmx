@@ -11,8 +11,8 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="client_name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="client_type" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="is_active" Type="int" Nullable="false" />
+          <Property Name="type_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -28,7 +28,15 @@
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
           <Property Name="Year_of_experence" Type="decimal" Precision="3" Scale="1" Nullable="false" />
-          <Property Name="gender" Type="varchar" MaxLength="10" />
+          <Property Name="gender" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="pan_no" Type="int" />
+          <Property Name="bank_account_no" Type="int" />
+          <Property Name="PF_no" Type="int" />
+          <Property Name="medical_insurance_no" Type="int" />
+          <Property Name="emergency_contact_no" Type="int" />
+          <Property Name="emergency_contact_person" Type="varchar" MaxLength="50" />
+          <Property Name="designation" Type="int" Nullable="false" />
+          <Property Name="blood_group" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -66,7 +74,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="leavetype_id" Type="int" Nullable="false" />
-          <Property Name="no_of_days" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="no_of_days" Type="decimal" Precision="5" Scale="1" Nullable="false" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -89,6 +97,9 @@
           <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="role_id" Type="int" Nullable="false" />
+          <Property Name="start_date" Type="date" />
+          <Property Name="end_date" Type="date" />
+          <Property Name="association" Type="int" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -136,7 +147,7 @@
           <Property Name="password" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Employee__report__31EC6D26">
+        <Association Name="FK__Employee__report__5BE2A6F2">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -148,7 +159,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Employee__user_i__30F848ED">
+        <Association Name="FK__Employee__user_i__5CD6CB2B">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -330,11 +341,11 @@
           <EntitySet Name="Timesheet" EntityType="Self.Timesheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_role" EntityType="Self.User_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Employee__report__31EC6D26" Association="Self.FK__Employee__report__31EC6D26">
+          <AssociationSet Name="FK__Employee__report__5BE2A6F2" Association="Self.FK__Employee__report__5BE2A6F2">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Employee1" EntitySet="Employee" />
           </AssociationSet>
-          <AssociationSet Name="FK__Employee__user_i__30F848ED" Association="Self.FK__Employee__user_i__30F848ED">
+          <AssociationSet Name="FK__Employee__user_i__5CD6CB2B" Association="Self.FK__Employee__user_i__5CD6CB2B">
             <End Role="Users" EntitySet="Users" />
             <End Role="Employee" EntitySet="Employee" />
           </AssociationSet>
@@ -479,6 +490,7 @@
           <Property Name="client_type" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="is_active" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Projects" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Client" ToRole="Project" />
+          <Property Name="type_id" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -494,7 +506,7 @@
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="reporting_to" Type="Int32" Nullable="false" />
           <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
-          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Employee1" Relationship="EMSModel.FK__Employee__report__31EC6D26" FromRole="Employee" ToRole="Employee1" />
           <NavigationProperty Name="Employee2" Relationship="EMSModel.FK__Employee__report__31EC6D26" FromRole="Employee1" ToRole="Employee" />
           <NavigationProperty Name="User" Relationship="EMSModel.FK__Employee__user_i__30F848ED" FromRole="Employee" ToRole="User" />
@@ -502,6 +514,14 @@
           <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
           <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
           <NavigationProperty Name="Timesheets" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
+          <Property Name="pan_no" Type="Int32" />
+          <Property Name="bank_account_no" Type="Int32" />
+          <Property Name="PF_no" Type="Int32" />
+          <Property Name="medical_insurance_no" Type="Int32" />
+          <Property Name="emergency_contact_no" Type="Int32" />
+          <Property Name="emergency_contact_person" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="designation" Type="Int32" Nullable="false" />
+          <Property Name="blood_group" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -543,7 +563,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="employee_id" Type="Int32" Nullable="false" />
           <Property Name="leavetype_id" Type="Int32" Nullable="false" />
-          <Property Name="no_of_days" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="no_of_days" Type="Decimal" Precision="5" Scale="1" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Leavebalance_sheet" ToRole="Employee" />
           <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leavebala__leave__47DBAE45" FromRole="Leavebalance_sheet" ToRole="Leave_type" />
         </EntityType>
@@ -574,6 +594,9 @@
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Project_role" ToRole="Employee" />
           <NavigationProperty Name="Project" Relationship="EMSModel.FK__Project_r__proje__38996AB5" FromRole="Project_role" ToRole="Project" />
           <NavigationProperty Name="Role" Relationship="EMSModel.FK__Project_r__role___398D8EEE" FromRole="Project_role" ToRole="Role" />
+          <Property Name="start_date" Type="DateTime" Precision="0" />
+          <Property Name="end_date" Type="DateTime" Precision="0" />
+          <Property Name="association" Type="Int32" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -820,8 +843,8 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="EMSModel.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="type_id" ColumnName="type_id" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="client_type" ColumnName="client_type" />
                 <ScalarProperty Name="client_name" ColumnName="client_name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
@@ -830,6 +853,14 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="EMSModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="blood_group" ColumnName="blood_group" />
+                <ScalarProperty Name="designation" ColumnName="designation" />
+                <ScalarProperty Name="emergency_contact_person" ColumnName="emergency_contact_person" />
+                <ScalarProperty Name="emergency_contact_no" ColumnName="emergency_contact_no" />
+                <ScalarProperty Name="medical_insurance_no" ColumnName="medical_insurance_no" />
+                <ScalarProperty Name="PF_no" ColumnName="PF_no" />
+                <ScalarProperty Name="bank_account_no" ColumnName="bank_account_no" />
+                <ScalarProperty Name="pan_no" ColumnName="pan_no" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="Year_of_experence" ColumnName="Year_of_experence" />
                 <ScalarProperty Name="reporting_to" ColumnName="reporting_to" />
@@ -903,6 +934,9 @@
           <EntitySetMapping Name="Project_role">
             <EntityTypeMapping TypeName="EMSModel.Project_role">
               <MappingFragment StoreEntitySet="Project_role">
+                <ScalarProperty Name="association" ColumnName="association" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
                 <ScalarProperty Name="role_id" ColumnName="role_id" />
                 <ScalarProperty Name="project_id" ColumnName="project_id" />
                 <ScalarProperty Name="employee_id" ColumnName="employee_id" />

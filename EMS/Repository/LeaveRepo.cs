@@ -191,7 +191,7 @@ namespace EMS.Repository
             try
             {
                 var query = from l in datacontext.Leaves
-                            where l.id == id
+                            where l.employee_id == id
                             select l;
                 return query.FirstOrDefault();
             }
@@ -407,6 +407,159 @@ namespace EMS.Repository
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
                 
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static Leavebalance_sheet LeaveBalanceById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from lbs in datacontext.Leavebalance_sheet
+                            where lbs.employee_id == id
+                            select lbs;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static decimal? GetNoofdaysByLeaveTypeId(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from lbs in datacontext.Leavebalance_sheet
+                            where lbs.leavetype_id == id
+                            select lbs.no_of_days;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static void UpdateLeaveBalanceSheet(Leavebalance_sheet leave_balance)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(leave_balance).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static Project_role GetProjectIdRoleId(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from pr in datacontext.Project_role
+                            where pr.employee_id == id
+                            select pr;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static string GetProjectName(int pro_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from p in datacontext.Projects
+                            where p.id == pro_id
+                            select p.project_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static string GetProjectRole(int role_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from r in datacontext.Roles
+                            where r.id == role_id && r.role_type == "Project Role"
+                            select r.role_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<EmployeeListByRoleModel> GetEmployeeListByRole(int id, string pro_name, string role_name)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from e in datacontext.Employees
+                            where e.reporting_to == id
+                            select new EmployeeListByRoleModel
+                            {
+                                id = e.id,
+                                first_name = e.first_name,
+                                last_name = e.last_name,
+                                email = e.email,
+                                project_name = pro_name,
+                                project_role = role_name
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
             }
             finally
             {

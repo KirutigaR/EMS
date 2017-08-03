@@ -11,7 +11,7 @@
         <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="8.25" PointY="10.5" />
         <EntityTypeShape EntityType="EMSModel.Leave_type" Width="1.5" PointX="3" PointY="2.75" />
         <EntityTypeShape EntityType="EMSModel.Leavebalance_sheet" Width="1.5" PointX="5.25" PointY="7.75" />
-        <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="3" PointY="15.25" />
+        <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="3.125" PointY="16.125" />
         <EntityTypeShape EntityType="EMSModel.Project_role" Width="1.5" PointX="5.25" PointY="10.625" />
         <EntityTypeShape EntityType="EMSModel.Role" Width="1.5" PointX="0.75" PointY="5" />
         <EntityTypeShape EntityType="EMSModel.Task" Width="1.5" PointX="3" PointY="19.75" />

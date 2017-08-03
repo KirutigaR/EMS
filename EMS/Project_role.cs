@@ -18,6 +18,9 @@ namespace EMS
         public int employee_id { get; set; }
         public int project_id { get; set; }
         public int role_id { get; set; }
+        public Nullable<System.DateTime> start_date { get; set; }
+        public Nullable<System.DateTime> end_date { get; set; }
+        public Nullable<int> association { get; set; }
     
         public virtual Employee Employee { get; set; }
         public virtual Project Project { get; set; }

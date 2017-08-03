@@ -17,7 +17,15 @@ namespace EMS.Models
         public int user_id { get; set; }
         public int reporting_to { get; set; }
         public decimal Year_of_experence { get; set; }
-        public int role_id { get; set; }
         public string gender { get; set; }
+        public int role_id { get; set; }
+        public Nullable<int> pan_no { get; set; }
+        public Nullable<int> bank_account_no { get; set; }
+        public Nullable<int> PF_no { get; set; }
+        public Nullable<int> medical_insurance_no { get; set; }
+        public Nullable<int> emergency_contact_no { get; set; }
+        public string emergency_contact_person { get; set; }
+        public int designation { get; set; }
+        public string blood_group { get; set; }
     }
 }

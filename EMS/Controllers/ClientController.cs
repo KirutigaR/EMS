@@ -48,7 +48,7 @@ namespace EMS.Controllers
         }
 
 
-        [Route("api/get/client/list")]
+        [Route("api/client/list")]
         public HttpResponseMessage GetClientList()
         {
             HttpResponseMessage response = null;
@@ -189,6 +189,24 @@ namespace EMS.Controllers
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
                 }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/client/type/list")]
+        public HttpResponseMessage GetClientTypeList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ClientModel> Client_type_List = ClientRepo.GetClientTypeList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Client_type_List));
             }
             catch (Exception exception)
             {

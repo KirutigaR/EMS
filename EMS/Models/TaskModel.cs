@@ -5,7 +5,7 @@ using System.Web;
 
 namespace EMS.Models
 {
-	public class TaskList
+	public class TaskModel
 	{
         public int id { get; set; }
         public string task_name { get; set; }

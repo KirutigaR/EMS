@@ -154,10 +154,12 @@
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ClientModel.cs" />
+    <Compile Include="Models\DesignationModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
-    <Compile Include="Models\RoleList.cs" />
-    <Compile Include="Models\TaskList.cs" />
+    <Compile Include="Models\ReportingTo.cs" />
+    <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\TimeSheetModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>

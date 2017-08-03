@@ -19,7 +19,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                List<TaskList> tasklist = TaskRepo.GetTaskList();
+                List<TaskModel> tasklist = TaskRepo.GetTaskList();
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tasklist));
             }
             catch (Exception exception)

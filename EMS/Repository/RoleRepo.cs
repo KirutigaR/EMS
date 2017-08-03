@@ -9,13 +9,13 @@ namespace EMS.Repository
 {
     public class RoleRepo
     {
-        public static List<RoleList> GetRoleList()
+        public static List<RoleModel> GetRoleList()
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from roles in datacontext.Roles
-                            select new RoleList
+                            select new RoleModel
                             {
                                 id = roles.id,
                                 role_name = roles.role_name,

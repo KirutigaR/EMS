@@ -189,7 +189,7 @@ namespace EMS.Repository
             }
         }
         
-        public static void InvalidEmployee(Employee existinginstance)
+        public static void InactiveEmployee(Employee existinginstance)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -253,6 +253,60 @@ namespace EMS.Repository
                 return query.FirstOrDefault();
             }
             catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<DesignationModel> GetDesignationList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from d_list in datacontext.Designations
+                            select new DesignationModel
+                            {
+                                id = d_list.id,
+                                name = d_list.name,
+                                description = d_list.description
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<ReportingTo> GetReportingtoList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Employees
+                            join y in datacontext.User_role
+                            on x.user_id equals y.user_id
+                            where y.role_id == Constants.HR || y.role_id == Constants.Manager
+                            select new ReportingTo
+                            {
+                                emp_name = x.first_name,
+                                emp_id = x.id
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());

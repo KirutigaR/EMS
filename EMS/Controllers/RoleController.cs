@@ -20,7 +20,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                List<RoleList> rolelist = RoleRepo.GetRoleList();
+                List<RoleModel> rolelist = RoleRepo.GetRoleList();
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", rolelist));
             }
             catch (Exception exception)

@@ -10,13 +10,13 @@ namespace EMS.Repository
 {
     public class TaskRepo
     {
-        public static List<TaskList> GetTaskList()
+        public static List<TaskModel> GetTaskList()
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from task in datacontext.Tasks
-                            select new TaskList
+                            select new TaskModel
                             {
                                 id= task.id,
                                 task_name = task.task_name,

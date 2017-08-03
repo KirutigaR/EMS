@@ -22,7 +22,7 @@ namespace EMS
         public int no_of_days { get; set; }
         public int is_approved { get; set; }
     
-        public virtual Employee Employee { get; set; }
         public virtual Leave_type Leave_type { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

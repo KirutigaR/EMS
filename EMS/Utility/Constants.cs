@@ -9,5 +9,7 @@ namespace EMS.Utility
     {
         public static int[] male_leave_type = { 1, 2 , 4, 5};
         public static int[] female_leave_type = { 1, 2, 3 , 4, 5};
+        public static int HR = 3;
+        public static int Manager = 5;
     }
 }

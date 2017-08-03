@@ -5,7 +5,7 @@ using System.Web;
 
 namespace EMS.Models
 {
-    public class RoleList
+    public class RoleModel
     {
         public int id { get; set; }
         public string role_name { get; set; }

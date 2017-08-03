@@ -21,7 +21,7 @@ namespace EMS
         public int work_hour { get; set; }
         public int project_id { get; set; }
     
-        public virtual Employee Employee { get; set; }
         public virtual Task Task { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

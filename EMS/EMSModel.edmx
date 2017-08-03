@@ -12,7 +12,8 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="client_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="is_active" Type="int" Nullable="false" />
-          <Property Name="type_id" Type="int" />
+          <Property Name="type_id" Type="int" Nullable="false" />
+          <Property Name="client_description" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Client_type">
           <Key>
@@ -44,14 +45,14 @@
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
           <Property Name="Year_of_experence" Type="decimal" Precision="3" Scale="1" Nullable="false" />
-          <Property Name="gender" Type="varchar" MaxLength="10" />
+          <Property Name="gender" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="pan_no" Type="int" />
           <Property Name="bank_account_no" Type="int" />
           <Property Name="PF_no" Type="int" />
           <Property Name="medical_insurance_no" Type="int" />
           <Property Name="emergency_contact_no" Type="int" />
           <Property Name="emergency_contact_person" Type="varchar" MaxLength="50" />
-          <Property Name="designation" Type="varchar" MaxLength="50" />
+          <Property Name="designation" Type="int" Nullable="false" />
           <Property Name="blood_group" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Holiday_List">
@@ -113,9 +114,9 @@
           <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="role_id" Type="int" Nullable="false" />
-          <Property Name="start_date" Type="date" />
-          <Property Name="end_date" Type="date" />
-          <Property Name="association" Type="int" />
+          <Property Name="start_date" Type="date" Nullable="false" />
+          <Property Name="end_date" Type="date" Nullable="false" />
+          <Property Name="association" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -164,7 +165,7 @@
           <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK__Client__type_id__619B8048">
-          <End Role="Client_type" Type="Self.Client_type" Multiplicity="0..1" />
+          <End Role="Client_type" Type="Self.Client_type" Multiplicity="1" />
           <End Role="Client" Type="Self.Client" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Client_type">
@@ -441,8 +442,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="EMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="EMSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Clients" EntityType="EMSModel.Client" />
-          <EntitySet Name="Employees" EntityType="EMSModel.Employee" />
           <EntitySet Name="Holiday_List" EntityType="EMSModel.Holiday_List" />
           <EntitySet Name="Leaves" EntityType="EMSModel.Leave" />
           <EntitySet Name="Leave_type" EntityType="EMSModel.Leave_type" />
@@ -454,34 +453,6 @@
           <EntitySet Name="Timesheets" EntityType="EMSModel.Timesheet" />
           <EntitySet Name="User_role" EntityType="EMSModel.User_role" />
           <EntitySet Name="Users" EntityType="EMSModel.User" />
-          <AssociationSet Name="FK__Project__client___34C8D9D1" Association="EMSModel.FK__Project__client___34C8D9D1">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="Project" EntitySet="Projects" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Employee__report__31EC6D26" Association="EMSModel.FK__Employee__report__31EC6D26">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Employee1" EntitySet="Employees" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Employee__user_i__30F848ED" Association="EMSModel.FK__Employee__user_i__30F848ED">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Employee" EntitySet="Employees" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Leave__employee___4316F928" Association="EMSModel.FK__Leave__employee___4316F928">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Leavebala__emplo__46E78A0C" Association="EMSModel.FK__Leavebala__emplo__46E78A0C">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Project_r__emplo__37A5467C" Association="EMSModel.FK__Project_r__emplo__37A5467C">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Project_role" EntitySet="Project_role" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Timesheet__emplo__3F466844" Association="EMSModel.FK__Timesheet__emplo__3F466844">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Timesheet" EntitySet="Timesheets" />
-          </AssociationSet>
           <AssociationSet Name="FK__Leave__leavetype__440B1D61" Association="EMSModel.FK__Leave__leavetype__440B1D61">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leaves" />
@@ -514,55 +485,43 @@
             <End Role="User" EntitySet="Users" />
             <End Role="User_role" EntitySet="User_role" />
           </AssociationSet>
-          <EntitySet Name="Client_type" EntityType="EMSModel.Client_type" />
           <EntitySet Name="Designations" EntityType="EMSModel.Designation" />
+          <EntitySet Name="Clients" EntityType="EMSModel.Client" />
+          <EntitySet Name="Client_type" EntityType="EMSModel.Client_type" />
           <AssociationSet Name="FK__Client__type_id__619B8048" Association="EMSModel.FK__Client__type_id__619B8048">
             <End Role="Client_type" EntitySet="Client_type" />
             <End Role="Client" EntitySet="Clients" />
           </AssociationSet>
+          <AssociationSet Name="FK__Project__client___34C8D9D1" Association="EMSModel.FK__Project__client___34C8D9D1">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <EntitySet Name="Employees" EntityType="EMSModel.Employee" />
+          <AssociationSet Name="FK__Employee__report__5BE2A6F2" Association="EMSModel.FK__Employee__report__5BE2A6F2">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Employee1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee__user_i__5CD6CB2B" Association="EMSModel.FK__Employee__user_i__5CD6CB2B">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__employee___4316F928" Association="EMSModel.FK__Leave__employee___4316F928">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leavebala__emplo__46E78A0C" Association="EMSModel.FK__Leavebala__emplo__46E78A0C">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Project_r__emplo__37A5467C" Association="EMSModel.FK__Project_r__emplo__37A5467C">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Project_role" EntitySet="Project_role" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Timesheet__emplo__3F466844" Association="EMSModel.FK__Timesheet__emplo__3F466844">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Timesheet" EntitySet="Timesheets" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Client">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="client_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="is_active" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Projects" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Client" ToRole="Project" />
-          <Property Name="type_id" Type="Int32" />
-          <NavigationProperty Name="Client_type" Relationship="EMSModel.FK__Client__type_id__619B8048" FromRole="Client" ToRole="Client_type" />
-        </EntityType>
-        <EntityType Name="Employee">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="first_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="last_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="date_of_birth" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="date_of_joining" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="contact_no" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="reporting_to" Type="Int32" Nullable="false" />
-          <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
-          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Employee1" Relationship="EMSModel.FK__Employee__report__31EC6D26" FromRole="Employee" ToRole="Employee1" />
-          <NavigationProperty Name="Employee2" Relationship="EMSModel.FK__Employee__report__31EC6D26" FromRole="Employee1" ToRole="Employee" />
-          <NavigationProperty Name="User" Relationship="EMSModel.FK__Employee__user_i__30F848ED" FromRole="Employee" ToRole="User" />
-          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___4316F928" FromRole="Employee" ToRole="Leave" />
-          <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
-          <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
-          <NavigationProperty Name="Timesheets" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
-          <Property Name="pan_no" Type="Int32" />
-          <Property Name="bank_account_no" Type="Int32" />
-          <Property Name="PF_no" Type="Int32" />
-          <Property Name="medical_insurance_no" Type="Int32" />
-          <Property Name="emergency_contact_no" Type="Int32" />
-          <Property Name="emergency_contact_person" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="blood_group" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
             <PropertyRef Name="id" />
@@ -582,8 +541,8 @@
           <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="no_of_days" Type="Int32" Nullable="false" />
           <Property Name="is_approved" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___4316F928" FromRole="Leave" ToRole="Employee" />
           <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leave__leavetype__440B1D61" FromRole="Leave" ToRole="Leave_type" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___4316F928" FromRole="Leave" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Leave_type">
           <Key>
@@ -604,8 +563,8 @@
           <Property Name="employee_id" Type="Int32" Nullable="false" />
           <Property Name="leavetype_id" Type="Int32" Nullable="false" />
           <Property Name="no_of_days" Type="Decimal" Precision="5" Scale="1" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Leavebalance_sheet" ToRole="Employee" />
           <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leavebala__leave__47DBAE45" FromRole="Leavebalance_sheet" ToRole="Leave_type" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Leavebalance_sheet" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -619,9 +578,9 @@
           <Property Name="po" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="project_description" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="client_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Project" ToRole="Client" />
           <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__proje__38996AB5" FromRole="Project" ToRole="Project_role" />
           <NavigationProperty Name="Tasks" Relationship="EMSModel.FK__Task__project_id__3C69FB99" FromRole="Project" ToRole="Task" />
+          <NavigationProperty Name="Client" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Project" ToRole="Client" />
         </EntityType>
         <EntityType Name="Project_role">
           <Key>
@@ -631,12 +590,12 @@
           <Property Name="employee_id" Type="Int32" Nullable="false" />
           <Property Name="project_id" Type="Int32" Nullable="false" />
           <Property Name="role_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Project_role" ToRole="Employee" />
           <NavigationProperty Name="Project" Relationship="EMSModel.FK__Project_r__proje__38996AB5" FromRole="Project_role" ToRole="Project" />
           <NavigationProperty Name="Role" Relationship="EMSModel.FK__Project_r__role___398D8EEE" FromRole="Project_role" ToRole="Role" />
-          <Property Name="start_date" Type="DateTime" Precision="0" />
-          <Property Name="end_date" Type="DateTime" Precision="0" />
-          <Property Name="association" Type="Int32" />
+          <Property Name="start_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="end_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="association" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Project_role" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -670,8 +629,8 @@
           <Property Name="work_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="work_hour" Type="Int32" Nullable="false" />
           <Property Name="project_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Timesheet" ToRole="Employee" />
           <NavigationProperty Name="Task" Relationship="EMSModel.FK__Timesheet__task___403A8C7D" FromRole="Timesheet" ToRole="Task" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Timesheet" ToRole="Employee" />
         </EntityType>
         <EntityType Name="User_role">
           <Key>
@@ -691,93 +650,9 @@
           <Property Name="user_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="is_active" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employees" Relationship="EMSModel.FK__Employee__user_i__30F848ED" FromRole="User" ToRole="Employee" />
           <NavigationProperty Name="User_role" Relationship="EMSModel.FK__User_role__user___2D27B809" FromRole="User" ToRole="User_role" />
+          <NavigationProperty Name="Employees" Relationship="EMSModel.FK__Employee__user_i__5CD6CB2B" FromRole="User" ToRole="Employee" />
         </EntityType>
-        <Association Name="FK__Project__client___34C8D9D1">
-          <End Type="EMSModel.Client" Role="Client" Multiplicity="1" />
-          <End Type="EMSModel.Project" Role="Project" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Project">
-              <PropertyRef Name="client_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Employee__report__31EC6D26">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Employee" Role="Employee1" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Employee1">
-              <PropertyRef Name="reporting_to" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Employee__user_i__30F848ED">
-          <End Type="EMSModel.User" Role="User" Multiplicity="1" />
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Employee">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Leave__employee___4316F928">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="employee_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Leavebala__emplo__46E78A0C">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Leavebalance_sheet" Role="Leavebalance_sheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leavebalance_sheet">
-              <PropertyRef Name="employee_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Project_r__emplo__37A5467C">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Project_role" Role="Project_role" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Project_role">
-              <PropertyRef Name="employee_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Timesheet__emplo__3F466844">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Timesheet" Role="Timesheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Timesheet">
-              <PropertyRef Name="employee_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Leave__leavetype__440B1D61">
           <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
           <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
@@ -874,6 +749,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Designation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="client_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="is_active" Type="Int32" Nullable="false" />
+          <Property Name="type_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Client_type" Relationship="EMSModel.FK__Client__type_id__619B8048" FromRole="Client" ToRole="Client_type" />
+          <NavigationProperty Name="Projects" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Client" ToRole="Project" />
+          <Property Name="client_description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="Client_type">
           <Key>
             <PropertyRef Name="id" />
@@ -883,16 +778,8 @@
           <Property Name="type_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Clients" Relationship="EMSModel.FK__Client__type_id__619B8048" FromRole="Client_type" ToRole="Client" />
         </EntityType>
-        <EntityType Name="Designation">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <Association Name="FK__Client__type_id__619B8048">
-          <End Type="EMSModel.Client_type" Role="Client_type" Multiplicity="0..1" />
+          <End Type="EMSModel.Client_type" Role="Client_type" Multiplicity="1" />
           <End Type="EMSModel.Client" Role="Client" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Client_type">
@@ -903,47 +790,127 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Project__client___34C8D9D1">
+          <End Type="EMSModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="EMSModel.Project" Role="Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="first_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="last_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="date_of_birth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="date_of_joining" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="contact_no" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="reporting_to" Type="Int32" Nullable="false" />
+          <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
+          <Property Name="gender" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pan_no" Type="Int32" />
+          <Property Name="bank_account_no" Type="Int32" />
+          <Property Name="PF_no" Type="Int32" />
+          <Property Name="medical_insurance_no" Type="Int32" />
+          <Property Name="emergency_contact_no" Type="Int32" />
+          <Property Name="emergency_contact_person" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="designation" Type="Int32" Nullable="false" />
+          <Property Name="blood_group" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Employee1" Relationship="EMSModel.FK__Employee__report__5BE2A6F2" FromRole="Employee" ToRole="Employee1" />
+          <NavigationProperty Name="Employee2" Relationship="EMSModel.FK__Employee__report__5BE2A6F2" FromRole="Employee1" ToRole="Employee" />
+          <NavigationProperty Name="User" Relationship="EMSModel.FK__Employee__user_i__5CD6CB2B" FromRole="Employee" ToRole="User" />
+          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___4316F928" FromRole="Employee" ToRole="Leave" />
+          <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
+          <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
+          <NavigationProperty Name="Timesheets" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
+        </EntityType>
+        <Association Name="FK__Employee__report__5BE2A6F2">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Employee" Role="Employee1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee1">
+              <PropertyRef Name="reporting_to" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee__user_i__5CD6CB2B">
+          <End Type="EMSModel.User" Role="User" Multiplicity="1" />
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__employee___4316F928">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leavebala__emplo__46E78A0C">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Leavebalance_sheet" Role="Leavebalance_sheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leavebalance_sheet">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Project_r__emplo__37A5467C">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Project_role" Role="Project_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Project_role">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Timesheet__emplo__3F466844">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Timesheet" Role="Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="EMSModelStoreContainer" CdmEntityContainer="EMSEntities">
-          <EntitySetMapping Name="Clients">
-            <EntityTypeMapping TypeName="EMSModel.Client">
-              <MappingFragment StoreEntitySet="Client">
-                <ScalarProperty Name="type_id" ColumnName="type_id" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="client_name" ColumnName="client_name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="EMSModel.Employee">
-              <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="blood_group" ColumnName="blood_group" />
-                <ScalarProperty Name="designation" ColumnName="designation" />
-                <ScalarProperty Name="emergency_contact_person" ColumnName="emergency_contact_person" />
-                <ScalarProperty Name="emergency_contact_no" ColumnName="emergency_contact_no" />
-                <ScalarProperty Name="medical_insurance_no" ColumnName="medical_insurance_no" />
-                <ScalarProperty Name="PF_no" ColumnName="PF_no" />
-                <ScalarProperty Name="bank_account_no" ColumnName="bank_account_no" />
-                <ScalarProperty Name="pan_no" ColumnName="pan_no" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="Year_of_experence" ColumnName="Year_of_experence" />
-                <ScalarProperty Name="reporting_to" ColumnName="reporting_to" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
-                <ScalarProperty Name="date_of_joining" ColumnName="date_of_joining" />
-                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="last_name" ColumnName="last_name" />
-                <ScalarProperty Name="first_name" ColumnName="first_name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Holiday_List">
             <EntityTypeMapping TypeName="EMSModel.Holiday_List">
               <MappingFragment StoreEntitySet="Holiday_List">
@@ -1064,6 +1031,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Designations">
+            <EntityTypeMapping TypeName="EMSModel.Designation">
+              <MappingFragment StoreEntitySet="Designation">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="EMSModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="client_description" ColumnName="client_description" />
+                <ScalarProperty Name="type_id" ColumnName="type_id" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="client_name" ColumnName="client_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Client_type">
             <EntityTypeMapping TypeName="EMSModel.Client_type">
               <MappingFragment StoreEntitySet="Client_type">
@@ -1073,11 +1060,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Designations">
-            <EntityTypeMapping TypeName="EMSModel.Designation">
-              <MappingFragment StoreEntitySet="Designation">
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="EMSModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="blood_group" ColumnName="blood_group" />
+                <ScalarProperty Name="designation" ColumnName="designation" />
+                <ScalarProperty Name="emergency_contact_person" ColumnName="emergency_contact_person" />
+                <ScalarProperty Name="emergency_contact_no" ColumnName="emergency_contact_no" />
+                <ScalarProperty Name="medical_insurance_no" ColumnName="medical_insurance_no" />
+                <ScalarProperty Name="PF_no" ColumnName="PF_no" />
+                <ScalarProperty Name="bank_account_no" ColumnName="bank_account_no" />
+                <ScalarProperty Name="pan_no" ColumnName="pan_no" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="Year_of_experence" ColumnName="Year_of_experence" />
+                <ScalarProperty Name="reporting_to" ColumnName="reporting_to" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="contact_no" ColumnName="contact_no" />
+                <ScalarProperty Name="date_of_joining" ColumnName="date_of_joining" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

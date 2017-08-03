@@ -58,13 +58,18 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from client in datacontext.Clients
-                            where client.id == c_id
+                var query = from x in datacontext.Clients
+                            join y in datacontext.Client_type
+                            on x.type_id equals y.id
+                            where x.id == c_id
                             select new ClientModel
                             {
-                                client_name = client.client_name,
-                                client_type = client.client_type,
-                                is_active = client.is_active
+                                client_id = x.id,
+                                client_name = x.client_name,
+                                client_type_id = x.type_id,
+                                client_type_name = y.type_name,
+                                client_type_description = y.type_description,
+                                is_active = x.is_active
                             };
                 return query.FirstOrDefault();
             }
@@ -85,12 +90,17 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from client in datacontext.Clients
+                var query = from x in datacontext.Clients
+                            join y in datacontext.Client_type
+                            on x.type_id equals y.id
                             select new ClientModel
                             {
-                                client_name = client.client_name,
-                                client_type = client.client_type,
-                                is_active = client.is_active
+                                client_id = x.id,
+                                client_name = x.client_name,
+                                client_type_id = x.type_id,
+                                client_type_name = y.type_name,
+                                client_type_description = y.type_description,
+                                is_active = x.is_active
                             };
                 return query.ToList();
             }
@@ -105,6 +115,33 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static List<ClientModel> GetClientTypeList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from c_type in datacontext.Client_type
+                            select new ClientModel
+                            {
+                                client_type_id = c_type.id,
+                                client_type_name = c_type.type_name,
+                                client_type_description = c_type.type_description
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
         public static void EditClient(Client client)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -168,7 +205,7 @@ namespace EMS.Repository
                                 po = y.po,
                                 client_id = x.id,
                                 client_name = x.client_name,
-                                client_type = x.client_type
+                                type_id = x.type_id
                             };
                 return query.ToList();
             }

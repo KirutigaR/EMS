@@ -25,8 +25,6 @@ namespace EMS
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Client> Clients { get; set; }
-        public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Holiday_List> Holiday_List { get; set; }
         public virtual DbSet<Leave> Leaves { get; set; }
         public virtual DbSet<Leave_type> Leave_type { get; set; }
@@ -38,7 +36,9 @@ namespace EMS
         public virtual DbSet<Timesheet> Timesheets { get; set; }
         public virtual DbSet<User_role> User_role { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Client_type> Client_type { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Client_type> Client_type { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
     }
 }

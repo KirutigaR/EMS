@@ -425,6 +425,7 @@ namespace EMS.Controllers
             return response;
         }
         [Route("api/employeelist/byrole")]
+        [HttpPost]
         public HttpResponseMessage EmployeeListByRole(Employee employee)
         {
             HttpResponseMessage response = null;

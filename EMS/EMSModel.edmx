@@ -13,6 +13,7 @@
           <Property Name="client_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="is_active" Type="int" Nullable="false" />
           <Property Name="type_id" Type="int" Nullable="false" />
+          <Property Name="client_description" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -97,9 +98,9 @@
           <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="role_id" Type="int" Nullable="false" />
-          <Property Name="start_date" Type="date" />
-          <Property Name="end_date" Type="date" />
-          <Property Name="association" Type="int" />
+          <Property Name="start_date" Type="date" Nullable="false" />
+          <Property Name="end_date" Type="date" Nullable="false" />
+          <Property Name="association" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -487,10 +488,10 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="client_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="client_type" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="is_active" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Projects" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Client" ToRole="Project" />
           <Property Name="type_id" Type="Int32" Nullable="false" />
+          <Property Name="client_description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -594,9 +595,9 @@
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Project_role" ToRole="Employee" />
           <NavigationProperty Name="Project" Relationship="EMSModel.FK__Project_r__proje__38996AB5" FromRole="Project_role" ToRole="Project" />
           <NavigationProperty Name="Role" Relationship="EMSModel.FK__Project_r__role___398D8EEE" FromRole="Project_role" ToRole="Role" />
-          <Property Name="start_date" Type="DateTime" Precision="0" />
-          <Property Name="end_date" Type="DateTime" Precision="0" />
-          <Property Name="association" Type="Int32" />
+          <Property Name="start_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="end_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="association" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -843,6 +844,7 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="EMSModel.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="client_description" ColumnName="client_description" />
                 <ScalarProperty Name="type_id" ColumnName="type_id" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="client_name" ColumnName="client_name" />

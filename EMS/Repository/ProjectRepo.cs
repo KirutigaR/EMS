@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using EMS.Models;
+using EMS.Utility;
 
 namespace EMS.Repository
 {
@@ -142,6 +143,35 @@ namespace EMS.Repository
                 datacontext.SaveChanges();
             }
             catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+
+        public static List<ReportingTo> GetProjectManagerList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Employees
+                            join y in datacontext.User_role
+                            on x.user_id equals y.user_id
+                            where y.role_id == Constants.Systemrole_Manager || y.role_id == Constants.Systemrole_TeamLeader || y.role_id == Constants.Projectrole_Manager
+                            select new ReportingTo
+                            {
+                                emp_name = x.first_name,
+                                emp_id = x.id
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());

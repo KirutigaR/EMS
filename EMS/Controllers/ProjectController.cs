@@ -48,7 +48,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/project/list")]
+        [Route("api/project/list")]
         public HttpResponseMessage GetProjectList()
         {
             HttpResponseMessage response = null;
@@ -134,29 +134,51 @@ namespace EMS.Controllers
         }
 
         [Route("api/assign/project/role")]
-        public HttpResponseMessage AssignEmployeeProjectRole(Project_role project_role)
+        public HttpResponseMessage AssignEmployeeProjectRole(List<Project_role> project_roles)
         {
             HttpResponseMessage response = null;
             try
             {
-                if(project_role !=null)
+                if(project_roles !=null)
                 {
-                    int empl_status = EmployeeRepo.GetEmployeeStatusById(project_role.employee_id);
-                    ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
-                    if ((empl_status == 1) && (proj != null))
+                    foreach(Project_role project_role in project_roles)
                     {
-                        ProjectRepo.ProjectRoleAssignment(project_role);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project Role Assigned to the Employee Succesfully"));
+                        int empl_status = EmployeeRepo.GetEmployeeStatusById(project_role.employee_id);
+                        ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
+                        if ((empl_status == 1) && (proj != null))
+                        {
+                            ProjectRepo.ProjectRoleAssignment(project_role);
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project Role Assigned to the Employee Succesfully"));
+                        }
+                        else
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "failure", "Check Project details and employee status"));
+                        }
                     }
-                    else
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "failure", "Check Project details and employee status"));
-                    }
+                    
                 }
                 else
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
                 }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/project/managerlist")]
+        public HttpResponseMessage GetProjectManagerList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ReportingTo> manager_list = ProjectRepo.GetProjectManagerList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", manager_list));
             }
             catch (Exception exception)
             {

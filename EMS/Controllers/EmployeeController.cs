@@ -9,6 +9,7 @@ using System.Web.Security;
 using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
+using LinqKit;
 
 namespace EMS.Controllers
 {
@@ -89,13 +90,13 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/employee/list")]
-        public HttpResponseMessage GetEmployeeList()
+        [Route("api/employee/list/{r_id?}/{d_id?}")]
+        public HttpResponseMessage GetEmployeeList(int r_id = 0, int d_id = 0)
         {
             HttpResponseMessage Response = null;
             try
             {
-                List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList();
+                List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList(r_id, d_id);
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Emp_List));
             }
             catch (Exception exception)
@@ -227,7 +228,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/get/reportingto/list")]
-        //Manager and HR list 
+        //Manager , TeamLeader and HR list 
         public HttpResponseMessage GetReportingtoList()
         {
             HttpResponseMessage response = null;

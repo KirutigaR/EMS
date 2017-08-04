@@ -105,6 +105,7 @@
           <Property Name="po" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="project_description" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="client_id" Type="int" Nullable="false" />
+          <Property Name="resources_req" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Project_role">
           <Key>
@@ -581,6 +582,7 @@
           <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__proje__38996AB5" FromRole="Project" ToRole="Project_role" />
           <NavigationProperty Name="Tasks" Relationship="EMSModel.FK__Task__project_id__3C69FB99" FromRole="Project" ToRole="Task" />
           <NavigationProperty Name="Client" Relationship="EMSModel.FK__Project__client___34C8D9D1" FromRole="Project" ToRole="Client" />
+          <Property Name="resources_req" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Project_role">
           <Key>
@@ -956,6 +958,7 @@
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="EMSModel.Project">
               <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="resources_req" ColumnName="resources_req" />
                 <ScalarProperty Name="client_id" ColumnName="client_id" />
                 <ScalarProperty Name="project_description" ColumnName="project_description" />
                 <ScalarProperty Name="po" ColumnName="po" />

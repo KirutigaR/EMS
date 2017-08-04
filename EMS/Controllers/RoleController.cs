@@ -31,5 +31,41 @@ namespace EMS.Controllers
             }
             return response;
         }
+
+        [Route("api/rolelist/systemrole")]
+        public HttpResponseMessage GetSystemRoleList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<RoleModel> rolelist = RoleRepo.GetSystemRoleList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", rolelist));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/rolelist/projectrole")]
+        public HttpResponseMessage GetProjectRoleList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<RoleModel> rolelist = RoleRepo.GetProjectRoleList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", rolelist));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

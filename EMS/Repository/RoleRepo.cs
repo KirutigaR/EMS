@@ -35,5 +35,61 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+         public static List<RoleModel> GetSystemRoleList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from roles in datacontext.Roles
+                            where roles.role_type == "System Role"
+                            select new RoleModel
+                            {
+                                id = roles.id,
+                                role_name = roles.role_name,
+                                role_description = roles.role_description,
+                                role_type = roles.role_type
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<RoleModel> GetProjectRoleList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from roles in datacontext.Roles
+                            where roles.role_type == "Project Role"
+                            select new RoleModel
+                            {
+                                id = roles.id,
+                                role_name = roles.role_name,
+                                role_description = roles.role_description,
+                                role_type = roles.role_type
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

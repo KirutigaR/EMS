@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using EMS.Models;
 using EMS.Utility;
+using LinqKit;
 
 namespace EMS.Repository
 {
@@ -69,30 +70,73 @@ namespace EMS.Repository
                 datacontent.Dispose();
             }
         }
-        public static List<EmployeeModel> GetEmployeeList()
+        public static List<EmployeeModel> GetEmployeeList(int r_id, int d_id)
         {
             EMSEntities datacontent = new EMSEntities();
             try
             {
-                var query = from employee in datacontent.Employees
-                            join user in datacontent.Users
-                            on employee.user_id equals user.id
-                            where user.is_active == 1 
-                            select new EmployeeModel
-                            {
-                                id = employee.id,
-                                first_name = employee.first_name,
-                                last_name = employee.last_name,
-                                email = employee.email,
-                                date_of_birth = employee.date_of_birth,
-                                gender = employee.gender,
-                                date_of_joining = employee.date_of_joining,
-                                contact_no = employee.contact_no,
-                                user_id = employee.user_id, 
-                                reporting_to = employee.reporting_to,
-                                Year_of_experence = employee.Year_of_experence
-                            };
+                var predicate = LinqKit.PredicateBuilder.True<Employee>();
+                if (r_id != 0)
+                {
+                    predicate = predicate.And(i => i.reporting_to == r_id);
+                    //var query = datacontent.Employees.Where(predicate).Select(i => new EmployeeModel
+                    //{
+                    //    id = i.id,
+                    //    first_name = i.first_name,
+                    //    last_name = i.last_name,
+                    //    email = i.email,
+                    //    date_of_birth = i.date_of_birth,
+                    //    gender = i.gender,
+                    //    date_of_joining = i.date_of_joining,
+                    //    contact_no = i.contact_no,
+                    //    user_id = i.user_id,
+                    //    reporting_to = i.reporting_to,
+                    //    Year_of_experence = i.Year_of_experence
+                    //});
+                    //return query.ToList();
+                }
+                if (d_id != 0)
+                {
+                    predicate = predicate.And(i => i.designation == d_id);
+                    //var query = datacontent.Employees.Where(predicate).Select(i => new EmployeeModel
+                    //{
+                    //    id = i.id,
+                    //    first_name = i.first_name,
+                    //    last_name = i.last_name,
+                    //    email = i.email,
+                    //    date_of_birth = i.date_of_birth,
+                    //    gender = i.gender,
+                    //    date_of_joining = i.date_of_joining,
+                    //    contact_no = i.contact_no,
+                    //    user_id = i.user_id,
+                    //    reporting_to = i.reporting_to,
+                    //    Year_of_experence = i.Year_of_experence
+                    //});
+                    //return query.ToList() ;
+                }
+                //else
+                //{
+                    var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
+                                join user in datacontent.Users
+                                on employee.user_id equals user.id
+                                where (user.is_active == 1)
+                                select new EmployeeModel
+                                {
+                                    id = employee.id,
+                                    first_name = employee.first_name,
+                                    last_name = employee.last_name,
+                                    email = employee.email,
+                                    date_of_birth = employee.date_of_birth,
+                                    gender = employee.gender,
+                                    date_of_joining = employee.date_of_joining,
+                                    contact_no = employee.contact_no,
+                                    user_id = employee.user_id,
+                                    reporting_to = employee.reporting_to,
+                                    Year_of_experence = employee.Year_of_experence
+                                };
                 return query.ToList();
+
+                //}        
             }
             catch(Exception exception)
             {
@@ -298,7 +342,7 @@ namespace EMS.Repository
                 var query = from x in datacontext.Employees
                             join y in datacontext.User_role
                             on x.user_id equals y.user_id
-                            where y.role_id == Constants.HR || y.role_id == Constants.Manager
+                            where y.role_id == Constants.HR || y.role_id == Constants.Systemrole_Manager || y.role_id == Constants.Systemrole_TeamLeader
                             select new ReportingTo
                             {
                                 emp_name = x.first_name,

@@ -139,6 +139,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
+                int count = 0;
                 if(project_roles !=null)
                 {
                     foreach(Project_role project_role in project_roles)
@@ -148,14 +149,17 @@ namespace EMS.Controllers
                         if ((empl_status == 1) && (proj != null))
                         {
                             ProjectRepo.ProjectRoleAssignment(project_role);
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project Role Assigned to the Employee Succesfully"));
+                            count++;
                         }
                         else
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "failure", "Check Project details and employee status"));
                         }
                     }
-                    
+                    if(count>0)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project Role Assigned to the Employee Succesfully"));
+                    }
                 }
                 else
                 {

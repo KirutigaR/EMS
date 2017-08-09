@@ -14,13 +14,13 @@ namespace EMS.Controllers
     public class LeaveController : ApiController
     {
         [Route("api/holiday/list")]
-        public HttpResponseMessage HolidayList()
+        public HttpResponseMessage GetHolidayList()
         {
             HttpResponseMessage response = null;
             try
             {
                 List<Holiday_List> holidayList = LeaveRepo.GetHoliday();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "holidayList"));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", holidayList));
             }
             catch (Exception exception)
             {
@@ -58,17 +58,17 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/holiday/delete")]
-        [HttpPost]
-        public HttpResponseMessage DeleteHolidayList(Holiday_List holiday_list)
+        [Route("api/holiday/delete/{h_id?}")]
+        [HttpGet]
+        public HttpResponseMessage DeleteHolidayList(int h_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                Holiday_List holiday = LeaveRepo.GetHolidayById(holiday_list.id);
+                Holiday_List holiday = LeaveRepo.GetHolidayById(h_id);
                 if (holiday != null)
                 {
-                    LeaveRepo.DeleteHolidayList(holiday_list);
+                    LeaveRepo.DeleteHolidayList(holiday);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Holiday successfully deleted"));
                 }
                 else

@@ -66,6 +66,7 @@ namespace EMS.Repository
             try
             {
                 var query = from u in datacontext.Users
+                            where u.user_name == user.user_name && u.password == user.password
                             select u.id;
                 return query.FirstOrDefault();
             }

@@ -7,6 +7,7 @@ namespace EMS.Models
 {
     public class ProjectModel
     {
+        public int id { get; set; }
         public string project_name { get; set; }
         public System.DateTime start_date { get; set; }
         public System.DateTime end_date { get; set; }
@@ -16,5 +17,6 @@ namespace EMS.Models
         public int client_id { get; set; }
         public string client_name { get; set; }
         public int type_id { get; set; }
+        public int resources_req { get; set; }
     }
 }

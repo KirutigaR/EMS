@@ -13,13 +13,13 @@ namespace EMS.Controllers
 {
     public class TaskController : ApiController
     {
-        [Route("api/task/list")]
-        public HttpResponseMessage GetTaskList()
+        [Route("api/task/list/{p_id?}")]
+        public HttpResponseMessage GetTaskList(int p_id=0)
         {
             HttpResponseMessage response = null;
             try
             {
-                List<TaskModel> tasklist = TaskRepo.GetTaskList();
+                List<TaskModel> tasklist = TaskRepo.GetTaskList(p_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tasklist));
             }
             catch (Exception exception)

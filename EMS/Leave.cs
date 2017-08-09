@@ -20,9 +20,10 @@ namespace EMS
         public System.DateTime from_date { get; set; }
         public System.DateTime to_date { get; set; }
         public int no_of_days { get; set; }
-        public int is_approved { get; set; }
+        public int leave_statusid { get; set; }
     
         public virtual Leave_type Leave_type { get; set; }
+        public virtual Leave_status Leave_status { get; set; }
         public virtual Employee Employee { get; set; }
     }
 }

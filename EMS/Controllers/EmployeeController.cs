@@ -227,7 +227,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/reportingto/list")]
+        [Route("api/employee/reportingto/list")]
         //Manager , TeamLeader and HR list 
         public HttpResponseMessage GetReportingtoList()
         {

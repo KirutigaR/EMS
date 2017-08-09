@@ -5,17 +5,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using EMS.Models;
+using LinqKit;
 
 namespace EMS.Repository
 {
     public class TaskRepo
     {
-        public static List<TaskModel> GetTaskList()
+        public static List<TaskModel> GetTaskList(int p_id)
         {
+            var predicate = LinqKit.PredicateBuilder.True<Task>();
+            if(p_id !=0)
+            {
+                predicate = predicate.And(i => i.project_id == p_id);
+            }
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from task in datacontext.Tasks
+                var query = from task in datacontext.Tasks.AsExpandable().Where(predicate)
                             select new TaskModel
                             {
                                 id= task.id,

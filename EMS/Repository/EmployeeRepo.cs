@@ -132,7 +132,15 @@ namespace EMS.Repository
                                     contact_no = employee.contact_no,
                                     user_id = employee.user_id,
                                     reporting_to = employee.reporting_to,
-                                    Year_of_experence = employee.Year_of_experence
+                                    Year_of_experence = employee.Year_of_experence,
+                                    pan_no = employee.pan_no,
+                                    bank_account_no =employee.bank_account_no,
+                                    blood_group = employee.blood_group,
+                                    designation = employee.designation,
+                                    emergency_contact_no = employee.emergency_contact_no,
+                                    emergency_contact_person = employee.emergency_contact_person,
+                                    medical_insurance_no = employee.medical_insurance_no,
+                                    PF_no = employee.PF_no
                                 };
                 return query.ToList();
 
@@ -154,21 +162,29 @@ namespace EMS.Repository
             EMSEntities datacontent = new EMSEntities();
             try
             {
-                var query = from x in datacontent.Employees
-                            where x.id == e_id
+                var query = from employee in datacontent.Employees
+                            where employee.id == e_id
                             select new EmployeeModel
                             {
-                                id = x.id,
-                                first_name = x.first_name,
-                                last_name = x.last_name,
-                                email = x.email,
-                                date_of_birth = x.date_of_birth,
-                                gender = x.gender,
-                                date_of_joining = x.date_of_joining,
-                                contact_no = x.contact_no,
-                                user_id = x.user_id, 
-                                reporting_to = x.reporting_to,
-                                Year_of_experence = x.Year_of_experence
+                                id = employee.id,
+                                first_name = employee.first_name,
+                                last_name = employee.last_name,
+                                email = employee.email,
+                                date_of_birth = employee.date_of_birth,
+                                gender = employee.gender,
+                                date_of_joining = employee.date_of_joining,
+                                contact_no = employee.contact_no,
+                                user_id = employee.user_id,
+                                reporting_to = employee.reporting_to,
+                                Year_of_experence = employee.Year_of_experence,
+                                pan_no = employee.pan_no,
+                                bank_account_no = employee.bank_account_no,
+                                blood_group = employee.blood_group,
+                                designation = employee.designation,
+                                emergency_contact_no = employee.emergency_contact_no,
+                                emergency_contact_person = employee.emergency_contact_person,
+                                medical_insurance_no = employee.medical_insurance_no,
+                                PF_no = employee.PF_no
                             };
                 return query.FirstOrDefault();
             }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1" ZoomLevel="77">
+      <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1" ZoomLevel="68">
         <EntityTypeShape EntityType="EMSModel.Holiday_List" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="8.25" PointY="10.5" />
         <EntityTypeShape EntityType="EMSModel.Leave_type" Width="1.5" PointX="3" PointY="2.75" />
@@ -29,10 +29,12 @@
         <EntityTypeShape EntityType="EMSModel.Client_type" Width="1.5" PointX="0.5" PointY="16.625" />
         <AssociationConnector Association="EMSModel.FK__Client__type_id__619B8048" />
         <AssociationConnector Association="EMSModel.FK__Project__client___34C8D9D1" />
+        <EntityTypeShape EntityType="EMSModel.Leave_status" Width="1.5" PointX="7.375" PointY="3.875" />
+        <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__73BA3083" />
         <EntityTypeShape EntityType="EMSModel.Employee" Width="1.5" PointX="3" PointY="9.125" />
         <AssociationConnector Association="EMSModel.FK__Employee__report__5BE2A6F2" />
         <AssociationConnector Association="EMSModel.FK__Employee__user_i__5CD6CB2B" />
-        <AssociationConnector Association="EMSModel.FK__Leave__employee___4316F928" />
+        <AssociationConnector Association="EMSModel.FK__Leave__employee___74AE54BC" />
         <AssociationConnector Association="EMSModel.FK__Leavebala__emplo__46E78A0C" />
         <AssociationConnector Association="EMSModel.FK__Project_r__emplo__37A5467C" />
         <AssociationConnector Association="EMSModel.FK__Timesheet__emplo__3F466844" />

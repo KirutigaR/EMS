@@ -60,6 +60,8 @@ namespace EMS.Repository
             try
             {
                 var query = from project in datacontext.Projects
+                            join client in datacontext.Clients
+                            on project.client_id equals client.id
                             where project.id == p_id
                             select new ProjectModel
                             {
@@ -71,7 +73,9 @@ namespace EMS.Repository
                                 po = project.po,
                                 project_description = project.project_description,
                                 resources_req = project.resources_req,
-                                client_id = (int)project.client_id
+                                client_id = (int)project.client_id,
+                                client_name = client.client_name,
+                                type_id = client.type_id
                             };
                 return query.FirstOrDefault();
             }
@@ -101,6 +105,7 @@ namespace EMS.Repository
                 {
                     predicate = predicate.And(i => i.status == status).And(i => i.end_date >= DateTime.Now);
                 }
+              
                 var query = from project in datacontext.Projects.AsExpandable().Where(predicate)
                             join client in datacontext.Clients
                             on project.client_id equals client.id
@@ -129,6 +134,44 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static List<ProjectModel> GetProjectListByEmployee(int e_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from proj_role in datacontext.Project_role
+                            join project in datacontext.Projects
+                            on proj_role.project_id equals project.id
+                            join client in datacontext.Clients
+                            on project.client_id equals client.id
+                            where proj_role.employee_id == e_id
+                            select new ProjectModel
+                            {
+                                project_name = project.project_name,
+                                start_date = project.start_date,
+                                end_date = project.end_date,
+                                status = project.status,
+                                po = project.po,
+                                project_description = project.project_description,
+                                client_id = project.client_id,
+                                client_name = client.client_name,
+                                type_id = client.type_id
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
 
         public static void EditProject(Project project)
         {

@@ -161,7 +161,8 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/timesheet/delete")]
+        [HttpGet]
+        [Route("api/timesheet/delete/{s_id}")]
         public HttpResponseMessage DeleteSheetById(int s_id)
         {
             HttpResponseMessage response = null;
@@ -174,6 +175,14 @@ namespace EMS.Controllers
                         TimeSheetRepo.DeleteTimeSheetRecord(s_id);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Timesheet deleted successfully!"));
                     }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid", "TimeSheet doesnot exists!"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
                 }
             }
             catch (Exception exception)

@@ -48,7 +48,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/project/list/{c_id?}/{status?}/{e_id?}")]
+        [Route("api/project/list/{c_id?}/{status?}")]
         public HttpResponseMessage GetProjectList(int c_id = 0, string status = null)
         {
             HttpResponseMessage response = null;
@@ -66,7 +66,24 @@ namespace EMS.Controllers
             return response;
         }
 
-        
+        [Route("api/project/list/{e_id?}")]
+        public HttpResponseMessage GetProjectListByEmployee(int e_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ProjectModel> Project_List = ProjectRepo.GetProjectListByEmployee(e_id);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
         [Route("api/get/project/{p_id}")]
         public HttpResponseMessage GetProjectById(int p_id)
         {

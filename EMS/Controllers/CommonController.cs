@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Diagnostics;
 using EMS.Repository;
+using EMS.Utility;
 
 namespace EMS.Controllers
 {
@@ -23,7 +24,7 @@ namespace EMS.Controllers
                 
                 if (!b)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, "login failed");
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_120", "Username or password didn't match", "login failed"));
                 }
                 else
                 {
@@ -32,7 +33,7 @@ namespace EMS.Controllers
                     resultSet.Add("user_id", user_id);
                     resultSet.Add("UserName", user.user_name);
                     resultSet.Add("role", user_role);
-                    response = Request.CreateResponse(HttpStatusCode.OK, resultSet);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", resultSet));
                 }
             }
             catch (Exception exception)

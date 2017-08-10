@@ -12,17 +12,17 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Leave_status
+    public partial class Status_leave
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Leave_status()
+        public Status_leave()
         {
             this.Leaves = new HashSet<Leave>();
         }
     
         public int id { get; set; }
-        public string leave_status1 { get; set; }
-        public string status_description { get; set; }
+        public string leave_status { get; set; }
+        public string leave_description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leave> Leaves { get; set; }

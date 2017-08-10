@@ -1,4 +1,5 @@
 ﻿using EMS.Models;
+using EMS.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -97,6 +98,7 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                leave.leave_statusid = Constants.LEAVE_STATUS_PENDING;
                 datacontext.Leaves.Add(leave);
                 datacontext.SaveChanges();
             }
@@ -179,6 +181,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
+                throw e;
             }
             finally
             {
@@ -191,7 +194,7 @@ namespace EMS.Repository
             try
             {
                 var query = from l in datacontext.Leaves
-                            where l.employee_id == id
+                            where l.id == id
                             select l;
                 return query.FirstOrDefault();
             }
@@ -277,19 +280,22 @@ namespace EMS.Repository
                             on e.id equals l.employee_id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
-                            where l.employee_id == id
+                            join ls in datacontext.Status_leave
+                            on l.leave_statusid equals ls.id
+                            where l.employee_id == id && l.leavetype_id == 2
                             select new LeavehistoryModel
                             {
-                                id = e.id,
-                                first_name = e.first_name,
-                                last_name = e.last_name,
+                                //id = e.id,
+                                //first_name = e.first_name,
+                                //last_name = e.last_name,
                                 type_name = lt.type_name,
                                 from_date = l.from_date,
                                 to_date = l.to_date,
-                                no_of_days = l.no_of_days
+                                no_of_days = l.no_of_days,
+                                leave_status = ls.leave_status
                             };
                 return query.ToList();
-                             
+
             }
             catch (Exception e)
             {
@@ -302,26 +308,26 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<Holiday_List> GetHolidayList()
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from hl in datacontext.Holiday_List
-                            select hl;
-                return query.ToList();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                return null;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
+        //public static List<Holiday_List> GetHolidayList()
+        //{
+        //    EMSEntities datacontext = new EMSEntities();
+        //    try
+        //    {
+        //        var query = from hl in datacontext.Holiday_List
+        //                    select hl;
+        //        return query.ToList();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e.Message);
+        //        Debug.WriteLine(e.GetBaseException());
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        datacontext.Dispose();
+        //    }
+        //}
         public static List<LeaveBalanceModel> GetLeaveBalanceById(int id)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -333,7 +339,7 @@ namespace EMS.Repository
                             where lbs.employee_id == id
                             select new LeaveBalanceModel
                             {
-                                //leavetype_id = lbs.leavetype_id,
+                                leavetype_id = lbs.leavetype_id,
                                 type_name = lt.type_name,
                                 no_of_days = (decimal)lbs.no_of_days
                             };
@@ -474,70 +480,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static Project_role GetProjectIdRoleId(int id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from pr in datacontext.Project_role
-                            where pr.employee_id == id
-                            select pr;
-                return query.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                return null;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-        public static string GetProjectName(int pro_id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from p in datacontext.Projects
-                            where p.id == pro_id
-                            select p.project_name;
-                return query.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                return null;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-        public static string GetProjectRole(int role_id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from r in datacontext.Roles
-                            where r.id == role_id && r.role_type == "Project Role"
-                            select r.role_name;
-                return query.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                return null;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-        public static List<EmployeeListByRoleModel> GetEmployeeListByRole(int id, string pro_name, string role_name)
+        public static List<EmployeeListByRoleModel> GetEmployeeListByRole(int id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -550,8 +493,8 @@ namespace EMS.Repository
                                 first_name = e.first_name,
                                 last_name = e.last_name,
                                 email = e.email,
-                                project_name = pro_name,
-                                project_role = role_name
+                                //project_name = pro_name,
+                                //project_role = role_name
                             };
                 return query.ToList();
             }
@@ -566,5 +509,140 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        //public static List<EmployeeListByRoleModel> emp_proj_details_byrole(EmployeeListByRoleModel details)
+        //{
+        //    EMSEntities datacontext = new EMSEntities();
+        //    try
+        //    {
+        //        foreach(EmployeeListByRoleModel items in details)
+        //        {
+        //            var query = from 
+        //        }
+        //    }
+        //}
+
+        public static List<LeavehistoryModel> GetRequestByRoleId(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from e in datacontext.Employees
+                            join l in datacontext.Leaves
+                            on e.id equals l.employee_id
+                            join lt in datacontext.Leave_type
+                            on l.leavetype_id equals lt.id
+                            join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
+                            where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now //&& l.leave_statusid == ls.id
+                            select new LeavehistoryModel
+                            {
+                                id = e.id,
+                                first_name = e.first_name,
+                                last_name = e.last_name,
+                                type_name = lt.type_name,
+                                from_date = l.from_date,
+                                to_date = l.to_date,
+                                no_of_days = l.no_of_days,
+                                //is_approved = l.is_approved,
+                                leave_id = l.id,
+                                leave_status = ls.leave_status,
+                                reporting_to = e.reporting_to
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<LeavehistoryModel> GetPendingLeave()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from l in datacontext.Leaves
+                            join e in datacontext.Employees
+                            on l.employee_id equals e.id
+                            join lt in datacontext.Leave_type
+                            on l.leavetype_id equals lt.id
+                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now
+                            select new LeavehistoryModel
+                            {
+                                id = e.id,
+                                first_name = e.first_name,
+                                last_name = e.last_name,
+                                type_name = lt.type_name,
+                                from_date = l.from_date,
+                                to_date = l.to_date,
+                                no_of_days = l.no_of_days,
+                                reporting_to = e.reporting_to,
+
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static Leave GetLeaveInstanceById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from l in datacontext.Leaves
+                            where l.id == id
+                            select l;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<LeaveTypeListModel> GetLeaveTypeList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from lt in datacontext.Leave_type
+                                //join lt in datacontext.Leave_type on l.leavetype_id equals lt.id
+                            select new LeaveTypeListModel
+                            {
+                                leavetype_id = lt.id,
+                                type_name = lt.type_name
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
     }
 }

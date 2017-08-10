@@ -163,9 +163,6 @@
     <Compile Include="Leavebalance_sheet.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Leave_status.cs">
-      <DependentUpon>EMSModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Leave_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
@@ -175,6 +172,7 @@
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\LeaveBalanceModel.cs" />
     <Compile Include="Models\LeavehistoryModel.cs" />
+    <Compile Include="Models\LeaveTypeListModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\Project_role_model.cs" />
     <Compile Include="Models\ReportingTo.cs" />
@@ -197,6 +195,9 @@
     <Compile Include="Repository\TaskRepo.cs" />
     <Compile Include="Repository\TimeSheetRepo.cs" />
     <Compile Include="Role.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Status_leave.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Task.cs">

@@ -75,14 +75,6 @@
           <Property Name="no_of_days" Type="int" Nullable="false" />
           <Property Name="leave_statusid" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Leave_status">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="leave_status" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="status_description" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
         <EntityType Name="Leave_type">
           <Key>
             <PropertyRef Name="id" />
@@ -135,6 +127,14 @@
           <Property Name="role_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="role_description" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="role_type" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status_leave">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="leave_status" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="leave_description" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -209,7 +209,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__employee___74AE54BC">
+        <Association Name="FK__Leave__employee___09A971A2">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
@@ -221,11 +221,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__73BA3083">
-          <End Role="Leave_status" Type="Self.Leave_status" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__0A9D95DB">
+          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Leave_status">
+            <Principal Role="Status_leave">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -233,7 +233,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leavetype__75A278F5">
+        <Association Name="FK__Leave__leave_sta__0C85DE4D">
+          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+          <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_leave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="leave_statusid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__leavetype__0B91BA14">
           <End Role="Leave_type" Type="Self.Leave_type" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
@@ -384,12 +396,12 @@
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Holiday_List" EntityType="Self.Holiday_List" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Leave_status" EntityType="Self.Leave_status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave_type" EntityType="Self.Leave_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leavebalance_sheet" EntityType="Self.Leavebalance_sheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Project_role" EntityType="Self.Project_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status_leave" EntityType="Self.Status_leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Timesheet" EntityType="Self.Timesheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_role" EntityType="Self.User_role" Schema="dbo" store:Type="Tables" />
@@ -406,15 +418,19 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Employee" EntitySet="Employee" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__employee___74AE54BC" Association="Self.FK__Leave__employee___74AE54BC">
+          <AssociationSet Name="FK__Leave__employee___09A971A2" Association="Self.FK__Leave__employee___09A971A2">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__73BA3083" Association="Self.FK__Leave__leave_sta__73BA3083">
-            <End Role="Leave_status" EntitySet="Leave_status" />
+          <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="Self.FK__Leave__leave_sta__0A9D95DB">
+            <End Role="Status_leave" EntitySet="Status_leave" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leavetype__75A278F5" Association="Self.FK__Leave__leavetype__75A278F5">
+          <AssociationSet Name="FK__Leave__leave_sta__0C85DE4D" Association="Self.FK__Leave__leave_sta__0C85DE4D">
+            <End Role="Status_leave" EntitySet="Status_leave" />
+            <End Role="Leave" EntitySet="Leave" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__leavetype__0B91BA14" Association="Self.FK__Leave__leavetype__0B91BA14">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
@@ -547,9 +563,9 @@
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Timesheet" EntitySet="Timesheets" />
           </AssociationSet>
-          <EntitySet Name="Leave_status" EntityType="EMSModel.Leave_status" />
-          <AssociationSet Name="FK__Leave__leave_sta__73BA3083" Association="EMSModel.FK__Leave__leave_sta__73BA3083">
-            <End Role="Leave_status" EntitySet="Leave_status" />
+          <EntitySet Name="Status_leave" EntityType="EMSModel.Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="EMSModel.FK__Leave__leave_sta__0A9D95DB">
+            <End Role="Status_leave" EntitySet="Status_leave" />
             <End Role="Leave" EntitySet="Leaves" />
           </AssociationSet>
         </EntityContainer>
@@ -574,7 +590,7 @@
           <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leave__leavetype__440B1D61" FromRole="Leave" ToRole="Leave_type" />
           <Property Name="leave_statusid" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___74AE54BC" FromRole="Leave" ToRole="Employee" />
-          <NavigationProperty Name="Leave_status" Relationship="EMSModel.FK__Leave__leave_sta__73BA3083" FromRole="Leave" ToRole="Leave_status" />
+          <NavigationProperty Name="Status_leave" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Leave" ToRole="Status_leave" />
         </EntityType>
         <EntityType Name="Leave_type">
           <Key>
@@ -938,20 +954,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Leave_status">
+        <EntityType Name="Status_leave">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="leave_status1" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="status_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leave_sta__73BA3083" FromRole="Leave_status" ToRole="Leave" />
+          <Property Name="leave_status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="leave_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Status_leave" ToRole="Leave" />
         </EntityType>
-        <Association Name="FK__Leave__leave_sta__73BA3083">
-          <End Type="EMSModel.Leave_status" Role="Leave_status" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__0A9D95DB">
+          <End Type="EMSModel.Status_leave" Role="Status_leave" Multiplicity="1" />
           <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Leave_status">
+            <Principal Role="Status_leave">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -1140,11 +1156,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Leave_status">
-            <EntityTypeMapping TypeName="EMSModel.Leave_status">
-              <MappingFragment StoreEntitySet="Leave_status">
-                <ScalarProperty Name="status_description" ColumnName="status_description" />
-                <ScalarProperty Name="leave_status1" ColumnName="leave_status" />
+          <EntitySetMapping Name="Status_leave">
+            <EntityTypeMapping TypeName="EMSModel.Status_leave">
+              <MappingFragment StoreEntitySet="Status_leave">
+                <ScalarProperty Name="leave_description" ColumnName="leave_description" />
+                <ScalarProperty Name="leave_status" ColumnName="leave_status" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

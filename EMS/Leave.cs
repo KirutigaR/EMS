@@ -23,7 +23,7 @@ namespace EMS
         public int leave_statusid { get; set; }
     
         public virtual Leave_type Leave_type { get; set; }
-        public virtual Leave_status Leave_status { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual Status_leave Status_leave { get; set; }
     }
 }

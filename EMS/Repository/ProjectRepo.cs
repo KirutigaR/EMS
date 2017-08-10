@@ -186,7 +186,27 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-
+        public static string GetRoleNameById(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from r in datacontext.Roles
+                            where r.id == id && r.role_type == "Project Role"
+                            select r.role_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
 
         public static List<ReportingTo> GetProjectManagerList()
         {
@@ -215,7 +235,70 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-
+        public static Project_role GetProjectIdRoleId(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from pr in datacontext.Project_role
+                            where pr.employee_id == id
+                            select pr;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static string GetProjectName(int pro_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from p in datacontext.Projects
+                            where p.id == pro_id
+                            select p.project_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static string GetProjectRole(int role_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from r in datacontext.Roles
+                            where r.id == role_id && r.role_type == "Project Role"
+                            select r.role_name;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return null;
+                
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
         public static List<Project_role_model> GetProjectRoleList(int e_id, int p_id)
         {
             EMSEntities datacontext = new EMSEntities();

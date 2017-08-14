@@ -33,7 +33,7 @@ namespace EMS.Repository
             }
         }
 
-        public static TimeSheetModel GetSheetById(int s_id)
+        public static TimeSheetModel GetSheetById(int s_id)//s_id timesheet_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -82,7 +82,7 @@ namespace EMS.Repository
             }
         }
 
-        public static List<TimeSheetModel> GetSheetByEmpId(int e_id)
+        public static List<TimeSheetModel> GetSheetByEmpId(int e_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -112,7 +112,7 @@ namespace EMS.Repository
             }
         }
 
-        public static List<TimeSheetModel> GetSheetByProjId(int p_id)
+        public static List<TimeSheetModel> GetSheetByProjId(int p_id)//p_id project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -142,7 +142,7 @@ namespace EMS.Repository
             }
         }
         
-        public static void DeleteTimeSheetRecord(int s_id)
+        public static void DeleteTimeSheetRecord(int s_id)//timesheet_id
         {
             EMSEntities datacontext = new EMSEntities();
             try

@@ -67,7 +67,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/get/client/{c_id?}")]
-        public HttpResponseMessage GetClientById(int c_id)
+        public HttpResponseMessage GetClientById(int c_id)//c_id client_id
         {
             HttpResponseMessage response = null;
             try
@@ -135,7 +135,7 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/client/drop/{c_id}")]
-        public HttpResponseMessage DropClient(int c_id)
+        public HttpResponseMessage DropClient(int c_id)//c_id client_id
         {
             HttpResponseMessage response = null;
             try
@@ -168,7 +168,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/client/project/list/{c_id?}")]
-        public HttpResponseMessage GetProjectListByClientId(int c_id)
+        public HttpResponseMessage GetProjectListByClientId(int c_id)//c_id client_id
         {
             HttpResponseMessage response = null;
             try

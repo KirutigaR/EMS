@@ -91,7 +91,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/employee/list/{r_id?}/{d_id?}")]
-        public HttpResponseMessage GetEmployeeList(int r_id = 0, int d_id = 0)
+        public HttpResponseMessage GetEmployeeList(int r_id = 0, int d_id = 0)//r_id role_id, d_id designation_id
         {
             HttpResponseMessage Response = null;
             try
@@ -109,7 +109,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/get/employee/{e_id?}")]
-        public HttpResponseMessage GetEmployeeById(int e_id)
+        public HttpResponseMessage GetEmployeeById(int e_id)//e_id employee_id
         {
             HttpResponseMessage Response = null;
             try
@@ -177,7 +177,7 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/employee/inactive/{e_id?}")]
-        public HttpResponseMessage InvalidEmployee(int e_id)
+        public HttpResponseMessage InvalidEmployee(int e_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
             try

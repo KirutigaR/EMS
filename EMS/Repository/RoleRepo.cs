@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -79,6 +80,127 @@ namespace EMS.Repository
                                 role_type = roles.role_type
                             };
                 return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static RoleModel GetRoleById(int r_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from role in datacontext.Roles
+                            where role.id == r_id
+                            select new RoleModel
+                            {
+                                id = role.id,
+                                role_name = role.role_name,
+                                role_type = role.role_type,
+                                role_description = role.role_description
+                            };
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static RoleModel GetExistingRole(Role details)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from role in datacontext.Roles
+                            where role.role_name == details.role_name && role.role_type == details.role_type
+                            select new RoleModel
+                            {
+                                id = role.id,
+                                role_name = role.role_name,
+                                role_type = role.role_type,
+                                role_description = role.role_description
+                            };
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+
+        public static void CreateRole(Role details)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Roles.Add(details);
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void EditRole(Role details)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(details).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void DeleteRoleById(int r_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Roles
+                            where x.id == r_id
+                            select x;
+
+                datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;
+                datacontext.SaveChanges();
             }
             catch (Exception exception)
             {

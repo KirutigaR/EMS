@@ -14,7 +14,7 @@ namespace EMS.Controllers
     public class TaskController : ApiController
     {
         [Route("api/task/list/{p_id?}")]
-        public HttpResponseMessage GetTaskList(int p_id=0)
+        public HttpResponseMessage GetTaskList(int p_id=0)//p_id project_id
         {
             HttpResponseMessage response = null;
             try
@@ -107,7 +107,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/get/task/{t_id?}")]
-        public HttpResponseMessage GetTaskById(int t_id)
+        public HttpResponseMessage GetTaskById(int t_id)//t_id task_id
         {
             HttpResponseMessage response = null;
             try
@@ -140,7 +140,7 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/task/delete/{t_id}")]
-        public HttpResponseMessage DeleteTask(int t_id)
+        public HttpResponseMessage DeleteTask(int t_id)//t_id task_id
         {
             HttpResponseMessage response = null;
             try

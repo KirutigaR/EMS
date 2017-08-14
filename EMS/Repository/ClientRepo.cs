@@ -197,6 +197,7 @@ namespace EMS.Repository
                             where x.id == c_id
                             select new ProjectModel
                             {
+                                project_id = y.id,
                                 project_name = y.project_name,
                                 project_description = y.project_description,
                                 start_date = y.start_date,
@@ -205,7 +206,8 @@ namespace EMS.Repository
                                 po = y.po,
                                 client_id = x.id,
                                 client_name = x.client_name,
-                                type_id = x.type_id
+                                type_id = x.type_id,
+                                resources_req = y.resources_req
                             };
                 return query.ToList();
             }

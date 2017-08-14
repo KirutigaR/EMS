@@ -63,7 +63,7 @@ namespace EMS.Repository
             }
         }
 
-        public static Task GetTaskById(int t_id)
+        public static Task GetTaskById(int t_id)//t_id task_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -85,7 +85,7 @@ namespace EMS.Repository
             }
         }
 
-        public static TaskModel GetTaskDetailsById(int t_id)
+        public static TaskModel GetTaskDetailsById(int t_id)//t_id task_id
         {
             EMSEntities datacontext = new EMSEntities();
             try

@@ -71,14 +71,14 @@ namespace EMS.Controllers
         }
 
         [Route("api/get/timesheet/{id?}")]
-        public HttpResponseMessage GetSheetById(int id)
+        public HttpResponseMessage GetSheetById(int s_id)//timesheet id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(id != 0)
+                if(s_id != 0)
                 {
-                    TimeSheetModel record = TimeSheetRepo.GetSheetById(id);
+                    TimeSheetModel record = TimeSheetRepo.GetSheetById(s_id);
                     if(record!= null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", record));
@@ -104,7 +104,7 @@ namespace EMS.Controllers
 
 
         [Route("api/get/employee/timesheet/{e_id?}")]
-        public HttpResponseMessage GetSheetByEmpId(int e_id)
+        public HttpResponseMessage GetSheetByEmpId(int e_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
             try
@@ -137,7 +137,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/get/project/timesheet/{p_id?}")]
-        public HttpResponseMessage GetSheetByProjId(int p_id)
+        public HttpResponseMessage GetSheetByProjId(int p_id)//p_id project_id
         {
             HttpResponseMessage response = null;
             try
@@ -163,7 +163,7 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/timesheet/delete/{s_id}")]
-        public HttpResponseMessage DeleteSheetById(int s_id)
+        public HttpResponseMessage DeleteSheetById(int s_id)//s_id timesheet_id
         {
             HttpResponseMessage response = null;
             try

@@ -213,7 +213,9 @@
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utility\Constants.cs" />
+    <Compile Include="Utility\DecryptPassword.cs" />
     <Compile Include="Utility\EMSResponseMessage.cs" />
+    <Compile Include="Utility\EncryptPassword.cs" />
     <Compile Include="Utility\PasswordGenerator.cs" />
     <Compile Include="Utility\Utils.cs" />
   </ItemGroup>
@@ -226,6 +228,7 @@
     <Content Include="EMSModel.edmx.diagram">
       <DependentUpon>EMSModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

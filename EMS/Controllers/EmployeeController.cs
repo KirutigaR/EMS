@@ -52,7 +52,11 @@ namespace EMS.Controllers
                         User user = new User();
                         user.user_name = employee.email;
                         //user.password = employee.first_name + "jaishu";
-                        user.password = PasswordGenerator.GeneratePassword();
+                        string passwod = PasswordGenerator.GeneratePassword();
+                        Debug.WriteLine(passwod);
+                        user.password = EncryptPassword.CalculateHash(passwod);
+                        //user.password = passwod;
+                        Debug.WriteLine(user.password);
                         user.is_active = 1;
                         EmployeeRepo.CreateNewUser(user);
                         employee.user_id = user.id;

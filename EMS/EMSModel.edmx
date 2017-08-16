@@ -170,7 +170,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="user_name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="password" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK__Client__type_id__619B8048">
@@ -697,7 +697,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="user_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="is_active" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User_role" Relationship="EMSModel.FK__User_role__user___2D27B809" FromRole="User" ToRole="User_role" />
           <NavigationProperty Name="Employees" Relationship="EMSModel.FK__Employee__user_i__5CD6CB2B" FromRole="User" ToRole="Employee" />

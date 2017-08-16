@@ -19,6 +19,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;            
             try
             {
+                user.password = EncryptPassword.CalculateHash(user.password);
                 Dictionary<string, object> resultSet = new Dictionary<string, object>(); 
                 bool b = CommonRepo.Login(user);
                 
@@ -28,6 +29,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
+
                     int user_id = CommonRepo.GetUserID(user);
                     string user_role = CommonRepo.GetUserRole(user_id);
                     resultSet.Add("user_id", user_id);

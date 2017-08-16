@@ -63,7 +63,7 @@ namespace EMS.Repository
             }
         }
 
-        public static Task GetTaskById(int t_id)
+        public static Task GetTaskById(int t_id)//t_id task_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -71,6 +71,34 @@ namespace EMS.Repository
                 var query = from task in datacontext.Tasks
                             where task.id == t_id
                             select task;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static TaskModel GetTaskDetailsById(int t_id)//t_id task_id
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from task in datacontext.Tasks
+                            where task.id == t_id
+                            select new TaskModel
+                            {
+                                id = task.id,
+                                task_name = task.task_name,
+                                task_description = task.task_description,
+                                project_id = task.project_id
+                            };
                 return query.FirstOrDefault();
             }
             catch (Exception exception)
@@ -105,6 +133,25 @@ namespace EMS.Repository
             }
         }
 
+        public static void DeleteTaskById(Task instance)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(instance).State = EntityState.Deleted;
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
 
     }
 }

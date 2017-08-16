@@ -70,7 +70,7 @@ namespace EMS.Repository
                 datacontent.Dispose();
             }
         }
-        public static List<EmployeeModel> GetEmployeeList(int r_id, int d_id)
+        public static List<EmployeeModel> GetEmployeeList(int r_id, int d_id) //r_id reportingto id, d_id designation id of the employee
         {
             EMSEntities datacontent = new EMSEntities();
             try
@@ -78,44 +78,13 @@ namespace EMS.Repository
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
                 if (r_id != 0)
                 {
-                    predicate = predicate.And(i => i.reporting_to == r_id);
-                    //var query = datacontent.Employees.Where(predicate).Select(i => new EmployeeModel
-                    //{
-                    //    id = i.id,
-                    //    first_name = i.first_name,
-                    //    last_name = i.last_name,
-                    //    email = i.email,
-                    //    date_of_birth = i.date_of_birth,
-                    //    gender = i.gender,
-                    //    date_of_joining = i.date_of_joining,
-                    //    contact_no = i.contact_no,
-                    //    user_id = i.user_id,
-                    //    reporting_to = i.reporting_to,
-                    //    Year_of_experence = i.Year_of_experence
-                    //});
-                    //return query.ToList();
+                    predicate = predicate.And(i => i.reporting_to == r_id);       
                 }
                 if (d_id != 0)
                 {
-                    predicate = predicate.And(i => i.designation == d_id);
-                    //var query = datacontent.Employees.Where(predicate).Select(i => new EmployeeModel
-                    //{
-                    //    id = i.id,
-                    //    first_name = i.first_name,
-                    //    last_name = i.last_name,
-                    //    email = i.email,
-                    //    date_of_birth = i.date_of_birth,
-                    //    gender = i.gender,
-                    //    date_of_joining = i.date_of_joining,
-                    //    contact_no = i.contact_no,
-                    //    user_id = i.user_id,
-                    //    reporting_to = i.reporting_to,
-                    //    Year_of_experence = i.Year_of_experence
-                    //});
-                    //return query.ToList() ;
+                    predicate = predicate.And(i => i.designation == d_id);      
                 }
-                //else
-                //{
+              
                     var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
                                 join user in datacontent.Users
                                 on employee.user_id equals user.id
@@ -143,8 +112,7 @@ namespace EMS.Repository
                                     PF_no = employee.PF_no
                                 };
                 return query.ToList();
-
-                //}        
+       
             }
             catch(Exception exception)
             {
@@ -157,7 +125,7 @@ namespace EMS.Repository
                 datacontent.Dispose();
             }
         }
-        public static EmployeeModel GetEmployeeDetailsById(int e_id)
+        public static EmployeeModel GetEmployeeDetailsById(int e_id)//e_id employee_id 
         {
             EMSEntities datacontent = new EMSEntities();
             try
@@ -200,7 +168,7 @@ namespace EMS.Repository
             }
         }
 
-        public static Employee GetEmployeeById(int e_id)
+        public static Employee GetEmployeeById(int e_id)//e_id employee_id
         {
             EMSEntities datacontent = new EMSEntities();
             try
@@ -222,7 +190,7 @@ namespace EMS.Repository
             }
         }
 
-        public static void InsertLeaveBalance(Employee employee, int[] arr)
+        public static void InsertLeaveBalance(Employee employee, int[] arr)//arr constant array - contains manager , HR and TeamLead ID
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -301,7 +269,7 @@ namespace EMS.Repository
             }
         }
 
-        public static int GetEmployeeStatusById(int e_id)
+        public static int GetEmployeeStatusById(int e_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try

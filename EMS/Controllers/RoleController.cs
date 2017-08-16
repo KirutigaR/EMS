@@ -67,5 +67,135 @@ namespace EMS.Controllers
             }
             return response;
         }
+
+        [Route("api/role/add")]
+        public HttpResponseMessage AddRole(Role role)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (role != null)
+                {
+                    RoleModel existing_instance = RoleRepo.GetExistingRole(role);
+                    if (existing_instance != null)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Role already exists", "Role already exists"));
+                    }
+                    else
+                    {
+                        RoleRepo.CreateRole(role);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Role created Successfully!"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/get/role/{r_id?}")]
+        public HttpResponseMessage GetRoleById(int r_id)//r_id role_id
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (r_id != 0)
+                {
+                    RoleModel instance = RoleRepo.GetRoleById(r_id);
+                    if (instance != null)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", instance));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid role ID", "Invalid role ID"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/role/edit")]
+        public HttpResponseMessage EditRole(Role role)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (role != null)
+                {
+                    if(RoleRepo.GetRoleById(role.id)!=null)
+                    {
+                        RoleRepo.EditRole(role);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "ROle Updated successfully!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid role object", "Invalid role object"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("api/role/delete/{r_id?}")]
+        public HttpResponseMessage DeleteRoleById(int r_id)//r_id role_id
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (r_id != 0)
+                {
+                    if (RoleRepo.GetRoleById(r_id) != null)
+                    {
+                        RoleRepo.DeleteRoleById(r_id);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Role deleted!"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid role object", "Invalid role object"));
+                    }
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

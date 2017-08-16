@@ -72,13 +72,13 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static decimal? GetNoofDaysById(int id)
+        public static decimal GetNoofDaysById(int id, int emp_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from lbs in datacontext.Leavebalance_sheet
-                            where lbs.id == id
+                            where lbs.leavetype_id == id && lbs.employee_id == emp_id
                             select lbs.no_of_days;
                 return query.FirstOrDefault();
             }
@@ -86,7 +86,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return 0;
+                throw e;
             }
             finally
             {
@@ -282,7 +282,7 @@ namespace EMS.Repository
                             on l.leavetype_id equals lt.id
                             join ls in datacontext.Status_leave
                             on l.leave_statusid equals ls.id
-                            where l.employee_id == id && l.leavetype_id == 2
+                            where l.employee_id == id //&& l.leavetype_id == 2
                             select new LeavehistoryModel
                             {
                                 //id = e.id,
@@ -485,16 +485,19 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from e in datacontext.Employees
-                            where e.reporting_to == id
+                var query = from pr in datacontext.Project_role
+                            join e in datacontext.Employees on pr.employee_id equals e.id
+                            join p in datacontext.Projects on pr.project_id equals p.id
+                            join r in datacontext.Roles on pr.role_id equals r.id
+                            where e.reporting_to == id && r.role_type == "Project Role"
                             select new EmployeeListByRoleModel
                             {
                                 id = e.id,
                                 first_name = e.first_name,
                                 last_name = e.last_name,
                                 email = e.email,
-                                //project_name = pro_name,
-                                //project_role = role_name
+                                project_name = p.project_name,
+                                project_role = r.role_name
                             };
                 return query.ToList();
             }
@@ -571,6 +574,7 @@ namespace EMS.Repository
                             on l.employee_id equals e.id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
+                            join st in datacontext.Status_leave on l.leave_statusid equals st.id
                             where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
@@ -582,7 +586,7 @@ namespace EMS.Repository
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
                                 reporting_to = e.reporting_to,
-
+                                leave_status = st.leave_status
                             };
                 return query.ToList();
             }

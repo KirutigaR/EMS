@@ -136,7 +136,7 @@ namespace EMS.Controllers
                     if (gender == "female" && leave_type1 == "ML")
                     {
                         //if (leave_type1 == "ML")
-                        //{
+                        //{ 
                         //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
                         decimal Ml_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
                         if (Ml_leave_type != 0)
@@ -362,18 +362,18 @@ namespace EMS.Controllers
         }
         [Route("api/changepassword")]
         [HttpPost]
-        public HttpResponseMessage ChangePassword(Employee employee, string oldapassword, string new_password, string confirm_password)
+        public HttpResponseMessage ChangePassword(ChangePasswordModel changepassword)
         {
             HttpResponseMessage response = null;
             try
             {
-                int user_id = LeaveRepo.GetUserIdById(employee.id);
+                int user_id = LeaveRepo.GetUserIdById(changepassword.id);
                 User user_instance = LeaveRepo.GetUserById(user_id);
-                if (new_password == confirm_password)
+                if (changepassword.new_password == changepassword.confirm_password)
                 {
-                    if (oldapassword == user_instance.password)
+                    if (changepassword.oldpassword == user_instance.password)
                     {
-                        user_instance.password = new_password;
+                        user_instance.password = changepassword.new_password;
                         LeaveRepo.EditUserPassword(user_instance);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Password sucessfully changed"));
                     }

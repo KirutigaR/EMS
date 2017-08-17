@@ -81,5 +81,26 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+        public static int GetEmployeeIdByUserid(int id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from e in datacontext.Employees
+                            where e.user_id == id
+                            select e.id;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return 0;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

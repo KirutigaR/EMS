@@ -32,6 +32,8 @@ namespace EMS.Controllers
 
                     int user_id = CommonRepo.GetUserID(user);
                     string user_role = CommonRepo.GetUserRole(user_id);
+                    int employee_id = CommonRepo.GetEmployeeIdByUserid(user_id);
+                    resultSet.Add("employee_id", employee_id);
                     resultSet.Add("user_id", user_id);
                     resultSet.Add("UserName", user.user_name);
                     resultSet.Add("role", user_role);

@@ -95,7 +95,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/employee/list/{r_id?}/{d_id?}")]
-        public HttpResponseMessage GetEmployeeList(int r_id = 0, int d_id = 0)//r_id role_id, d_id designation_id
+        public HttpResponseMessage GetEmployeeList(int r_id = 0, int d_id = 0)//r_id reportingto_id, d_id designation_id
         {
             HttpResponseMessage Response = null;
             try

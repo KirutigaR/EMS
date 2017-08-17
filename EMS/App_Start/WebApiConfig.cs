@@ -16,9 +16,6 @@ namespace EMS
             // Web API configuration and services
 
             config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-            
             config.MapHttpAttributeRoutes();
 
             var json = config.Formatters.JsonFormatter;

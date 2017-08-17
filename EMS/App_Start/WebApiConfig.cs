@@ -14,12 +14,11 @@ namespace EMS
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
 
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-            //config.EnableCors();
-            // Web API routes
+            
             config.MapHttpAttributeRoutes();
 
             var json = config.Formatters.JsonFormatter;

@@ -27,5 +27,6 @@ namespace EMS.Models
         public string emergency_contact_person { get; set; }
         public int designation { get; set; }
         public string blood_group { get; set; }
+        public decimal ctc { get; set; }
     }
 }

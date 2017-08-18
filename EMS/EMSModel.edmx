@@ -98,17 +98,18 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ctc" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="basic_pay" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="HRA" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="FA" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="MA" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="CA" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="PF" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="MI" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="ESI" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="gratuity" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="SA" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ctc" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="basic_pay" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="HRA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="FA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="MA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="CA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="PF" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="MI" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="ESI" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="gratuity" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="SA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="pt" Type="decimal" Precision="12" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -393,7 +394,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__User_Pays__emp_i__17F790F9">
+        <Association Name="FK__User_Pays__emp_i__1BC821DD">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="User_Payslip" Type="Self.User_Payslip" Multiplicity="*" />
           <ReferentialConstraint>
@@ -405,7 +406,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__User_Pays__paysl__18EBB532">
+        <Association Name="FK__User_Pays__paysl__1EA48E88">
           <End Role="Payslip" Type="Self.Payslip" Multiplicity="1" />
           <End Role="User_Payslip" Type="Self.User_Payslip" Multiplicity="*" />
           <ReferentialConstraint>
@@ -524,11 +525,11 @@
             <End Role="Task" EntitySet="Task" />
             <End Role="Timesheet" EntitySet="Timesheet" />
           </AssociationSet>
-          <AssociationSet Name="FK__User_Pays__emp_i__17F790F9" Association="Self.FK__User_Pays__emp_i__17F790F9">
+          <AssociationSet Name="FK__User_Pays__emp_i__1BC821DD" Association="Self.FK__User_Pays__emp_i__1BC821DD">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="User_Payslip" EntitySet="User_Payslip" />
           </AssociationSet>
-          <AssociationSet Name="FK__User_Pays__paysl__18EBB532" Association="Self.FK__User_Pays__paysl__18EBB532">
+          <AssociationSet Name="FK__User_Pays__paysl__1EA48E88" Association="Self.FK__User_Pays__paysl__1EA48E88">
             <End Role="Payslip" EntitySet="Payslip" />
             <End Role="User_Payslip" EntitySet="User_Payslip" />
           </AssociationSet>
@@ -632,11 +633,11 @@
           </AssociationSet>
           <EntitySet Name="Payslips" EntityType="EMSModel.Payslip" />
           <EntitySet Name="User_Payslip" EntityType="EMSModel.User_Payslip" />
-          <AssociationSet Name="FK__User_Pays__emp_i__17F790F9" Association="EMSModel.FK__User_Pays__emp_i__17F790F9">
+          <AssociationSet Name="FK__User_Pays__emp_i__1BC821DD" Association="EMSModel.FK__User_Pays__emp_i__1BC821DD">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="User_Payslip" EntitySet="User_Payslip" />
           </AssociationSet>
-          <AssociationSet Name="FK__User_Pays__paysl__18EBB532" Association="EMSModel.FK__User_Pays__paysl__18EBB532">
+          <AssociationSet Name="FK__User_Pays__paysl__1EA48E88" Association="EMSModel.FK__User_Pays__paysl__1EA48E88">
             <End Role="Payslip" EntitySet="Payslips" />
             <End Role="User_Payslip" EntitySet="User_Payslip" />
           </AssociationSet>
@@ -953,7 +954,7 @@
           <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
           <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
           <NavigationProperty Name="Timesheets" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
-          <NavigationProperty Name="User_Payslip" Relationship="EMSModel.FK__User_Pays__emp_i__17F790F9" FromRole="Employee" ToRole="User_Payslip" />
+          <NavigationProperty Name="User_Payslip" Relationship="EMSModel.FK__User_Pays__emp_i__1BC821DD" FromRole="Employee" ToRole="User_Payslip" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -1053,18 +1054,19 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ctc" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="basic_pay" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="HRA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="FA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="MA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="CA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="PF" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="MI" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="ESI" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="gratuity" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="SA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="User_Payslip" Relationship="EMSModel.FK__User_Pays__paysl__18EBB532" FromRole="Payslip" ToRole="User_Payslip" />
+          <Property Name="ctc" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="basic_pay" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="HRA" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="FA" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="MA" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="CA" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="PF" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="MI" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="ESI" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="gratuity" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="SA" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <NavigationProperty Name="User_Payslip" Relationship="EMSModel.FK__User_Pays__paysl__1EA48E88" FromRole="Payslip" ToRole="User_Payslip" />
+          <Property Name="pt" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
         </EntityType>
         <EntityType Name="User_Payslip">
           <Key>
@@ -1076,10 +1078,10 @@
           <Property Name="from_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="is_active" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__User_Pays__emp_i__17F790F9" FromRole="User_Payslip" ToRole="Employee" />
-          <NavigationProperty Name="Payslip" Relationship="EMSModel.FK__User_Pays__paysl__18EBB532" FromRole="User_Payslip" ToRole="Payslip" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__User_Pays__emp_i__1BC821DD" FromRole="User_Payslip" ToRole="Employee" />
+          <NavigationProperty Name="Payslip" Relationship="EMSModel.FK__User_Pays__paysl__1EA48E88" FromRole="User_Payslip" ToRole="Payslip" />
         </EntityType>
-        <Association Name="FK__User_Pays__emp_i__17F790F9">
+        <Association Name="FK__User_Pays__emp_i__1BC821DD">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
           <End Type="EMSModel.User_Payslip" Role="User_Payslip" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1091,7 +1093,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__User_Pays__paysl__18EBB532">
+        <Association Name="FK__User_Pays__paysl__1EA48E88">
           <End Type="EMSModel.Payslip" Role="Payslip" Multiplicity="1" />
           <End Type="EMSModel.User_Payslip" Role="User_Payslip" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1296,6 +1298,7 @@
           <EntitySetMapping Name="Payslips">
             <EntityTypeMapping TypeName="EMSModel.Payslip">
               <MappingFragment StoreEntitySet="Payslip">
+                <ScalarProperty Name="pt" ColumnName="pt" />
                 <ScalarProperty Name="SA" ColumnName="SA" />
                 <ScalarProperty Name="gratuity" ColumnName="gratuity" />
                 <ScalarProperty Name="ESI" ColumnName="ESI" />

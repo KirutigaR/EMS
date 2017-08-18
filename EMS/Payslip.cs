@@ -21,17 +21,18 @@ namespace EMS
         }
     
         public int id { get; set; }
-        public string ctc { get; set; }
-        public string basic_pay { get; set; }
-        public string HRA { get; set; }
-        public string FA { get; set; }
-        public string MA { get; set; }
-        public string CA { get; set; }
-        public string PF { get; set; }
-        public string MI { get; set; }
-        public string ESI { get; set; }
-        public string gratuity { get; set; }
-        public string SA { get; set; }
+        public decimal ctc { get; set; }
+        public decimal basic_pay { get; set; }
+        public decimal HRA { get; set; }
+        public decimal FA { get; set; }
+        public decimal MA { get; set; }
+        public decimal CA { get; set; }
+        public decimal PF { get; set; }
+        public decimal MI { get; set; }
+        public decimal ESI { get; set; }
+        public decimal gratuity { get; set; }
+        public decimal SA { get; set; }
+        public decimal pt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_Payslip> User_Payslip { get; set; }

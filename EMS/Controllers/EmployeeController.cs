@@ -73,6 +73,9 @@ namespace EMS.Controllers
                         {
                             EmployeeRepo.InsertLeaveBalance(employee, Constants.female_leave_type);
                         }
+                        Payslip payslip = new Payslip();
+                        payslip.ctc = employee_details.ctc;
+                        
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
                     }
                     else

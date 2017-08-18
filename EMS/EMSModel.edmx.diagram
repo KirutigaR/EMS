@@ -40,8 +40,8 @@
         <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0A9D95DB" />
         <EntityTypeShape EntityType="EMSModel.Payslip" Width="1.5" PointX="5" PointY="23.5" />
         <EntityTypeShape EntityType="EMSModel.User_Payslip" Width="1.5" PointX="7.25" PointY="15" />
-        <AssociationConnector Association="EMSModel.FK__User_Pays__emp_i__17F790F9" />
-        <AssociationConnector Association="EMSModel.FK__User_Pays__paysl__18EBB532" />
+        <AssociationConnector Association="EMSModel.FK__User_Pays__emp_i__1BC821DD" />
+        <AssociationConnector Association="EMSModel.FK__User_Pays__paysl__1EA48E88" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

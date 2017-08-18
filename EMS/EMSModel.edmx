@@ -93,6 +93,23 @@
           <Property Name="leavetype_id" Type="int" Nullable="false" />
           <Property Name="no_of_days" Type="decimal" Precision="5" Scale="1" Nullable="false" />
         </EntityType>
+        <EntityType Name="Payslip">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ctc" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="basic_pay" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="HRA" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FA" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MA" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CA" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PF" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MI" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ESI" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="gratuity" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="SA" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
         <EntityType Name="Project">
           <Key>
             <PropertyRef Name="id" />
@@ -155,6 +172,17 @@
           <Property Name="work_date" Type="date" Nullable="false" />
           <Property Name="work_hour" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_Payslip">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="emp_id" Type="int" Nullable="false" />
+          <Property Name="payslip_id" Type="int" Nullable="false" />
+          <Property Name="from_date" Type="date" Nullable="false" />
+          <Property Name="to_date" Type="date" Nullable="false" />
+          <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User_role">
           <Key>
@@ -365,6 +393,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__User_Pays__emp_i__17F790F9">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="User_Payslip" Type="Self.User_Payslip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User_Payslip">
+              <PropertyRef Name="emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User_Pays__paysl__18EBB532">
+          <End Role="Payslip" Type="Self.Payslip" Multiplicity="1" />
+          <End Role="User_Payslip" Type="Self.User_Payslip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payslip">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User_Payslip">
+              <PropertyRef Name="payslip_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__User_role__role___2E1BDC42">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="User_role" Type="Self.User_role" Multiplicity="*" />
@@ -398,12 +450,14 @@
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave_type" EntityType="Self.Leave_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leavebalance_sheet" EntityType="Self.Leavebalance_sheet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payslip" EntityType="Self.Payslip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Project_role" EntityType="Self.Project_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Status_leave" EntityType="Self.Status_leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Timesheet" EntityType="Self.Timesheet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Payslip" EntityType="Self.User_Payslip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_role" EntityType="Self.User_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Client__type_id__619B8048" Association="Self.FK__Client__type_id__619B8048">
@@ -469,6 +523,14 @@
           <AssociationSet Name="FK__Timesheet__task___403A8C7D" Association="Self.FK__Timesheet__task___403A8C7D">
             <End Role="Task" EntitySet="Task" />
             <End Role="Timesheet" EntitySet="Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User_Pays__emp_i__17F790F9" Association="Self.FK__User_Pays__emp_i__17F790F9">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="User_Payslip" EntitySet="User_Payslip" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User_Pays__paysl__18EBB532" Association="Self.FK__User_Pays__paysl__18EBB532">
+            <End Role="Payslip" EntitySet="Payslip" />
+            <End Role="User_Payslip" EntitySet="User_Payslip" />
           </AssociationSet>
           <AssociationSet Name="FK__User_role__role___2E1BDC42" Association="Self.FK__User_role__role___2E1BDC42">
             <End Role="Roles" EntitySet="Roles" />
@@ -567,6 +629,16 @@
           <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="EMSModel.FK__Leave__leave_sta__0A9D95DB">
             <End Role="Status_leave" EntitySet="Status_leave" />
             <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <EntitySet Name="Payslips" EntityType="EMSModel.Payslip" />
+          <EntitySet Name="User_Payslip" EntityType="EMSModel.User_Payslip" />
+          <AssociationSet Name="FK__User_Pays__emp_i__17F790F9" Association="EMSModel.FK__User_Pays__emp_i__17F790F9">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="User_Payslip" EntitySet="User_Payslip" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User_Pays__paysl__18EBB532" Association="EMSModel.FK__User_Pays__paysl__18EBB532">
+            <End Role="Payslip" EntitySet="Payslips" />
+            <End Role="User_Payslip" EntitySet="User_Payslip" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Holiday_List">
@@ -881,6 +953,7 @@
           <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
           <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
           <NavigationProperty Name="Timesheets" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
+          <NavigationProperty Name="User_Payslip" Relationship="EMSModel.FK__User_Pays__emp_i__17F790F9" FromRole="Employee" ToRole="User_Payslip" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -972,6 +1045,61 @@
             </Principal>
             <Dependent Role="Leave">
               <PropertyRef Name="leave_statusid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Payslip">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ctc" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="basic_pay" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="HRA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PF" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MI" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ESI" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="gratuity" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SA" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User_Payslip" Relationship="EMSModel.FK__User_Pays__paysl__18EBB532" FromRole="Payslip" ToRole="User_Payslip" />
+        </EntityType>
+        <EntityType Name="User_Payslip">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="emp_id" Type="Int32" Nullable="false" />
+          <Property Name="payslip_id" Type="Int32" Nullable="false" />
+          <Property Name="from_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="is_active" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__User_Pays__emp_i__17F790F9" FromRole="User_Payslip" ToRole="Employee" />
+          <NavigationProperty Name="Payslip" Relationship="EMSModel.FK__User_Pays__paysl__18EBB532" FromRole="User_Payslip" ToRole="Payslip" />
+        </EntityType>
+        <Association Name="FK__User_Pays__emp_i__17F790F9">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.User_Payslip" Role="User_Payslip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User_Payslip">
+              <PropertyRef Name="emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User_Pays__paysl__18EBB532">
+          <End Type="EMSModel.Payslip" Role="Payslip" Multiplicity="1" />
+          <End Type="EMSModel.User_Payslip" Role="User_Payslip" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payslip">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="User_Payslip">
+              <PropertyRef Name="payslip_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1161,6 +1289,36 @@
               <MappingFragment StoreEntitySet="Status_leave">
                 <ScalarProperty Name="leave_description" ColumnName="leave_description" />
                 <ScalarProperty Name="leave_status" ColumnName="leave_status" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payslips">
+            <EntityTypeMapping TypeName="EMSModel.Payslip">
+              <MappingFragment StoreEntitySet="Payslip">
+                <ScalarProperty Name="SA" ColumnName="SA" />
+                <ScalarProperty Name="gratuity" ColumnName="gratuity" />
+                <ScalarProperty Name="ESI" ColumnName="ESI" />
+                <ScalarProperty Name="MI" ColumnName="MI" />
+                <ScalarProperty Name="PF" ColumnName="PF" />
+                <ScalarProperty Name="CA" ColumnName="CA" />
+                <ScalarProperty Name="MA" ColumnName="MA" />
+                <ScalarProperty Name="FA" ColumnName="FA" />
+                <ScalarProperty Name="HRA" ColumnName="HRA" />
+                <ScalarProperty Name="basic_pay" ColumnName="basic_pay" />
+                <ScalarProperty Name="ctc" ColumnName="ctc" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Payslip">
+            <EntityTypeMapping TypeName="EMSModel.User_Payslip">
+              <MappingFragment StoreEntitySet="User_Payslip">
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="to_date" ColumnName="to_date" />
+                <ScalarProperty Name="from_date" ColumnName="from_date" />
+                <ScalarProperty Name="payslip_id" ColumnName="payslip_id" />
+                <ScalarProperty Name="emp_id" ColumnName="emp_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

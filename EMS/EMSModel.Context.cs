@@ -41,5 +41,7 @@ namespace EMS
         public virtual DbSet<Client_type> Client_type { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Status_leave> Status_leave { get; set; }
+        public virtual DbSet<Payslip> Payslips { get; set; }
+        public virtual DbSet<User_Payslip> User_Payslip { get; set; }
     }
 }

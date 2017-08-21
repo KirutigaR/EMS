@@ -38,10 +38,12 @@
         <AssociationConnector Association="EMSModel.FK__Timesheet__emplo__3F466844" />
         <EntityTypeShape EntityType="EMSModel.Status_leave" Width="1.5" PointX="7.375" PointY="3.875" />
         <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0A9D95DB" />
-        <EntityTypeShape EntityType="EMSModel.Payslip" Width="1.5" PointX="5" PointY="23.5" />
-        <EntityTypeShape EntityType="EMSModel.User_Payslip" Width="1.5" PointX="7.25" PointY="15" />
-        <AssociationConnector Association="EMSModel.FK__User_Pays__emp_i__1BC821DD" />
-        <AssociationConnector Association="EMSModel.FK__User_Pays__paysl__1EA48E88" />
+        <EntityTypeShape EntityType="EMSModel.Incometax" Width="1.5" PointX="5.5" PointY="26.375" />
+        <EntityTypeShape EntityType="EMSModel.Salary_Structure" Width="1.5" PointX="2.625" PointY="24.125" />
+        <AssociationConnector Association="EMSModel.FK__Incometax__emp_i__29221CFB" />
+        <AssociationConnector Association="EMSModel.FK__Salary_St__emp_i__2EDAF651" />
+        <EntityTypeShape EntityType="EMSModel.Payslip" Width="1.5" PointX="5.25" PointY="20.375" />
+        <AssociationConnector Association="EMSModel.FK__Payslip__emp_id__2BFE89A6" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

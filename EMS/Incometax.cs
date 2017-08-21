@@ -12,16 +12,16 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class User_Payslip
+    public partial class Incometax
     {
         public int id { get; set; }
         public int emp_id { get; set; }
-        public int payslip_id { get; set; }
-        public System.DateTime from_date { get; set; }
-        public System.DateTime to_date { get; set; }
         public int is_active { get; set; }
+        public decimal income_tax { get; set; }
+        public System.DateTime from_date { get; set; }
+        public Nullable<System.DateTime> to_date { get; set; }
+        public string notes { get; set; }
     
         public virtual Employee Employee { get; set; }
-        public virtual Payslip Payslip { get; set; }
     }
 }

@@ -22,7 +22,9 @@ namespace EMS
             this.Leavebalance_sheet = new HashSet<Leavebalance_sheet>();
             this.Project_role = new HashSet<Project_role>();
             this.Timesheets = new HashSet<Timesheet>();
-            this.User_Payslip = new HashSet<User_Payslip>();
+            this.Incometaxes = new HashSet<Incometax>();
+            this.Salary_Structure = new HashSet<Salary_Structure>();
+            this.Payslips = new HashSet<Payslip>();
         }
     
         public int id { get; set; }
@@ -58,6 +60,10 @@ namespace EMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Timesheet> Timesheets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User_Payslip> User_Payslip { get; set; }
+        public virtual ICollection<Incometax> Incometaxes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Salary_Structure> Salary_Structure { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Payslip> Payslips { get; set; }
     }
 }

@@ -12,11 +12,11 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Payslip
+    public partial class Salary_Structure
     {
         public int id { get; set; }
         public int emp_id { get; set; }
-        public int payslip_month { get; set; }
+        public decimal ctc { get; set; }
         public decimal basic_pay { get; set; }
         public decimal HRA { get; set; }
         public decimal FA { get; set; }
@@ -28,7 +28,9 @@ namespace EMS
         public decimal Gratuity { get; set; }
         public decimal SA { get; set; }
         public decimal PT { get; set; }
-        public decimal incometax { get; set; }
+        public int is_active { get; set; }
+        public System.DateTime from_date { get; set; }
+        public Nullable<System.DateTime> to_date { get; set; }
     
         public virtual Employee Employee { get; set; }
     }

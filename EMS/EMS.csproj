@@ -220,6 +220,7 @@
     <Compile Include="Repository\PayslipRepo.cs" />
     <Compile Include="Repository\ProjectRepo.cs" />
     <Compile Include="Repository\RoleRepo.cs" />
+    <Compile Include="Repository\SalaryRepo.cs" />
     <Compile Include="Repository\TaskRepo.cs" />
     <Compile Include="Repository\TimeSheetRepo.cs" />
     <Compile Include="Role.cs">
@@ -248,7 +249,7 @@
     <Compile Include="Utility\EMSResponseMessage.cs" />
     <Compile Include="Utility\EncryptPassword.cs" />
     <Compile Include="Utility\PasswordGenerator.cs" />
-    <Compile Include="Utility\PayslipCalculation.cs" />
+    <Compile Include="Utility\SalaryCalculation.cs" />
     <Compile Include="Utility\Utils.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -76,10 +76,16 @@ namespace EMS.Controllers
 
                         Salary_Structure salary = new Salary_Structure();
                         salary.ctc = employee_details.ctc;
-                        salary = PayslipCalculation.CalculatePayslipDetails(salary.ctc);
+                        salary = SalaryCalculation.CalculateSalaryStructure(salary.ctc);
                         salary.emp_id = employee_details.id;
+                        salary.is_active = 1;
+                        salary.from_date = DateTime.Now;
+                        salary.to_date = null;
+                        SalaryRepo.CreateSalaryStructure(salary);
 
-                        PayslipRepo.AddPayslip(salary);
+                        Payslip payslip = new Payslip();
+                        //payslip = Utils.FirstMonthSalary(employee_details.date_of_joining, salary);
+                        PayslipRepo.AddPayslip(payslip);
 
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
                     }

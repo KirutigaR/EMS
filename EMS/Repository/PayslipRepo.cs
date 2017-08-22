@@ -30,7 +30,8 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static Payslip GetPayslipinstanceById(int e_id, int month)
+
+        public static Payslip GetExistingPayslip(int e_id, int month)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -40,7 +41,7 @@ namespace EMS.Repository
                             select ps;
                 return query.FirstOrDefault();
             }
-            catch (Exception exception)
+             catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
@@ -52,5 +53,4 @@ namespace EMS.Repository
             }
         }
     }
-    
 }

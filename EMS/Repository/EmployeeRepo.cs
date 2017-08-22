@@ -125,6 +125,50 @@ namespace EMS.Repository
                 datacontent.Dispose();
             }
         }
+
+        public static EmployeeModel GetEmployeeDetailsByUserId(int u_id)//u_id user_id 
+        {
+            EMSEntities datacontent = new EMSEntities();
+            try
+            {
+                var query = from employee in datacontent.Employees
+                            where employee.user_id == u_id
+                            select new EmployeeModel
+                            {
+                                id = employee.id,
+                                first_name = employee.first_name,
+                                last_name = employee.last_name,
+                                email = employee.email,
+                                date_of_birth = employee.date_of_birth,
+                                gender = employee.gender,
+                                date_of_joining = employee.date_of_joining,
+                                contact_no = employee.contact_no,
+                                user_id = employee.user_id,
+                                reporting_to = employee.reporting_to,
+                                Year_of_experence = employee.Year_of_experence,
+                                pan_no = employee.pan_no,
+                                bank_account_no = employee.bank_account_no,
+                                blood_group = employee.blood_group,
+                                designation = employee.designation,
+                                emergency_contact_no = employee.emergency_contact_no,
+                                emergency_contact_person = employee.emergency_contact_person,
+                                medical_insurance_no = employee.medical_insurance_no,
+                                PF_no = employee.PF_no
+                            };
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontent.Dispose();
+            }
+        }
+
         public static EmployeeModel GetEmployeeDetailsById(int e_id)//e_id employee_id 
         {
             EMSEntities datacontent = new EMSEntities();

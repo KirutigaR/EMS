@@ -1,6 +1,6 @@
 ﻿using System;
 using EMS.Models;
-using System.Diagnostics;
+using EMS.Repository;
 
 namespace EMS.Utility
 {
@@ -31,23 +31,26 @@ namespace EMS.Utility
             }
             return salarypobj;
         }
-        public static Payslip FirstMonthSalary(DateTime DOJ, Salary_Structure salary)
+
+        public static Payslip Calculatepayslip(Salary_Structure salary)
         {
-            int working_days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DOJ.Day;
             Payslip payslip = new Payslip();
-            decimal per_day_salary = (salary.basic_pay / 12) / 30;            
-            Debug.WriteLine(working_days);
-            payslip.basic_pay = payslip.basic_pay * working_days;
-            payslip.HRA = ((salary.HRA / 12) /30 ) * working_days;
-            payslip.FA = (Constants.FOOD_ALLOWANCE /30) * working_days;
-            payslip.MA = (Constants.MEDICAL_ALLOWANCE /30) * working_days;
-            payslip.CA = (Constants.CONVEYANCE_ALLOWANCE /30) * working_days;
-            payslip.PF = ((salary.PF / 12) /30) * working_days;
-            payslip.MI = ((salary.MI / 12) /30) * working_days ;
-            payslip.Gratuity = ((salary.Gratuity / 12)/30) * working_days;
-            payslip.SA = ((salary.SA /12) /30) * working_days;
-            payslip.ESI = ((salary.ESI / 12) /30) * working_days;
-            payslip.payslip_month = DOJ.Month;
+            payslip.emp_id = salary.emp_id;
+            payslip.payslip_month = DateTime.Now.Month;
+            payslip.basic_pay = salary.basic_pay / 12;
+            payslip.HRA = salary.HRA / 12;
+            payslip.FA = salary.FA / 12;
+            payslip.MA = salary.MA / 12;
+            payslip.CA = salary.CA / 12;
+            payslip.PF = salary.PF / 12;
+            payslip.MI = salary.MI / 12;
+            payslip.ESI = salary.ESI / 12;
+            payslip.Gratuity = salary.Gratuity / 12;
+            payslip.SA = salary.SA / 12;
+            payslip.PT = salary.PT / 12;
+            Incometax incometax = IncometaxRepo.GetTaxValueByEmpId(salary.emp_id);
+            payslip.incometax = incometax.income_tax;
+            payslip.arrears = 0;
             return payslip;
         }
     }

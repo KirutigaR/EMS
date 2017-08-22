@@ -77,6 +77,8 @@ namespace EMS.Controllers
                         Salary_Structure salary = new Salary_Structure();
                         salary.ctc = employee_details.ctc;
                         salary = PayslipCalculation.CalculatePayslipDetails(salary.ctc);
+                        salary.emp_id = employee_details.id;
+
                         PayslipRepo.AddPayslip(salary);
 
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));

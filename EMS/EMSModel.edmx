@@ -124,6 +124,7 @@
           <Property Name="SA" Type="decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="PT" Type="decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="incometax" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="arrears" Type="decimal" Precision="12" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -1178,6 +1179,7 @@
           <Property Name="PT" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
           <Property Name="incometax" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Payslip__emp_id__2BFE89A6" FromRole="Payslip" ToRole="Employee" />
+          <Property Name="arrears" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
         </EntityType>
         <Association Name="FK__Payslip__emp_id__2BFE89A6">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -1420,6 +1422,7 @@
           <EntitySetMapping Name="Payslips">
             <EntityTypeMapping TypeName="EMSModel.Payslip">
               <MappingFragment StoreEntitySet="Payslip">
+                <ScalarProperty Name="arrears" ColumnName="arrears" />
                 <ScalarProperty Name="incometax" ColumnName="incometax" />
                 <ScalarProperty Name="PT" ColumnName="PT" />
                 <ScalarProperty Name="SA" ColumnName="SA" />

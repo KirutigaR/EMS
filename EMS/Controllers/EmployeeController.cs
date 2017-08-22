@@ -75,8 +75,7 @@ namespace EMS.Controllers
                         }
 
                         Salary_Structure salary = new Salary_Structure();
-                        salary.ctc = employee_details.ctc;
-                        salary = SalaryCalculation.CalculateSalaryStructure(salary.ctc);
+                        salary = SalaryCalculation.CalculateSalaryStructure(employee_details.ctc);
                         salary.emp_id = employee_details.id;
                         salary.is_active = 1;
                         salary.from_date = DateTime.Now;
@@ -135,6 +134,38 @@ namespace EMS.Controllers
                 if (e_id != 0)
                 {
                     EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsById(e_id);
+                    if (existingInstance != null)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existingInstance));
+                    }
+                    else
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Employee ID doesnot exists", "Employee ID doesnot exists"));
+                    }
+                }
+                else
+                {
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return Response;
+        }
+
+        [Route("api/get/employee/{u_id?}")]
+        public HttpResponseMessage GetEmployeeByUserId(int u_id)//u_id user_id
+        {
+            HttpResponseMessage Response = null;
+            try
+            {
+                if (u_id != 0)
+                {
+                    EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsByUserId(u_id);
                     if (existingInstance != null)
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existingInstance));

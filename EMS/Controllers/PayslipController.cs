@@ -56,7 +56,7 @@ namespace EMS.Controllers
             {
                 if(payslip != null)
                 {
-                    Payslip pay_slip = PayslipRepo.GetPayslipinstanceById(payslip.emp_id, payslip.payslip_month);
+                    Payslip pay_slip = PayslipRepo.GetExistingPayslip(payslip.emp_id, payslip.payslip_month);
                     //pay_slip.emp_id = payslip.emp_id;
                     pay_slip.incometax = payslip.incometax;
                     pay_slip.arrears = payslip.arrears;

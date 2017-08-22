@@ -29,6 +29,7 @@ namespace EMS
         public decimal SA { get; set; }
         public decimal PT { get; set; }
         public decimal incometax { get; set; }
+        public decimal arrears { get; set; }
     
         public virtual Employee Employee { get; set; }
     }

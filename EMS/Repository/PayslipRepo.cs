@@ -30,5 +30,27 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+        public static Payslip GetPayslipinstanceById(int e_id, int month)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from ps in datacontext.Payslips
+                            where ps.emp_id == e_id && ps.payslip_month == month
+                            select ps;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
+    
 }

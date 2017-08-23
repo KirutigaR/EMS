@@ -132,7 +132,7 @@ namespace EMS.Repository
             try
             {
                 var query = from employee in datacontent.Employees
-                            where employee.user_id == u_id
+                            where employee.user_id == u_id 
                             select new EmployeeModel
                             {
                                 id = employee.id,

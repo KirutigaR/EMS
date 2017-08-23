@@ -38,6 +38,7 @@ namespace EMS.Utility
             Payslip payslip = new Payslip();
             payslip.emp_id = salary.emp_id;
             payslip.payslip_month = DateTime.Now.Month;
+            payslip.payslip_year = DateTime.Now.Year;
             payslip.basic_pay = salary.basic_pay / 12;
             payslip.HRA = salary.HRA / 12;
             payslip.FA = salary.FA / 12;
@@ -50,17 +51,25 @@ namespace EMS.Utility
             payslip.SA = salary.SA / 12;
             payslip.PT = salary.PT / 12;
             Incometax incometax = IncometaxRepo.GetTaxValueByEmpId(salary.emp_id);
-            payslip.incometax = incometax.income_tax;
+            if(incometax != null)
+            {
+                payslip.incometax = incometax.income_tax;
+            }
+            else
+            {
+                payslip.incometax = 0;
+            }
             payslip.arrears = 0;
             return payslip;
         }
         public static Payslip FirstMonthSalary(DateTime DOJ, Salary_Structure salary)
         {
-            int working_days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DOJ.Day;
+            int working_days = (DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DOJ.Day)+1;
             Payslip payslip = new Payslip();
             decimal per_day_salary = (salary.basic_pay / 12) / 30;
             Debug.WriteLine(working_days);
-            payslip.basic_pay = payslip.basic_pay * working_days;
+            payslip.emp_id = salary.emp_id;
+            payslip.basic_pay = per_day_salary * working_days;
             payslip.HRA = ((salary.HRA / 12) / 30) * working_days;
             payslip.FA = (Constants.FOOD_ALLOWANCE / 30) * working_days;
             payslip.MA = (Constants.MEDICAL_ALLOWANCE / 30) * working_days;
@@ -70,7 +79,9 @@ namespace EMS.Utility
             payslip.Gratuity = ((salary.Gratuity / 12) / 30) * working_days;
             payslip.SA = ((salary.SA / 12) / 30) * working_days;
             payslip.ESI = ((salary.ESI / 12) / 30) * working_days;
+            payslip.PT = (Constants.PT / 30) * working_days;
             payslip.payslip_month = DOJ.Month;
+            payslip.payslip_year = DOJ.Year;
             return payslip;
         }
     }

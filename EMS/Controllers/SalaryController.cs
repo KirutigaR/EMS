@@ -12,6 +12,8 @@ namespace EMS.Controllers
 {
     public class SalaryController : ApiController
     {
+        [HttpGet]
+        [Route("api/salarystructure/update/{e_id?}/{ctc?}")]
         public HttpResponseMessage UpdateSalaryStructure(int e_id , decimal ctc)
         {
             HttpResponseMessage response = null;
@@ -33,6 +35,7 @@ namespace EMS.Controllers
                         new_sal_structure.from_date = DateTime.Now;
                         new_sal_structure.to_date = null;
                         SalaryRepo.CreateSalaryStructure(new_sal_structure);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "Salary structure successfully updated"));
                     }
                     else
                     {

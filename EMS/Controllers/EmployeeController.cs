@@ -83,7 +83,7 @@ namespace EMS.Controllers
                         SalaryRepo.CreateSalaryStructure(salary);
 
                         Payslip payslip = new Payslip();
-                        //payslip = Utils.FirstMonthSalary(employee_details.date_of_joining, salary);
+                        payslip = SalaryCalculation.FirstMonthSalary(employee_details.date_of_joining, salary);
                         PayslipRepo.AddPayslip(payslip);
 
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
@@ -157,7 +157,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/employee/{u_id?}")]
+        [Route("api/get/employee/byuser/{u_id?}")]
         public HttpResponseMessage GetEmployeeByUserId(int u_id)//u_id user_id
         {
             HttpResponseMessage Response = null;

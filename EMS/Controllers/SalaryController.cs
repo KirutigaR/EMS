@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using EMS.Repository;
 using EMS.Utility;
+using EMS.Models;
 
 namespace EMS.Controllers
 {
@@ -64,7 +65,7 @@ namespace EMS.Controllers
             {
                 if(e_id != 0)
                 {
-                    List<Salary_Structure> salary_structure = SalaryRepo.GetSalaryStructureList(e_id);
+                    List<SalaryStructureModel> salary_structure = SalaryRepo.GetSalaryStructureList(e_id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", salary_structure));
                 }
                 else

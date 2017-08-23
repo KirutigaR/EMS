@@ -57,7 +57,7 @@ namespace EMS.Repository
                 var query = from sal_structure in datacontext.Salary_Structure
                             where sal_structure.emp_id == e_id && sal_structure.is_active == 1
                             select sal_structure;
-                return query.FirstOrDefault();
+                return query.FirstOrDefault(); 
             }
             catch (Exception exception)
             {
@@ -70,6 +70,26 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-       
+        public static List<Salary_Structure> GetSalaryStructureList(int e_id)//e_id employee_id
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from sal_structure in datacontext.Salary_Structure
+                            where sal_structure.emp_id == e_id && sal_structure.is_active == 1
+                            select sal_structure;
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

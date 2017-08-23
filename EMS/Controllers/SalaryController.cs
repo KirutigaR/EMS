@@ -55,7 +55,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/Get/salarystructure/{e_id?}")]
+        [Route("api/Get/salarystructure/list/{e_id?}")]
         [HttpGet]
         public HttpResponseMessage GetSalaryStructure(int e_id)
         {
@@ -64,7 +64,7 @@ namespace EMS.Controllers
             {
                 if(e_id != 0)
                 {
-                    Salary_Structure salary_structure = SalaryRepo.GetSalaryStructureByEmpId(e_id);
+                    List<Salary_Structure> salary_structure = SalaryRepo.GetSalaryStructureList(e_id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", salary_structure));
                 }
                 else

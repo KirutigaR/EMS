@@ -30,6 +30,7 @@ namespace EMS
         public decimal PT { get; set; }
         public decimal incometax { get; set; }
         public decimal arrears { get; set; }
+        public int payslip_year { get; set; }
     
         public virtual Employee Employee { get; set; }
     }

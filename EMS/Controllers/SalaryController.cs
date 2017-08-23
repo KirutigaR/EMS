@@ -52,5 +52,30 @@ namespace EMS.Controllers
             }
             return response;
         }
+        [Route("api/Get/salarystructure/{e_id?}")]
+        [HttpGet]
+        public HttpResponseMessage GetSalaryStructure(int e_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(e_id != 0)
+                {
+                    Salary_Structure salary_structure = SalaryRepo.GetSalaryStructureByEmpId(e_id);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", salary_structure));
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "please check Input json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

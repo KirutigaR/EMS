@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using EMS.Models;
 
 namespace EMS.Repository
 {
@@ -93,14 +94,23 @@ namespace EMS.Repository
             }
         }
 
-        public static List<Incometax> GetIncometaxListByEmpId(int e_id)//e_id employee_id
+        public static List<IncometaxModel> GetIncometaxListByEmpId(int e_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from tax in datacontext.Incometaxes
                             where tax.emp_id == e_id
-                            select tax;
+                            select new IncometaxModel
+                            {
+                                id = tax.id,
+                                emp_id = tax.emp_id,
+                                from_date = tax.from_date,
+                                to_date = tax.to_date,
+                                income_tax = tax.income_tax,
+                                is_active = tax.is_active,
+                                notes = tax.notes
+                            };
                 return query.ToList();
             }
             catch (Exception exception)

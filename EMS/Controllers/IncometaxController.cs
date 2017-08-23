@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 
@@ -103,7 +104,7 @@ namespace EMS.Controllers
             {
                 if(e_id!= 0)
                 {
-                    List<Incometax> tax_list = IncometaxRepo.GetIncometaxListByEmpId(e_id);
+                    List<IncometaxModel> tax_list = IncometaxRepo.GetIncometaxListByEmpId(e_id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tax_list));
                 }
                 else

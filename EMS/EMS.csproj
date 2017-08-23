@@ -193,6 +193,7 @@
     <Compile Include="Models\DesignationModel.cs" />
     <Compile Include="Models\EmployeeListByRoleModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\IncometaxModel.cs" />
     <Compile Include="Models\LeaveBalanceModel.cs" />
     <Compile Include="Models\LeavehistoryModel.cs" />
     <Compile Include="Models\LeaveTypeListModel.cs" />

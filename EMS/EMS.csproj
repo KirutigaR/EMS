@@ -202,6 +202,7 @@
     <Compile Include="Models\Project_role_model.cs" />
     <Compile Include="Models\ReportingTo.cs" />
     <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\SalaryStructureModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\TimeSheetModel.cs" />
     <Compile Include="Payslip.cs">

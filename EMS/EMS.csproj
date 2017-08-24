@@ -251,6 +251,7 @@
     <Compile Include="Utility\DecryptPassword.cs" />
     <Compile Include="Utility\EMSResponseMessage.cs" />
     <Compile Include="Utility\EncryptPassword.cs" />
+    <Compile Include="Utility\MailHandler.cs" />
     <Compile Include="Utility\PasswordGenerator.cs" />
     <Compile Include="Utility\SalaryCalculation.cs" />
     <Compile Include="Utility\Utils.cs" />

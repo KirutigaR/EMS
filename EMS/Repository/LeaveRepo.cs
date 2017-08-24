@@ -209,7 +209,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static void ApproveLeave(Leave leave)
+        public static void EditLeave(Leave leave)
         {
             EMSEntities datacontext = new EMSEntities();
             try

@@ -404,22 +404,27 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if (is_approved == 1)
+                if (is_approved == 2)
                 {
                     //LeaveRepo.GetLeaveById(leave.employee_id, leave.id);
                     //Leavebalance_sheet leave_balance = new Leavebalance_sheet();
                     Leave leave1 = LeaveRepo.GetLeaveById(leave_id);
                     leave1.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
-                    LeaveRepo.ApproveLeave(leave1);
+                    LeaveRepo.EditLeave(leave1);
                     Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave1.employee_id);
 
                     decimal? no_of_days = LeaveRepo.GetNoofdaysByLeaveTypeId(leave1.leavetype_id);
                     leave_balance_instance.no_of_days = (decimal)no_of_days - leave1.no_of_days;
                     LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+                    Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
+                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, is_approved, employee.email);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave Approved"));
                 }
-                else if (is_approved == 0)
+                else if (is_approved == 3)
                 {
+                    Leave leave1 = LeaveRepo.GetLeaveById(leave_id);
+                    leave1.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
+                    LeaveRepo.EditLeave(leave1);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_117", "Leave not approved", "Leave cancel"));
                 }
             }

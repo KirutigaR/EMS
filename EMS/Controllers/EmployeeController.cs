@@ -52,9 +52,9 @@ namespace EMS.Controllers
                         User user = new User();
                         user.user_name = employee.email;
                         //user.password = employee.first_name + "jaishu";
-                        string passwod = PasswordGenerator.GeneratePassword();
-                        Debug.WriteLine(passwod);
-                        user.password = EncryptPassword.CalculateHash(passwod);
+                        string Temp_password = PasswordGenerator.GeneratePassword();
+                        Debug.WriteLine(Temp_password);
+                        user.password = EncryptPassword.CalculateHash(Temp_password);
                         //user.password = passwod;
                         Debug.WriteLine(user.password);
                         user.is_active = 1;
@@ -86,6 +86,8 @@ namespace EMS.Controllers
                         payslip = SalaryCalculation.FirstMonthSalary(employee_details.date_of_joining, salary);
                         PayslipRepo.AddPayslip(payslip);
 
+                        string username = employee.first_name +" "+ employee.last_name;
+                        MailHandler.PasswordMailingFunction(username, employee.email , Temp_password);
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
                     }
                     else

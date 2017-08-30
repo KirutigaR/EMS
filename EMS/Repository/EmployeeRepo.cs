@@ -449,14 +449,21 @@ namespace EMS.Repository
             }
         }
 
-        public static int GetReportingtoByEmpId(int employee_id)
+        public static ReportingTo GetReportingtoByEmpId(int employee_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from employee in datacontext.Employees
+                            join employee2 in datacontext.Employees
+                            on employee.reporting_to equals employee2.id
                             where employee.id == employee_id
-                            select employee.reporting_to;
+                            select new ReportingTo
+                            {
+                               emp_name = employee2.first_name,
+                               emp_id = employee2.id,
+                               mailid = employee2.email
+                            };
                 return query.FirstOrDefault();
             }
             catch (Exception exception)

@@ -16,12 +16,12 @@ namespace EMS.Utility
             {
 
                 SmtpClient SmtpServer = new SmtpClient();
-                SmtpServer.Credentials = new NetworkCredential("kirutiga96@gmail.com", "Structuring*Data.");
+                SmtpServer.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
                 SmtpServer.Port = 587;
                 SmtpServer.Host = "smtp.gmail.com";
                 SmtpServer.EnableSsl = true;
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("kirutiga96@gmail.com");
+                mail.From = new MailAddress("testems32@gmail.com");
             
                 //String[] addr = toemail.Split('kirutigaramesh@gmail.com'); // toemail is a string which contains many email address separated by comma
                 //mail.From = new MailAddress(toemail);
@@ -48,12 +48,14 @@ namespace EMS.Utility
             }
             //  }
         }
-        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail)
+        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid)
         {
             try
             {
-                
 
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("testems32@gmail.com");
+                mail.CC.Add("kirutiga96@gmail.com");
                 //Console.WriteLine("Your Message");
                 if (status == 2)
                 {
@@ -61,13 +63,10 @@ namespace EMS.Utility
                     MailAddress to = new MailAddress(user_mail);
 
                     //Console.WriteLine("Mail From");
-                    MailAddress from = new MailAddress("testems32@gmail.com");
-
-                    MailMessage mail = new MailMessage(from, to);
-                    mail.CC.Add("");
+                    
                     //Console.WriteLine("Subject");
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi" + user_name + "Your leave application" + from_date + "-" + to_date + "has been approved";
+                    mail.Body = "Hi<br>" + user_name + "Your leave application    " + from_date + "-" + to_date + "has been approved";
                 }
                 else if(status == 3)
                 {
@@ -75,27 +74,21 @@ namespace EMS.Utility
                     MailAddress to = new MailAddress(user_mail);
 
                     //Console.WriteLine("Mail From");
-                    MailAddress from = new MailAddress("testems32@gmail.com");
-
-                    MailMessage mail = new MailMessage(from, to);
-                    mail.CC.Add("");
+                    
                     //Console.WriteLine("Subject");
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi" + user_name + "Your leave application" + from_date + "-" + to_date + "has been Rejected";
+                    mail.Body = "Hi<br>" + user_name + " Your leave application   " + from_date + "-" + to_date + "has been Rejected";
                 }
                 else 
                 {
                     //Console.WriteLine("Mail To");
-                    MailAddress to = new MailAddress("");
+                    MailAddress to = new MailAddress(reporting_to_mailid);
 
-                    //Console.WriteLine("Mail From");
-                    MailAddress from = new MailAddress(user_mail);
-
-                    MailMessage mail = new MailMessage(from, to);
-                    mail.CC.Add("");
+                    
                     //Console.WriteLine("Subject");
                     mail.Subject = "Employee Leave Application";
-                    mail.Body = "hi" + user_name + "applied leave from" + from_date + "to" + to_date;
+                    mail.Body = "hi,<br>" + user_name  + " applied leave from" + from_date +" "+ "to" +" "+ to_date;
+                    
                 }
 
                 //System.Net.Mail.Attachment attachment;
@@ -109,9 +102,10 @@ namespace EMS.Utility
 
                 smtp.UseDefaultCredentials = true;
                 smtp.EnableSsl = true;
-                smtp.Credentials = new NetworkCredential("sathranathbaskaran17@gmail.com", "muralidhoni7");
+                smtp.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
                 //smtp.EnableSsl = true;
                 Console.WriteLine("Sending email...");
+                mail.IsBodyHtml = true;
                 smtp.Send(mail);
             }
             catch (Exception ex)
@@ -122,57 +116,6 @@ namespace EMS.Utility
             }
 
         }
-        public static void ApplyLeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail)
-        {
-            try
-            {
-                //Console.WriteLine("Mail To");
-                MailAddress to = new MailAddress(user_mail);
-
-                //Console.WriteLine("Mail From");
-                MailAddress from = new MailAddress("testems32@gmail.com");
-                //MailAddress cc = new MailAddress("", "");
-
-                MailMessage mail = new MailMessage(from, to);
-                mail.CC.Add()
-
-                //Console.WriteLine("Subject");
-                mail.Subject = "Employee Leave Status";
-
-                //Console.WriteLine("Your Message");
-                if (status == 2)
-                {
-                    mail.Body = "Hi" + user_name + "Your leave application" + from_date + "-" + to_date + "has been approved";
-                }
-                else //if(status == 3)
-                {
-                    mail.Body = "Hi" + user_name + "Your leave application" + from_date + "-" + to_date + "has been Rejected";
-                }
-
-
-                //System.Net.Mail.Attachment attachment;
-                //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
-                //mail.Attachments.Add(attachment);
-
-
-                SmtpClient smtp = new SmtpClient();
-                smtp.Port = 587;
-                smtp.Host = "smtp.gmail.com";
-
-                smtp.UseDefaultCredentials = true;
-                smtp.EnableSsl = true;
-                smtp.Credentials = new NetworkCredential("sathranathbaskaran17@gmail.com", "muralidhoni7");
-                //smtp.EnableSsl = true;
-                Console.WriteLine("Sending email...");
-                smtp.Send(mail);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.GetBaseException());
-                throw ex;
-            }
-
-        }
+        
     }
 }

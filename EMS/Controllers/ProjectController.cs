@@ -49,21 +49,32 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/project/list/{c_id?}/{status?}")]
+        [Route("api/project/list/{c_id?}/{status?}")]//project list of active client 
         public HttpResponseMessage GetProjectList(int c_id = 0, string status = null)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
             try
             {
-                if(c_id!=0 || status!= null)
-                {
-                    List<ProjectModel> Project_List = ProjectRepo.GetProjectList(c_id, status);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
-                }
+                List<ProjectModel> Project_List = ProjectRepo.GetProjectList(c_id, status);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/entire/project/list/{c_id?}/{status?}")]//entire project list (include active and incative client projects )
+        public HttpResponseMessage GetEntireProjectList(int c_id = 0, string status = null)//c_id client_id , status project_status
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ProjectModel> Project_List = ProjectRepo.GetEntireProjectList(c_id, status);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
             }
             catch (Exception exception)
             {

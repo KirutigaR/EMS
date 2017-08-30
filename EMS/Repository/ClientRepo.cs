@@ -116,6 +116,38 @@ namespace EMS.Repository
             }
         }
 
+        public static List<ClientModel> GetActiveClientList()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Clients
+                            join y in datacontext.Client_type
+                            on x.type_id equals y.id
+                            where x.is_active == 1
+                            select new ClientModel
+                            {
+                                client_id = x.id,
+                                client_name = x.client_name,
+                                client_type_id = x.type_id,
+                                client_type_name = y.type_name,
+                                client_type_description = y.type_description,
+                                is_active = x.is_active
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
         public static List<ClientModel> GetClientTypeList()
         {
             EMSEntities datacontext = new EMSEntities();

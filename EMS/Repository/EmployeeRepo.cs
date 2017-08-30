@@ -70,6 +70,7 @@ namespace EMS.Repository
                 datacontent.Dispose();
             }
         }
+
         public static List<EmployeeModel> GetEmployeeList(int r_id, int d_id) //r_id reportingto id, d_id designation id of the employee
         {
             EMSEntities datacontent = new EMSEntities();
@@ -115,6 +116,64 @@ namespace EMS.Repository
        
             }
             catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontent.Dispose();
+            }
+        }
+
+        public static List<EmployeeModel> GetAvailableEmployeeList(int r_id, int d_id) //r_id reportingto id, d_id designation id of the employee
+        {
+            EMSEntities datacontent = new EMSEntities();
+            try
+            {
+                var predicate = LinqKit.PredicateBuilder.True<Employee>();
+                if (r_id != 0)
+                {
+                    predicate = predicate.And(i => i.reporting_to == r_id);
+                }
+                if (d_id != 0)
+                {
+                    predicate = predicate.And(i => i.designation == d_id);
+                }
+
+                var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
+                            join user in datacontent.Users
+                            on employee.user_id equals user.id
+                            join project_role in datacontent.Project_role
+                            on employee.id equals project_role.employee_id
+                            where (user.is_active == 1) && (project_role.project_id == 1)//available employees are the employees who are all in bench(project id 1 = bench ) 
+                            select new EmployeeModel
+                            {
+                                id = employee.id,
+                                first_name = employee.first_name,
+                                last_name = employee.last_name,
+                                email = employee.email,
+                                date_of_birth = employee.date_of_birth,
+                                gender = employee.gender,
+                                date_of_joining = employee.date_of_joining,
+                                contact_no = employee.contact_no,
+                                user_id = employee.user_id,
+                                reporting_to = employee.reporting_to,
+                                Year_of_experence = employee.Year_of_experence,
+                                pan_no = employee.pan_no,
+                                bank_account_no = employee.bank_account_no,
+                                blood_group = employee.blood_group,
+                                designation = employee.designation,
+                                emergency_contact_no = employee.emergency_contact_no,
+                                emergency_contact_person = employee.emergency_contact_person,
+                                medical_insurance_no = employee.medical_insurance_no,
+                                PF_no = employee.PF_no
+                            };
+                return query.ToList();
+
+            }
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
@@ -377,6 +436,28 @@ namespace EMS.Repository
                                 emp_id = x.id
                             };
                 return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static int GetReportingtoByEmpId(int employee_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from employee in datacontext.Employees
+                            where employee.id == employee_id
+                            select employee.reporting_to;
+                return query.FirstOrDefault();
             }
             catch (Exception exception)
             {

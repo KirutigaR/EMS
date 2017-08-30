@@ -103,9 +103,56 @@ namespace EMS.Repository
                 }
                 if(status != null)
                 {
-                    predicate = predicate.And(i => i.status == status).And(i => i.end_date >= DateTime.Now);
+                    predicate = predicate.And(i => i.status == status);
                 }
               
+                var query = from project in datacontext.Projects.AsExpandable().Where(predicate)
+                            join client in datacontext.Clients
+                            on project.client_id equals client.id
+                            where client.is_active == 1 
+                            select new ProjectModel
+                            {
+                                project_id = project.id,
+                                project_name = project.project_name,
+                                start_date = project.start_date,
+                                end_date = project.end_date,
+                                status = project.status,
+                                po = project.po,
+                                project_description = project.project_description,
+                                client_id = project.client_id,
+                                client_name = client.client_name,
+                                type_id = client.type_id,
+                                resources_req = project.resources_req
+                            };
+                return query.ToList();
+            }
+            catch(Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<ProjectModel> GetEntireProjectList(int c_id, string status)//c_id Client Id , Status = Project status 
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var predicate = LinqKit.PredicateBuilder.True<Project>();
+                if (c_id != 0)
+                {
+                    predicate = predicate.And(i => i.client_id == c_id);
+                }
+                if (status != null)
+                {
+                    predicate = predicate.And(i => i.status == status);
+                }
+
                 var query = from project in datacontext.Projects.AsExpandable().Where(predicate)
                             join client in datacontext.Clients
                             on project.client_id equals client.id
@@ -125,7 +172,7 @@ namespace EMS.Repository
                             };
                 return query.ToList();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());

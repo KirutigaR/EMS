@@ -66,6 +66,24 @@ namespace EMS.Controllers
             return response;
         }
 
+        [Route("api/active/client/list")]
+        public HttpResponseMessage GetActiveClientList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<ClientModel> Client_List = ClientRepo.GetActiveClientList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Client_List));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
         [Route("api/get/client/{c_id?}")]
         public HttpResponseMessage GetClientById(int c_id)//c_id client_id
         {

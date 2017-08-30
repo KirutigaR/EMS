@@ -12,7 +12,7 @@ namespace EMS.Repository
     public class LeaveRepo
     {
         public static List<Holiday_List> GetHoliday()
-        {
+        { 
             EMSEntities datacontext = new EMSEntities();
             try
             {
@@ -24,7 +24,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -44,7 +44,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -65,7 +65,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return 0;
+                throw e;
             }
             finally
             {
@@ -93,7 +93,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static void EditLeaveHistory(Leave leave)
+        public static void AddLeaveHistory(Leave leave)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -106,6 +106,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
+                throw e;
             }
             finally
             {
@@ -126,7 +127,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -145,6 +146,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
+                throw e;
             }
             finally
             {
@@ -163,6 +165,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
+                throw e;
             }
             finally
             {
@@ -202,7 +205,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -221,7 +224,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-
+                throw e;
             }
             finally
             {
@@ -242,7 +245,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return 0;
+                throw e;
             }
             finally
             {
@@ -263,7 +266,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -301,7 +304,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -321,7 +324,7 @@ namespace EMS.Repository
         //    {
         //        Debug.WriteLine(e.Message);
         //        Debug.WriteLine(e.GetBaseException());
-        //        return null;
+        //        throw e;
         //    }
         //    finally
         //    {
@@ -349,7 +352,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -372,7 +375,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return 0;
+                throw e;
             }
             finally
             {
@@ -393,7 +396,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -412,7 +415,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                
+                throw e;
             }
             finally
             {
@@ -433,7 +436,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -454,7 +457,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -473,7 +476,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                
+                throw e;
             }
             finally
             {
@@ -505,7 +508,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -557,7 +560,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -594,7 +597,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -615,7 +618,7 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
             }
             finally
             {
@@ -640,7 +643,81 @@ namespace EMS.Repository
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return null;
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<LeavehistoryModel> GetPendingApprovedLeave()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from l in datacontext.Leaves
+                            join e in datacontext.Employees
+                            on l.employee_id equals e.id
+                            join lt in datacontext.Leave_type
+                            on l.leavetype_id equals lt.id
+                            join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now && l.leave_statusid == Constants.LEAVE_STATUS_APPROVED
+                            select new LeavehistoryModel
+                            {
+                                id = e.id,
+                                first_name = e.first_name,
+                                last_name = e.last_name,
+                                type_name = lt.type_name,
+                                from_date = l.from_date,
+                                to_date = l.to_date,
+                                no_of_days = l.no_of_days,
+                                reporting_to = e.reporting_to,
+                                leave_status = st.leave_status
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static List<LeavehistoryModel> GetLeaveHistory()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from l in datacontext.Leaves
+                            join e in datacontext.Employees
+                            on l.employee_id equals e.id
+                            join lt in datacontext.Leave_type
+                            on l.leavetype_id equals lt.id
+                            join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            where l.from_date > DateTime.Now 
+                            select new LeavehistoryModel
+                            {
+                                id = e.id,
+                                first_name = e.first_name,
+                                last_name = e.last_name,
+                                type_name = lt.type_name,
+                                from_date = l.from_date,
+                                to_date = l.to_date,
+                                no_of_days = l.no_of_days,
+                                reporting_to = e.reporting_to,
+                                leave_status = st.leave_status
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
             }
             finally
             {

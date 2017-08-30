@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Diagnostics;
 using EMS.Repository;
 using EMS.Utility;
+using EMS.Models;
 
 namespace EMS.Controllers
 {
@@ -32,10 +33,10 @@ namespace EMS.Controllers
 
                     int user_id = CommonRepo.GetUserID(user);
                     string user_role = CommonRepo.GetUserRole(user_id);
-                    int employee_id = CommonRepo.GetEmployeeIdByUserid(user_id);
-                    resultSet.Add("employee_id", employee_id);
+                    EmployeeModel employee = EmployeeRepo.GetEmployeeDetailsByUserId(user_id);
+                    resultSet.Add("employee_id", employee.id);
                     resultSet.Add("user_id", user_id);
-                    resultSet.Add("UserName", user.user_name);
+                    resultSet.Add("UserName", employee.first_name + employee.last_name);
                     resultSet.Add("role", user_role);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", resultSet));
                 }

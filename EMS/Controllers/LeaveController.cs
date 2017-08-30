@@ -38,7 +38,7 @@ namespace EMS.Controllers
             try
             {
                 Holiday_List holiday_list = LeaveRepo.GetHolidayById(holiday.id);
-                if(holiday_list != null)
+                if (holiday_list != null)
                 {
                     //holiday.id = holiday_list.id;
                     LeaveRepo.EditHolidayList(holiday);
@@ -91,7 +91,7 @@ namespace EMS.Controllers
         {
             HttpResponseMessage response = null;
             try
-            {               
+            {
                 if (holiday_list != null)
                 {
                     LeaveRepo.CreateHoliday(holiday_list);
@@ -102,7 +102,7 @@ namespace EMS.Controllers
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
@@ -121,7 +121,7 @@ namespace EMS.Controllers
                 Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
                 string gender = employee_instance.gender;
 
-                if (leave.from_date < DateTime.Now )
+                if (leave.from_date < DateTime.Now)
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_106", "invalid date", "Your date is past date. or to date is emplty. so please select valid Date"));
                 }
@@ -138,16 +138,17 @@ namespace EMS.Controllers
                         //if (leave_type1 == "ML")
                         //{ 
                         //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
-                        decimal Ml_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
-                        if (Ml_leave_type != 0)
+                        decimal Ml_leaves = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
+                        if (Ml_leaves != 0)
                         {
                             DateTime MLnoofdays = ((DateTime)leave.from_date).AddDays(182);
                             //leave.maternity_leave = 0;
                             leave.no_of_days = 182;
                             leave.to_date = MLnoofdays;
-                            LeaveRepo.EditLeaveHistory(leave);
+                            LeaveRepo.AddLeaveHistory(leave);
                             //LMSRepo.EditEmployeeLeaveByApplyLeave(leave.employee_id, LeaveType, FromDate, MLnoofdays, 182);
                             //ViewData["MlMessage"] = "Leave successfully Applied";
+                            MailHandler.ApplyLeaveMailing()
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                         }
                         else
@@ -486,8 +487,8 @@ namespace EMS.Controllers
                 //string role_name = ProjectRepo.GetRoleNameById(project_role.role_id);
                 //if (role_name == "HR")
                 //{
-                    List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingLeave();
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingLeave();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
                 //}
 
             }
@@ -499,7 +500,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/typesofleaves/list")]
+        [Route("api/typesofleaves/list")] //for leave type list dropdown
         public HttpResponseMessage GetLeaveTypesList()
         {
             HttpResponseMessage response = null;
@@ -507,6 +508,52 @@ namespace EMS.Controllers
             {
                 List<LeaveTypeListModel> leave_type_list = LeaveRepo.GetLeaveTypeList();
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_type_list));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+        [Route("api/leave/pending/approved/list/hr")] // pending approval in hr manager
+        public HttpResponseMessage GetPendingApprovedList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                //Project_role project_role = ProjectRepo.GetProjectIdRoleId(employee.id);
+                //string role_name = ProjectRepo.GetRoleNameById(project_role.role_id);
+                //if (role_name == "HR")
+                //{
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingApprovedLeave();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
+                //}
+
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+        [Route("api/leave/history/list/hr")] // leave history in hr manager
+        public HttpResponseMessage GetLeaveHistoryList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                //Project_role project_role = ProjectRepo.GetProjectIdRoleId(employee.id);
+                //string role_name = ProjectRepo.GetRoleNameById(project_role.role_id);
+                //if (role_name == "HR")
+                //{
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetLeaveHistory();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
+                //}
+
             }
             catch (Exception exception)
             {

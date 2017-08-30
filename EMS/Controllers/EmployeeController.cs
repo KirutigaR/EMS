@@ -321,9 +321,8 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                int reportingto_id = EmployeeRepo.GetReportingtoByEmpId(employee_id);
-                EmployeeModel reproting_to_instance = EmployeeRepo.GetEmployeeDetailsById(reportingto_id);
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", reproting_to_instance));
+                ReportingTo reportingto = EmployeeRepo.GetReportingtoByEmpId(employee_id);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", reportingto));
             }
             catch (Exception exception)
             {

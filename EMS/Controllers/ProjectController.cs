@@ -91,15 +91,8 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(e_id!=0)
-                {
-                    List<Project_role_model> Project_List = ProjectRepo.GetProjectListByEmployee(e_id);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
-                }
+                List<Project_role_model> Project_List = ProjectRepo.GetProjectListByEmployee(e_id);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
             }
             catch (Exception exception)
             {
@@ -228,15 +221,8 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(e_id!=0 || p_id!=0)
-                {
-                    List<Project_role_model> project_role_list = ProjectRepo.GetProjectRoleList(e_id, p_id);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role_list));
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
-                }
+                List<Project_role_model> project_role_list = ProjectRepo.GetProjectRoleList(e_id, p_id);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role_list));
             }
             catch (Exception exception)
             {

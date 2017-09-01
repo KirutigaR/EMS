@@ -15,7 +15,6 @@ namespace EMS.Controllers
 {
     public class EmployeeController : ApiController
     {
-
         [HttpPost]
         [Route("api/employee/create")]
         public HttpResponseMessage CreateNewEmployee(EmployeeModel employee_details)
@@ -332,5 +331,127 @@ namespace EMS.Controllers
             }
             return response;
         }
+
+        [HttpPost]
+        [Route("api/employee/add/update")]
+        public HttpResponseMessage EmployeeAddandUpdate(EmployeeModel employee_details)
+        {
+            HttpResponseMessage Response = null;
+            try
+            {
+                if (employee_details != null)
+                {
+                    Employee existingInstance = EmployeeRepo.GetEmployeeById(employee_details.id);
+                    Employee employee = new Employee();
+                    employee.id = employee_details.id;
+                    employee.first_name = employee_details.first_name;
+                    employee.last_name = employee_details.last_name;
+                    employee.email = employee_details.email;
+                    employee.date_of_birth = employee_details.date_of_birth;
+                    employee.date_of_joining = employee_details.date_of_joining;
+                    employee.contact_no = employee_details.contact_no;
+                    employee.reporting_to = employee_details.reporting_to;
+                    employee.Year_of_experence = employee_details.Year_of_experence;
+                    employee.gender = employee_details.gender;
+                    employee.pan_no = employee_details.pan_no;
+                    employee.bank_account_no = employee_details.bank_account_no;
+                    employee.emergency_contact_no = employee_details.emergency_contact_no;
+                    employee.emergency_contact_person = employee_details.emergency_contact_person;
+                    employee.PF_no = employee_details.PF_no;
+                    employee.medical_insurance_no = employee_details.medical_insurance_no;
+                    employee.blood_group = employee_details.blood_group;
+                    employee.designation = employee_details.designation;
+
+                    if (existingInstance == null)
+                    {
+                        User user = new User();
+                        user.user_name = employee.email;
+                        //user.password = employee.first_name + "jaishu";
+                        string Temp_password = PasswordGenerator.GeneratePassword();
+                        user.password = EncryptPassword.CalculateHash(Temp_password);
+                        //user.password = passwod;
+                        user.is_active = 1;
+                        EmployeeRepo.CreateNewUser(user);
+                        employee.user_id = user.id;
+                        EmployeeRepo.CreateNewEmployee(employee);
+                        User_role user_role = new User_role();
+                        user_role.user_id = user.id;
+                        user_role.role_id = employee_details.role_id;
+                        EmployeeRepo.AssignEmployeeRole(user_role);
+                        if (employee.gender == "male")
+                        {
+                            EmployeeRepo.InsertLeaveBalance(employee, Constants.male_leave_type);
+                        }
+                        else
+                        {
+                            EmployeeRepo.InsertLeaveBalance(employee, Constants.female_leave_type);
+                        }
+
+                        Salary_Structure salary = new Salary_Structure();
+                        salary = SalaryCalculation.CalculateSalaryStructure(employee_details.ctc);
+                        salary.emp_id = employee_details.id;
+                        salary.is_active = 1;
+                        salary.from_date = DateTime.Now;
+                        salary.to_date = null;
+                        SalaryRepo.CreateSalaryStructure(salary);
+
+                        Payslip payslip = new Payslip();
+                        payslip = SalaryCalculation.FirstMonthSalary(employee_details.date_of_joining, salary);
+                        PayslipRepo.AddPayslip(payslip);
+
+                        string username = employee.first_name + " " + employee.last_name;
+                        MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "New Employee added Successfully"));
+                    }
+                    else//(if existingInstance != null)
+                    {
+                        employee.user_id = existingInstance.user_id;
+
+                        Salary_Structure active_instance = SalaryRepo.GetSalaryStructureByEmpId(employee.id);
+                        if (active_instance != null)
+                        {
+                            if(active_instance.ctc != employee_details.ctc)
+                            {
+                                active_instance.is_active = 0;
+                                active_instance.to_date = DateTime.Now;
+                                SalaryRepo.UpdateSalaryStructure(active_instance);
+
+                                Salary_Structure new_sal_structure = new Salary_Structure();
+                                new_sal_structure = SalaryCalculation.CalculateSalaryStructure(employee_details.ctc);
+                                new_sal_structure.emp_id = employee.id;
+                                new_sal_structure.is_active = 1;
+                                new_sal_structure.from_date = DateTime.Now;
+                                new_sal_structure.to_date = null;
+                                SalaryRepo.CreateSalaryStructure(new_sal_structure);
+                                EmployeeRepo.EditEmployee(employee);
+                                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Updated Successfully!", "Employee ID already exists and employee details along with salary details are updated now!"));
+                            }
+                            else
+                            {
+                                EmployeeRepo.EditEmployee(employee);
+                                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Updated Successfully!", "Employee ID already exists and details are updated now, old salary structure is maintained since exixting ctc is equal to the updated ctc"));
+                            }       
+                        }
+                        else
+                        {
+                            EmployeeRepo.EditEmployee(employee);
+                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Updated Successfully!", "Employee ID already exists and details are updated now, active salary structure of this employee does not exixts!"));
+                        }
+                    }//(existingInstance != null) ELSE PART
+                }//employee_details != null IF PART 
+                else //IF employee_details == null
+                {
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return Response;
+        }
+
     }
 }

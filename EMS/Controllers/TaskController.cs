@@ -19,15 +19,8 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(p_id!=0)
-                {
-                    List<TaskModel> tasklist = TaskRepo.GetTaskList(p_id);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tasklist));
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
-                }
+                List<TaskModel> tasklist = TaskRepo.GetTaskList(p_id);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tasklist));
             }
             catch (Exception exception)
             {

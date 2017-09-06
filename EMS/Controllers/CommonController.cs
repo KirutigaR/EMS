@@ -60,9 +60,10 @@ namespace EMS.Controllers
                 {
                     Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.id);
                     User user = CommonRepo.GetuserById(employee.user_id);
-                    
                     user.password = EncryptPassword.CalculateHash(forgotpassword.new_password);
                     CommonRepo.EditUserDetails(user);
+                    string user_name = employee.first_name + employee.last_name;
+                    MailHandler.ChangePasswordIntimation(user_name, employee.email);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "your password has been changed"));
                 }
                 else

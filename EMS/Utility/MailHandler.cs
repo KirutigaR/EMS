@@ -113,8 +113,58 @@ namespace EMS.Utility
                 Debug.WriteLine(ex.GetBaseException());
                 throw ex;
             }
-
         }
         
+        public static void ForgotPassword(string username, string user_mail)
+        {
+            try
+            {
+
+                SmtpClient SmtpServer = new SmtpClient();
+                SmtpServer.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
+                SmtpServer.Port = 587;
+                SmtpServer.Host = "smtp.gmail.com";
+                SmtpServer.EnableSsl = true;
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("testems32@gmail.com");
+                mail.To.Add(user_mail);
+                mail.Subject = "Change Password Link ";
+                mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=https://www.google.co.in/>here</a> to change your password...<br><br> Thank You";
+                mail.IsBodyHtml = true;
+                SmtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.GetBaseException());
+                throw ex;
+            }
+        }
+
+        public static void ChangePasswordIntimation(string username, string user_mail)
+        {
+            try
+            {
+
+                SmtpClient SmtpServer = new SmtpClient();
+                SmtpServer.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
+                SmtpServer.Port = 587;
+                SmtpServer.Host = "smtp.gmail.com";
+                SmtpServer.EnableSsl = true;
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("testems32@gmail.com");
+                mail.To.Add(user_mail);
+                mail.Subject = "Change Password Link ";
+                mail.Body = "Hi " + username + ".." + "<br><br>Your password has been changed...kindly login again to confirm...<br><br> Thank You";
+                mail.IsBodyHtml = true;
+                SmtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.GetBaseException());
+                throw ex;
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using EMS.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -96,6 +98,47 @@ namespace EMS.Repository
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
                 return 0;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        
+        public static User GetuserById(int user_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from u in datacontext.Users
+                            where u.id == user_id
+                            select u;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static void EditUserDetails(User user)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(user).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
             }
             finally
             {

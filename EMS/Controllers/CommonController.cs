@@ -49,6 +49,35 @@ namespace EMS.Controllers
             }
             return response;
         }
+        [Route("api/forgotpassword")]
+        [HttpPost]
+        public HttpResponseMessage ForgotPassword(ChangePasswordModel forgotpassword)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(forgotpassword.new_password == forgotpassword.confirm_password)
+                {
+                    Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.id);
+                    User user = CommonRepo.GetuserById(employee.user_id);
+                    
+                    user.password = EncryptPassword.CalculateHash(forgotpassword.new_password);
+                    CommonRepo.EditUserDetails(user);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "your password has been changed"));
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_110", "fail", "password didnot match"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, exception.Message);
+            }
+            return response;
+        }
     }
     
 }

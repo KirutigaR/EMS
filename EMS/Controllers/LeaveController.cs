@@ -179,7 +179,8 @@ namespace EMS.Controllers
                             {
                                 if (Cl_leave_type < noofdays)
                                 {
-
+                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_109", "casual leave less than applied leave", "Applied Leave more than Casual Leave. Choose Another LeaveType"));
                                 }
                                 else if (Cl_leave_type >= noofdays)
@@ -213,7 +214,8 @@ namespace EMS.Controllers
                                 LeaveRepo.AddLeaveHistory(leave);
                                 if (noofdays != 0)
                                 {
-
+                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
                             }

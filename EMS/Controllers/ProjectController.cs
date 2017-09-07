@@ -250,7 +250,14 @@ namespace EMS.Controllers
                 if (employee_id != 0 && project_id !=0 && role_id !=0)
                 {
                     Project_role project_role = ProjectRepo.GetAssignedEmployeebyid(employee_id, project_id, role_id);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role));
+                    if(project_role!= null)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "failure", "Given employee is not specifically assigned to the role in that project"));
+                    }
                 }
                 else
                 {
@@ -273,15 +280,22 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Project_role project_role = ProjectRepo.GetAssignedEmployeebyid(employee_id,project_id,role_id);
-                if (project_role != null)
+                if(employee_id!=0 && project_id!=0&& role_id!=0)
                 {
-                    ProjectRepo.DeleteEmployeeProjectRoleAssignmnet(project_role);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee role deleted from the given project"));
+                    Project_role project_role = ProjectRepo.GetAssignedEmployeebyid(employee_id, project_id, role_id);
+                    if (project_role != null)
+                    {
+                        ProjectRepo.DeleteEmployeeProjectRoleAssignmnet(project_role);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee role deleted from the given project"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "check employe id role id and project id"));
+                    }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "check employe id role id and project id"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)
@@ -293,7 +307,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/employee/project/list/{reporting_id?}")]
+        [Route("api/employee/project/list/{reporting_id?}")]//same as api/project_role/list/{reportingto_id?}
         public HttpResponseMessage GetEmpProjDetailsByManager(int reporting_id)
         {
             HttpResponseMessage response = null;

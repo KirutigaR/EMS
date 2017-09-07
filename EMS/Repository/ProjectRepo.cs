@@ -184,44 +184,6 @@ namespace EMS.Repository
             }
         }
 
-        public static List<Project_role_model> GetProjectListByEmployee(int e_id)//e_id employee_id
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from x in datacontext.Project_role
-                            join emp in datacontext.Employees
-                            on x.employee_id equals emp.id
-                            join proj in datacontext.Projects
-                            on x.project_id equals proj.id
-                            join role in datacontext.Roles
-                            on x.role_id equals role.id
-                            where x.employee_id == e_id
-                            select new Project_role_model
-                            {
-                                id = x.id,
-                                employee_name = emp.first_name,
-                                project_name = proj.project_name,
-                                role_name = role.role_name,
-                                start_date = x.start_date,
-                                end_date = x.end_date,
-                                association = x.association
-                            };
-                return query.ToList();
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                throw exception;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
-
         public static void EditProject(Project project)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -254,7 +216,7 @@ namespace EMS.Repository
                         int empl_status = EmployeeRepo.GetEmployeeStatusById(project_role.employee_id);
                         ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
                         int actual_resource_count = proj.resources_req;
-                        List<Project_role_model> assigned_resource_count = ProjectRepo.GetProjectRoleList(0, proj.project_id);
+                        List<Project_role_model> assigned_resource_count = ProjectRepo.GetProjectRoleList(0, proj.project_id,0);
                         if ((empl_status == 1) && (proj != null) && (assigned_resource_count.Count < actual_resource_count) )
                         {
                             datacontext.Project_role.Add(project_role);
@@ -391,12 +353,13 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<Project_role_model> GetProjectRoleList(int e_id, int p_id)//e_id employee_id , p_id project_id
+        public static List<Project_role_model> GetProjectRoleList(int e_id, int p_id, int reportingto_id)//e_id employee_id , p_id project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Project_role>();
+                var emp_repoting_predicate = LinqKit.PredicateBuilder.True<Employee>();
                 if(e_id!=0)
                 {
                     predicate = predicate.And(i => i.employee_id == e_id);
@@ -405,8 +368,13 @@ namespace EMS.Repository
                 {
                     predicate = predicate.And(i => i.project_id == p_id);
                 }
+                if (reportingto_id != 0)
+                {
+                    emp_repoting_predicate = emp_repoting_predicate.And(m => m.reporting_to == reportingto_id);
+                }
+
                 var query = from x in datacontext.Project_role.AsExpandable().Where(predicate)
-                            join emp in datacontext.Employees
+                            join emp in datacontext.Employees.AsExpandable().Where(emp_repoting_predicate)
                             on x.employee_id equals emp.id
                             join proj in datacontext.Projects 
                             on x.project_id equals proj.id

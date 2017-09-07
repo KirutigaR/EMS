@@ -216,8 +216,8 @@ namespace EMS.Repository
                         int empl_status = EmployeeRepo.GetEmployeeStatusById(project_role.employee_id);
                         ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
                         int actual_resource_count = proj.resources_req;
-                        List<Project_role_model> assigned_resource_count = ProjectRepo.GetProjectRoleList(0, proj.project_id,0);
-                        if ((empl_status == 1) && (proj != null) && (assigned_resource_count.Count < actual_resource_count) )
+                        List<Project_role_model> assigned_resource = ProjectRepo.GetProjectRoleList(0, proj.project_id,0);
+                        if ((empl_status == 1) && (proj != null) && (assigned_resource.Count < actual_resource_count) )
                         {
                             datacontext.Project_role.Add(project_role);
                             datacontext.SaveChanges();
@@ -240,6 +240,83 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static void EditEmployeeProjectRoleAssignmnet(Project_role Project_role)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                if (Project_role != null)
+                {
+                        int empl_status = EmployeeRepo.GetEmployeeStatusById(Project_role.employee_id);
+                        ProjectModel proj = ProjectRepo.GetProjectDetailsById(Project_role.project_id);
+                        int actual_resource_count = proj.resources_req;
+                        List<Project_role_model> assigned_resource = ProjectRepo.GetProjectRoleList(0, proj.project_id, 0);
+                        if ((empl_status == 1) && (proj != null) && (assigned_resource.Count <= actual_resource_count))
+                        {
+                            datacontext.Entry(Project_role).State = EntityState.Modified;
+                            datacontext.SaveChanges();
+                        }
+                        else
+                        {
+                            throw new Exception("Check Project details , employee status and resource allocation count ");
+                        }
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static Project_role GetAssignedEmployeebyid(int employee_id , int project_id , int role_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from project_role in datacontext.Project_role
+                            where project_role.employee_id == employee_id && project_role.project_id == project_id && project_role.role_id == role_id
+                            select project_role;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void DeleteEmployeeProjectRoleAssignmnet(Project_role projectrole)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(projectrole).State = EntityState.Deleted;
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
         public static string GetRoleNameById(int id)
         {
             EMSEntities datacontext = new EMSEntities();

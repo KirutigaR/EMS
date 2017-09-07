@@ -215,6 +215,84 @@ namespace EMS.Controllers
             return response;
         }
 
+        [Route("api/edit/employee/project/role")]
+        public HttpResponseMessage EditEmployeeProjectRoleAssignmnet(Project_role project_roles)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (project_roles != null)
+                {
+                    ProjectRepo.EditEmployeeProjectRoleAssignmnet(project_roles);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee details assigned to the given project has been changed"));
+                }
+
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json, Project details and employee status"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/get/employee/project/role/{employee_id?}/{project_id?}/{role_id?}")]
+        public HttpResponseMessage GetAssignedEmployeebyid(int employee_id, int project_id, int role_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (employee_id != 0 && project_id !=0 && role_id !=0)
+                {
+                    Project_role project_role = ProjectRepo.GetAssignedEmployeebyid(employee_id, project_id, role_id);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role));
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json, Project details and employee status"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("api/delete/employee/project/role/{employee_id?}/{project_id?}/{role_id?}")]
+        public HttpResponseMessage DeleteEmployeeProjectRoleAssignmnet(int employee_id, int project_id, int role_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                Project_role project_role = ProjectRepo.GetAssignedEmployeebyid(employee_id,project_id,role_id);
+                if (project_role != null)
+                {
+                    ProjectRepo.DeleteEmployeeProjectRoleAssignmnet(project_role);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee role deleted from the given project"));
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "check employe id role id and project id"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
         [Route("api/employee/project/list/{reporting_id?}")]
         public HttpResponseMessage GetEmpProjDetailsByManager(int reporting_id)
         {

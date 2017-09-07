@@ -1,5 +1,6 @@
 ﻿using EMS.Models;
 using EMS.Utility;
+using LinqKit;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -650,13 +651,18 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<LeavehistoryModel> GetPendingApprovedLeave()
+        public static List<LeavehistoryModel> GetPendingApprovedLeave(int r_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                var predicate = LinqKit.PredicateBuilder.True<Employee>();
+                if(r_id != 0)
+                {
+                    predicate = predicate.And(X => X.reporting_to == r_id);
+                }
                 var query = from l in datacontext.Leaves
-                            join e in datacontext.Employees
+                            join e in datacontext.Employees.AsExpandable().Where(predicate)
                             on l.employee_id equals e.id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id

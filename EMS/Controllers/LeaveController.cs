@@ -535,8 +535,8 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/leave/pending/approved/list/hr")] // pending approval in hr manager
-        public HttpResponseMessage GetPendingApprovedList()
+        [Route("api/leave/pending/approved/list/hr/{r_id?}")] // pending approval in hr manager
+        public HttpResponseMessage GetPendingApprovedList(int r_id = 0)
         {
             HttpResponseMessage response = null;
             try
@@ -545,7 +545,7 @@ namespace EMS.Controllers
                 //string role_name = ProjectRepo.GetRoleNameById(project_role.role_id);
                 //if (role_name == "HR")
                 //{
-                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingApprovedLeave();
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingApprovedLeave(r_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
                 //}
 

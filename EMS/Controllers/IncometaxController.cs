@@ -40,15 +40,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/incometax/{e_id?}")]
-        public HttpResponseMessage GetTaxValueByEmpId(int e_id)//e_id employee_id
+        [Route("api/get/incometax/{employee_id?}")]
+        public HttpResponseMessage GetTaxValueByEmpId(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (e_id != 0)
+                if (employee_id != 0)
                 {
-                    Incometax tax = IncometaxRepo.GetTaxValueByEmpId(e_id);
+                    Incometax tax = IncometaxRepo.GetTaxValueByEmpId(employee_id);
                     if (tax != null)
                     {
                         decimal tax_value = tax.income_tax;
@@ -98,15 +98,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/incometax/list/{e_id?}")]
-        public HttpResponseMessage GetIncometaxListByEmpId(int e_id)//e_id employww_id
+        [Route("api/incometax/list/{employee_id?}")]
+        public HttpResponseMessage GetIncometaxListByEmpId(int employee_id)//e_id employww_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(e_id!= 0)
+                if(employee_id!= 0)
                 {
-                    List<IncometaxModel> tax_list = IncometaxRepo.GetIncometaxListByEmpId(e_id);
+                    List<IncometaxModel> tax_list = IncometaxRepo.GetIncometaxListByEmpId(employee_id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tax_list));
                 }
                 else

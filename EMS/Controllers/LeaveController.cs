@@ -58,14 +58,14 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/holiday/delete/{h_id?}")]
+        [Route("api/holiday/delete/{holiday_id?}")]
         [HttpGet]
-        public HttpResponseMessage DeleteHolidayList(int h_id)
+        public HttpResponseMessage DeleteHolidayList(int holiday_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                Holiday_List holiday = LeaveRepo.GetHolidayById(h_id);
+                Holiday_List holiday = LeaveRepo.GetHolidayById(holiday_id);
                 if (holiday != null)
                 {
                     LeaveRepo.DeleteHolidayList(holiday);
@@ -318,13 +318,13 @@ namespace EMS.Controllers
             return response;
         }
         //[HttpPost]
-        [Route("api/leavehistory/id/{e_id?}")] // display Leavehistory in leavepage by id
-        public HttpResponseMessage GetLeaveHistoryById(int e_id)
+        [Route("api/leavehistory/id/{employee_id?}")] // display Leavehistory in leavepage by id
+        public HttpResponseMessage GetLeaveHistoryById(int employee_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                List<LeavehistoryModel> leave_history_model = LeaveRepo.GetLeaveHistoryById(e_id);
+                List<LeavehistoryModel> leave_history_model = LeaveRepo.GetLeaveHistoryById(employee_id);
 
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_119", "approved", leave_history_model));
 
@@ -357,13 +357,13 @@ namespace EMS.Controllers
         //    return response;
         //}
         //[HttpPost]
-        [Route("api/balanceleave/{e_id?}")] //balance CL EL Ml Lop leave in applyleave page
-        public HttpResponseMessage GetLeavePageBalanceLeave(int e_id)
+        [Route("api/balanceleave/{employee_id?}")] //balance CL EL Ml Lop leave in applyleave page
+        public HttpResponseMessage GetLeavePageBalanceLeave(int employee_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                List<LeaveBalanceModel> leavebalance = LeaveRepo.GetLeaveBalanceById(e_id);
+                List<LeaveBalanceModel> leavebalance = LeaveRepo.GetLeaveBalanceById(employee_id);
                 //LeaveBalanceModel leavebalance = LeaveRepo.GetLeaveBalanceById(leave.employee_id);
                 //Leave_type leave_type = new Leave_type();
                 //leave_type.type_name = 
@@ -459,9 +459,9 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/employeelist/byrole/{e_id?}")]// Get employee list by hr/project manager id
+        [Route("api/employeelist/byrole/{employee_id?}")]// Get employee list by hr/project manager id
         [HttpGet]
-        public HttpResponseMessage EmployeeListByRole(int e_id)
+        public HttpResponseMessage EmployeeListByRole(int employee_id)
         {
             HttpResponseMessage response = null;
             try
@@ -469,7 +469,7 @@ namespace EMS.Controllers
                 //Project_role project_role = ProjectRepo.GetProjectIdRoleId(e_id);
                 //string project_name = ProjectRepo.GetProjectName(project_role.project_id);
                 //string role_name = ProjectRepo.GetProjectRole(project_role.role_id);
-                List<EmployeeListByRoleModel> employee_list_byrole = LeaveRepo.GetEmployeeListByRole(e_id);
+                List<EmployeeListByRoleModel> employee_list_byrole = LeaveRepo.GetEmployeeListByRole(employee_id);
                 //List<EmployeeListByRoleModel> emp_proj_details_byrole = LeaveRepo.emp_proj_details_byrole(employee_list_byrole);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", employee_list_byrole));
             }
@@ -482,13 +482,13 @@ namespace EMS.Controllers
             return response;
         }
         [HttpGet]
-        [Route("api/leave/pending/{e_id?}")] //leave request project manager page
-        public HttpResponseMessage GetLeaveRequestByRole(int e_id)
+        [Route("api/leave/pending/{employee_id?}")] //leave request project manager page
+        public HttpResponseMessage GetLeaveRequestByRole(int employee_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                List<LeavehistoryModel> leave_history = LeaveRepo.GetRequestByRoleId(e_id);
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetRequestByRoleId(employee_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
             }
             catch (Exception exception)
@@ -539,8 +539,8 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/leave/pending/approved/list/hr/{r_id?}")] // pending approval in hr manager
-        public HttpResponseMessage GetPendingApprovedList(int r_id = 0)
+        [Route("api/leave/pending/approved/list/hr/{reportingto_id?}")] // pending approval in hr manager
+        public HttpResponseMessage GetPendingApprovedList(int reportingto_id = 0)
         {
             HttpResponseMessage response = null;
             try
@@ -549,7 +549,7 @@ namespace EMS.Controllers
                 //string role_name = ProjectRepo.GetRoleNameById(project_role.role_id);
                 //if (role_name == "HR")
                 //{
-                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingApprovedLeave(r_id);
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingApprovedLeave(reportingto_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
                 //}
 

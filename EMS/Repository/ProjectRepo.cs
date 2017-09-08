@@ -75,7 +75,7 @@ namespace EMS.Repository
                                 resources_req = project.resources_req,
                                 client_id = (int)project.client_id,
                                 client_name = client.client_name,
-                                type_id = client.type_id
+                                client_type_id = client.type_id
                             };
                 return query.FirstOrDefault();
             }
@@ -121,7 +121,7 @@ namespace EMS.Repository
                                 project_description = project.project_description,
                                 client_id = project.client_id,
                                 client_name = client.client_name,
-                                type_id = client.type_id,
+                                client_type_id = client.type_id,
                                 resources_req = project.resources_req
                             };
                 return query.ToList();
@@ -201,7 +201,7 @@ namespace EMS.Repository
                                 project_description = project.project_description,
                                 client_id = project.client_id,
                                 client_name = client.client_name,
-                                type_id = client.type_id,
+                                client_type_id = client.type_id,
                                 resources_req = project.resources_req
                             };
                 return query.ToList();

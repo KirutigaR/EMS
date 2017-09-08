@@ -16,7 +16,7 @@ namespace EMS.Models
         public string project_description { get; set; }
         public int client_id { get; set; }
         public string client_name { get; set; }
-        public int type_id { get; set; }
+        public int client_type_id { get; set; }
         public int resources_req { get; set; }
     }
 }

@@ -260,7 +260,7 @@ namespace EMS.Repository
                                 po = y.po,
                                 client_id = x.id,
                                 client_name = x.client_name,
-                                type_id = x.type_id,
+                                client_type_id = x.type_id,
                                 resources_req = y.resources_req
                             };
                 return query.ToList();

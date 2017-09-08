@@ -234,6 +234,10 @@ namespace EMS.Repository
             try
             {
                 var query = from employee in datacontent.Employees
+                            join userrole in datacontent.User_role
+                            on employee.user_id equals userrole.user_id
+                            join salary in datacontent.Salary_Structure
+                            on employee.id equals salary.emp_id
                             where employee.id == e_id
                             select new EmployeeModel
                             {
@@ -246,6 +250,7 @@ namespace EMS.Repository
                                 date_of_joining = employee.date_of_joining,
                                 contact_no = employee.contact_no,
                                 user_id = employee.user_id,
+                                role_id = userrole.role_id,
                                 reporting_to = employee.reporting_to,
                                 Year_of_experence = employee.Year_of_experence,
                                 pan_no = employee.pan_no,
@@ -255,7 +260,8 @@ namespace EMS.Repository
                                 emergency_contact_no = employee.emergency_contact_no,
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,
-                                PF_no = employee.PF_no
+                                PF_no = employee.PF_no,
+                                ctc = salary.ctc
                             };
                 return query.FirstOrDefault();
             }

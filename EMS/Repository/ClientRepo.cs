@@ -53,13 +53,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Client GetClientById(int c_id)
+        public static Client GetClientById(int client_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from x in datacontext.Clients
-                            where x.id == c_id
+                            where x.id == client_id
                             select x;
                 return query.FirstOrDefault();
             }
@@ -75,7 +75,7 @@ namespace EMS.Repository
             }
         }
 
-        public static ClientModel GetClientDetailsById(int c_id)
+        public static ClientModel GetClientDetailsById(int client_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -83,7 +83,7 @@ namespace EMS.Repository
                 var query = from x in datacontext.Clients
                             join y in datacontext.Client_type
                             on x.type_id equals y.id
-                            where x.id == c_id
+                            where x.id == client_id
                             select new ClientModel
                             {
                                 client_id = x.id,
@@ -216,13 +216,13 @@ namespace EMS.Repository
             }
         }
 
-        public static void DropClient(int c_id)
+        public static void DropClient(int client_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from client in datacontext.Clients
-                            where client.id == c_id
+                            where client.id == client_id
                             select client;
                 query.FirstOrDefault().is_active = 0;
                 datacontext.Entry(query.FirstOrDefault()).State = EntityState.Modified;
@@ -240,7 +240,7 @@ namespace EMS.Repository
             }
         }
 
-        public static List<ProjectModel> GetProjectListByClientId(int c_id)
+        public static List<ProjectModel> GetProjectListByClientId(int client_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -248,7 +248,7 @@ namespace EMS.Repository
                 var query = from x in datacontext.Clients
                             join y in datacontext.Projects
                             on x.id equals y.client_id
-                            where x.id == c_id
+                            where x.id == client_id
                             select new ProjectModel
                             {
                                 project_id = y.id,

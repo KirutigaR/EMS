@@ -108,13 +108,13 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/list/{r_id?}/{d_id?}")]
-        public HttpResponseMessage GetEmployeeList(int r_id = 0, int d_id = 0)//r_id reportingto_id, d_id designation_id
+        [Route("api/employee/list/{reportingto_id?}/{designation_id?}")]
+        public HttpResponseMessage GetEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id
         {
             HttpResponseMessage Response = null;
             try
             {
-                List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList(r_id, d_id);
+                List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList(reportingto_id, designation_id);
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Emp_List));
             }
             catch (Exception exception)
@@ -126,13 +126,13 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/available/list/{r_id?}/{d_id?}")]
-        public HttpResponseMessage GetAvailableEmployeeList(int r_id = 0, int d_id = 0)//r_id reportingto_id, d_id designation_id (available employees = employees assigned in bench [bench project id =1])
+        [Route("api/employee/available/list/{reportingto_id?}/{designation_id?}")]
+        public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id (available employees = employees assigned in bench [bench project id =1])
         {
             HttpResponseMessage Response = null;
             try
             {
-                List<EmployeeModel> Emp_List = EmployeeRepo.GetAvailableEmployeeList(r_id, d_id);
+                List<EmployeeModel> Emp_List = EmployeeRepo.GetAvailableEmployeeList(reportingto_id, designation_id);
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Emp_List));
             }
             catch (Exception exception)
@@ -144,15 +144,15 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/employee/{e_id?}")]
-        public HttpResponseMessage GetEmployeeById(int e_id)//e_id employee_id
+        [Route("api/get/employee/{employee_id?}")]
+        public HttpResponseMessage GetEmployeeById(int employee_id)//e_id employee_id
         {
             HttpResponseMessage Response = null;
             try
             {
-                if (e_id != 0)
+                if (employee_id != 0)
                 {
-                    EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsById(e_id);
+                    EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsById(employee_id);
                     if (existingInstance != null)
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existingInstance));
@@ -176,15 +176,15 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/employee/byuserid/{u_id?}")]
-        public HttpResponseMessage GetEmployeeByUserId(int u_id)//u_id user_id
+        [Route("api/get/employee/byuserid/{user_id?}")]
+        public HttpResponseMessage GetEmployeeByUserId(int user_id)//u_id user_id
         {
             HttpResponseMessage Response = null;
             try
             {
-                if (u_id != 0)
+                if (user_id != 0)
                 {
-                    EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsByUserId(u_id);
+                    EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsByUserId(user_id);
                     if (existingInstance != null)
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existingInstance));
@@ -244,15 +244,15 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/employee/inactive/{e_id?}")]
-        public HttpResponseMessage InvalidEmployee(int e_id)//e_id employee_id
+        [Route("api/employee/inactive/{employee_id?}")]
+        public HttpResponseMessage InvalidEmployee(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (e_id != 0)
+                if (employee_id != 0)
                 {
-                    Employee existinginstance = EmployeeRepo.GetEmployeeById(e_id);
+                    Employee existinginstance = EmployeeRepo.GetEmployeeById(employee_id);
                     if (existinginstance != null)
                     {
                         EmployeeRepo.InactiveEmployee(existinginstance);

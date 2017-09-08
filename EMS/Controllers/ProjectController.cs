@@ -49,13 +49,13 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/project/list/{c_id?}/{status?}")]//project list of active client 
-        public HttpResponseMessage GetProjectList(int c_id = 0, string status = null)//c_id client_id , status project_status
+        [Route("api/project/list/{client_id?}/{status?}")]//project list of active client 
+        public HttpResponseMessage GetProjectList(int client_id = 0, string status = null)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
             try
             {
-                List<ProjectModel> Project_List = ProjectRepo.GetProjectList(c_id, status);
+                List<ProjectModel> Project_List = ProjectRepo.GetProjectList(client_id, status);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
             }
             catch (Exception exception)
@@ -67,13 +67,13 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/entire/project/list/{c_id?}/{status?}")]//entire project list (include active and incative client projects )
-        public HttpResponseMessage GetEntireProjectList(int c_id = 0, string status = null)//c_id client_id , status project_status
+        [Route("api/project/list/{employee_id?}")]//project list of active client 
+        public HttpResponseMessage GetProjectListByEmployee(int employee_id)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
             try
             {
-                List<ProjectModel> Project_List = ProjectRepo.GetEntireProjectList(c_id, status);
+                List<ProjectModel> Project_List = ProjectRepo.GetProjectListByEmployee(employee_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
             }
             catch (Exception exception)
@@ -85,15 +85,33 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/project/{p_id}")]
-        public HttpResponseMessage GetProjectById(int p_id)//p_id project_id
+        [Route("api/entire/project/list/{client_id?}/{status?}")]//entire project list (include active and incative client projects )
+        public HttpResponseMessage GetEntireProjectList(int client_id = 0, string status = null)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
             try
             {
-                if (p_id != 0)
+                List<ProjectModel> Project_List = ProjectRepo.GetEntireProjectList(client_id, status);
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Project_List));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/get/project/{project_id}")]
+        public HttpResponseMessage GetProjectById(int project_id)//p_id project_id
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (project_id != 0)
                 {
-                    ProjectModel existinginstance = ProjectRepo.GetProjectDetailsById(p_id);
+                    ProjectModel existinginstance = ProjectRepo.GetProjectDetailsById(project_id);
                     if (existinginstance != null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existinginstance));
@@ -197,13 +215,13 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/assigned/project_role/list/{e_id?}/{p_id?}/{reportingto_id?}")]
-        public HttpResponseMessage GetAssignedProjectRoleList(int e_id = 0, int p_id = 0, int reportingto_id=0)//e_id employee_id , p_id project_id
+        [Route("api/assigned/project_role/list/{employee_id?}/{project_id?}/{reportingto_id?}")]
+        public HttpResponseMessage GetAssignedProjectRoleList(int employee_id = 0, int project_id = 0, int reportingto_id = 0)//e_id employee_id , p_id project_id
         {
             HttpResponseMessage response = null;
             try
             {
-                List<Project_role_model> project_role_list = ProjectRepo.GetAssignedProjectRoleList(e_id, p_id, reportingto_id);
+                List<Project_role_model> project_role_list = ProjectRepo.GetAssignedProjectRoleList(employee_id, project_id, reportingto_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role_list));
             }
             catch (Exception exception)

@@ -101,15 +101,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/role/{r_id?}")]
-        public HttpResponseMessage GetRoleById(int r_id)//r_id role_id
+        [Route("api/get/role/{role_id?}")]
+        public HttpResponseMessage GetRoleById(int role_id)//r_id role_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (r_id != 0)
+                if (role_id != 0)
                 {
-                    RoleModel instance = RoleRepo.GetRoleById(r_id);
+                    RoleModel instance = RoleRepo.GetRoleById(role_id);
                     if (instance != null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", instance));
@@ -166,17 +166,17 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/role/delete/{r_id?}")]
-        public HttpResponseMessage DeleteRoleById(int r_id)//r_id role_id
+        [Route("api/role/delete/{role_id?}")]
+        public HttpResponseMessage DeleteRoleById(int role_id)//r_id role_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (r_id != 0)
+                if (role_id != 0)
                 {
-                    if (RoleRepo.GetRoleById(r_id) != null)
+                    if (RoleRepo.GetRoleById(role_id) != null)
                     {
-                        RoleRepo.DeleteRoleById(r_id);
+                        RoleRepo.DeleteRoleById(role_id);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Role deleted!"));
                     }
                     else

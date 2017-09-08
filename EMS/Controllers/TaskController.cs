@@ -13,13 +13,13 @@ namespace EMS.Controllers
 {
     public class TaskController : ApiController
     {
-        [Route("api/task/list/{p_id?}")]
-        public HttpResponseMessage GetTaskList(int p_id=0)//p_id project_id
+        [Route("api/task/list/{project_id?}")]
+        public HttpResponseMessage GetTaskList(int project_id = 0)//p_id project_id
         {
             HttpResponseMessage response = null;
             try
             {
-                List<TaskModel> tasklist = TaskRepo.GetTaskList(p_id);
+                List<TaskModel> tasklist = TaskRepo.GetTaskList(project_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", tasklist));
             }
             catch (Exception exception)
@@ -99,15 +99,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/task/{t_id?}")]
-        public HttpResponseMessage GetTaskById(int t_id)//t_id task_id
+        [Route("api/get/task/{task_id?}")]
+        public HttpResponseMessage GetTaskById(int task_id)//t_id task_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(t_id!=0)
+                if(task_id != 0)
                 {
-                    TaskModel instance = TaskRepo.GetTaskDetailsById(t_id);
+                    TaskModel instance = TaskRepo.GetTaskDetailsById(task_id);
                     if (instance != null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", instance));
@@ -132,15 +132,15 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/task/delete/{t_id}")]
-        public HttpResponseMessage DeleteTask(int t_id)//t_id task_id
+        [Route("api/task/delete/{task_id}")]
+        public HttpResponseMessage DeleteTask(int task_id)//t_id task_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(t_id!=0)
+                if(task_id != 0)
                 {
-                    Task instance = TaskRepo.GetTaskById(t_id);
+                    Task instance = TaskRepo.GetTaskById(task_id);
                     if (instance != null)
                     {
                         TaskRepo.DeleteTaskById(instance);

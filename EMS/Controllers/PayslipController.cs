@@ -13,15 +13,15 @@ namespace EMS.Controllers
 {
     public class PayslipController : ApiController
     {
-        [Route("api/payslip/generate/{e_id?}")]
-        public HttpResponseMessage GeneratePayslip(int e_id)//e_id employee_id
+        [Route("api/payslip/generate/{employee_id?}")]
+        public HttpResponseMessage GeneratePayslip(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(e_id != 0 )
+                if(employee_id != 0 )
                 {
-                    Salary_Structure salary = SalaryRepo.GetSalaryStructureByEmpId(e_id);
+                    Salary_Structure salary = SalaryRepo.GetSalaryStructureByEmpId(employee_id);
                     Payslip payslip = SalaryCalculation.Calculatepayslip(salary);
                     Payslip existing_instance = PayslipRepo.GetExistingPayslip(payslip.emp_id, payslip.payslip_month, payslip.payslip_year);
                     if(payslip!= null && existing_instance == null)

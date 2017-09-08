@@ -14,15 +14,15 @@ namespace EMS.Controllers
     public class SalaryController : ApiController
     {
         [HttpGet]
-        [Route("api/salarystructure/update/{e_id?}/{ctc?}")]
-        public HttpResponseMessage UpdateSalaryStructure(int e_id , decimal ctc)
+        [Route("api/salarystructure/update/{employee_id?}/{ctc?}")]
+        public HttpResponseMessage UpdateSalaryStructure(int employee_id, decimal ctc)
         {
             HttpResponseMessage response = null;
             try
             {
-                if(e_id !=0 && EmployeeRepo.GetEmployeeStatusById(e_id)!=0 && ctc!=0)
+                if(employee_id != 0 && EmployeeRepo.GetEmployeeStatusById(employee_id) !=0 && ctc!=0)
                 {
-                    Salary_Structure active_instance = SalaryRepo.GetSalaryStructureByEmpId(e_id);
+                    Salary_Structure active_instance = SalaryRepo.GetSalaryStructureByEmpId(employee_id);
                     if (active_instance != null)
                     {
                         active_instance.is_active = 0;
@@ -31,7 +31,7 @@ namespace EMS.Controllers
 
                         Salary_Structure new_sal_structure = new Salary_Structure();
                         new_sal_structure = SalaryCalculation.CalculateSalaryStructure(ctc);
-                        new_sal_structure.emp_id = e_id;
+                        new_sal_structure.emp_id = employee_id;
                         new_sal_structure.is_active = 1;
                         new_sal_structure.from_date = DateTime.Now;
                         new_sal_structure.to_date = null;
@@ -56,16 +56,16 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/Get/salarystructure/list/{e_id?}")]
+        [Route("api/Get/salarystructure/list/{employee_id?}")]
         [HttpGet]
-        public HttpResponseMessage GetSalaryStructure(int e_id)
+        public HttpResponseMessage GetSalaryStructure(int employee_id)
         {
             HttpResponseMessage response = null;
             try
             {
-                if(e_id != 0)
+                if(employee_id != 0)
                 {
-                    List<SalaryStructureModel> salary_structure = SalaryRepo.GetSalaryStructureList(e_id);
+                    List<SalaryStructureModel> salary_structure = SalaryRepo.GetSalaryStructureList(employee_id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", salary_structure));
                 }
                 else

@@ -85,15 +85,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/client/{c_id?}")]
-        public HttpResponseMessage GetClientById(int c_id)//c_id client_id
+        [Route("api/get/client/{client_id?}")]
+        public HttpResponseMessage GetClientById(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (c_id != 0)
+                if (client_id != 0)
                 {
-                    ClientModel existinginstance = ClientRepo.GetClientDetailsById(c_id);
+                    ClientModel existinginstance = ClientRepo.GetClientDetailsById(client_id);
                     if (existinginstance != null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existinginstance));
@@ -153,18 +153,18 @@ namespace EMS.Controllers
 
 
         [HttpGet]
-        [Route("api/client/drop/{c_id}")]
-        public HttpResponseMessage DropClient(int c_id)//c_id client_id
+        [Route("api/client/drop/{client_id}")]
+        public HttpResponseMessage DropClient(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (c_id != 0)
+                if (client_id != 0)
                 {
-                    Client existinginstace = ClientRepo.GetClientById(c_id);
+                    Client existinginstace = ClientRepo.GetClientById(client_id);
                     if (existinginstace != null)
                     {
-                        ClientRepo.DropClient(c_id);
+                        ClientRepo.DropClient(client_id);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details dropped!"));
                     }
                     else
@@ -186,17 +186,17 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/client/project/list/{c_id?}")]
-        public HttpResponseMessage GetProjectListByClientId(int c_id)//c_id client_id
+        [Route("api/client/project/list/{client_id?}")]
+        public HttpResponseMessage GetProjectListByClientId(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(c_id!=0)
+                if(client_id != 0)
                 {
-                    if(ClientRepo.GetClientById(c_id)!=null)
+                    if(ClientRepo.GetClientById(client_id) !=null)
                     {
-                        List<ProjectModel> project_list = ClientRepo.GetProjectListByClientId(c_id);
+                        List<ProjectModel> project_list = ClientRepo.GetProjectListByClientId(client_id);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_list));
                     }
                     else

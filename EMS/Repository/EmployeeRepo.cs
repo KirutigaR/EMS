@@ -71,19 +71,19 @@ namespace EMS.Repository
             }
         }
 
-        public static List<EmployeeModel> GetEmployeeList(int r_id, int d_id) //r_id reportingto id, d_id designation id of the employee
+        public static List<EmployeeModel> GetEmployeeList(int reportingto_id, int designation_id) //r_id reportingto id, d_id designation id of the employee
         {
             EMSEntities datacontent = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
-                if (r_id != 0)
+                if (reportingto_id != 0)
                 {
-                    predicate = predicate.And(i => i.reporting_to == r_id);       
+                    predicate = predicate.And(i => i.reporting_to == reportingto_id);       
                 }
-                if (d_id != 0)
+                if (designation_id != 0)
                 {
-                    predicate = predicate.And(i => i.designation == d_id);      
+                    predicate = predicate.And(i => i.designation == designation_id);      
                 }
               
                     var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)

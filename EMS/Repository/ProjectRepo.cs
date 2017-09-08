@@ -138,6 +138,40 @@ namespace EMS.Repository
             }
         }
 
+        public static List<ProjectModel> GetProjectListByEmployee(int employee_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from projectrole in datacontext.Project_role
+                            join project in datacontext.Projects on projectrole.project_id equals project.id
+                            where projectrole.employee_id == employee_id
+                            select new ProjectModel
+                            {
+                                project_id = project.id,
+                                project_name = project.project_name,
+                                start_date = project.start_date,
+                                end_date = project.end_date,
+                                status = project.status,
+                                po = project.po,
+                                project_description = project.project_description,
+                                client_id = project.client_id,
+                                resources_req = project.resources_req
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
         public static List<ProjectModel> GetEntireProjectList(int c_id, string status)//c_id Client Id , Status = Project status 
         {
             EMSEntities datacontext = new EMSEntities();

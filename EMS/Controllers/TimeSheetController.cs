@@ -70,15 +70,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/timesheet/{id?}")]
-        public HttpResponseMessage GetSheetById(int s_id)//timesheet id
+        [Route("api/get/timesheet/{timesheetid?}")]
+        public HttpResponseMessage GetSheetById(int timesheetid)//timesheet id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(s_id != 0)
+                if(timesheetid != 0)
                 {
-                    TimeSheetModel record = TimeSheetRepo.GetSheetById(s_id);
+                    TimeSheetModel record = TimeSheetRepo.GetSheetById(timesheetid);
                     if(record!= null)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", record));
@@ -103,18 +103,18 @@ namespace EMS.Controllers
         }
 
 
-        [Route("api/get/employee/timesheet/{e_id?}")]
-        public HttpResponseMessage GetSheetByEmpId(int e_id)//e_id employee_id
+        [Route("api/get/employee/timesheet/{employee_id?}")]
+        public HttpResponseMessage GetSheetByEmpId(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (e_id != 0)
+                if (employee_id != 0)
                 {
                     //int emp_status = EmployeeRepo.GetEmployeeStatusByID(e_id);
                     //if (emp_status == 1)
                     //{
-                        List<TimeSheetModel> record_list = TimeSheetRepo.GetSheetByEmpId(e_id);
+                        List<TimeSheetModel> record_list = TimeSheetRepo.GetSheetByEmpId(employee_id);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", record_list));
                     //}
                     //else
@@ -136,15 +136,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/project/timesheet/{p_id?}")]
-        public HttpResponseMessage GetSheetByProjId(int p_id)//p_id project_id
+        [Route("api/get/project/timesheet/{project_id?}")]
+        public HttpResponseMessage GetSheetByProjId(int project_id)//p_id project_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if (p_id != 0)
+                if (project_id != 0)
                 {
-                    List<TimeSheetModel> record_list = TimeSheetRepo.GetSheetByProjId(p_id);
+                    List<TimeSheetModel> record_list = TimeSheetRepo.GetSheetByProjId(project_id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", record_list));
                 }
                 else
@@ -162,17 +162,17 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/timesheet/delete/{s_id}")]
-        public HttpResponseMessage DeleteSheetById(int s_id)//s_id timesheet_id
+        [Route("api/timesheet/delete/{timesheet_id}")]
+        public HttpResponseMessage DeleteSheetById(int timesheet_id)//s_id timesheet_id
         {
             HttpResponseMessage response = null;
             try
             {
-                if(s_id!=0)
+                if(timesheet_id != 0)
                 {
-                    if (TimeSheetRepo.GetSheetById(s_id) != null)
+                    if (TimeSheetRepo.GetSheetById(timesheet_id) != null)
                     {
-                        TimeSheetRepo.DeleteTimeSheetRecord(s_id);
+                        TimeSheetRepo.DeleteTimeSheetRecord(timesheet_id);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Timesheet deleted successfully!"));
                     }
                     else

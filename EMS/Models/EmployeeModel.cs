@@ -25,7 +25,8 @@ namespace EMS.Models
         public string medical_insurance_no { get; set; }
         public string emergency_contact_no { get; set; }
         public string emergency_contact_person { get; set; }
-        public int designation { get; set; }
+        public int designation_id { get; set; }
+        public string designation { get; set; }
         public string blood_group { get; set; }
         public decimal ctc { get; set; }
     }

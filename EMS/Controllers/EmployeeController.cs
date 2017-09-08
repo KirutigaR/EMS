@@ -43,7 +43,7 @@ namespace EMS.Controllers
                     employee.PF_no = employee_details.PF_no;
                     employee.medical_insurance_no = employee_details.medical_insurance_no;
                     employee.blood_group = employee_details.blood_group;
-                    employee.designation = employee_details.designation;
+                    employee.designation = employee_details.designation_id;
 
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
                     if (existingInstance == null)
@@ -360,7 +360,7 @@ namespace EMS.Controllers
                     employee.PF_no = employee_details.PF_no;
                     employee.medical_insurance_no = employee_details.medical_insurance_no;
                     employee.blood_group = employee_details.blood_group;
-                    employee.designation = employee_details.designation;
+                    employee.designation = employee_details.designation_id;
 
                     if (existingInstance == null)
                     {

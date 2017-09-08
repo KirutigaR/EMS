@@ -89,6 +89,8 @@ namespace EMS.Repository
                     var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
                                 join user in datacontent.Users
                                 on employee.user_id equals user.id
+                                join designation in datacontent.Designations
+                                on employee.designation equals designation.id
                                 where (user.is_active == 1)
                                 select new EmployeeModel
                                 {
@@ -106,7 +108,8 @@ namespace EMS.Repository
                                     pan_no = employee.pan_no,
                                     bank_account_no =employee.bank_account_no,
                                     blood_group = employee.blood_group,
-                                    designation = employee.designation,
+                                    designation_id = designation.id,
+                                    designation = designation.name,
                                     emergency_contact_no = employee.emergency_contact_no,
                                     emergency_contact_person = employee.emergency_contact_person,
                                     medical_insurance_no = employee.medical_insurance_no,
@@ -145,6 +148,8 @@ namespace EMS.Repository
                 var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
                             join user in datacontent.Users
                             on employee.user_id equals user.id
+                            join designation in datacontent.Designations
+                            on employee.designation equals designation.id
                             join project_role in datacontent.Project_role
                             on employee.id equals project_role.employee_id
                             where (user.is_active == 1) && (project_role.project_id == 1)//available employees are the employees who are all in bench(project id 1 = bench ) 
@@ -164,7 +169,8 @@ namespace EMS.Repository
                                 pan_no = employee.pan_no,
                                 bank_account_no = employee.bank_account_no,
                                 blood_group = employee.blood_group,
-                                designation = employee.designation,
+                                designation_id = designation.id,
+                                designation = designation.name,
                                 emergency_contact_no = employee.emergency_contact_no,
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,
@@ -191,6 +197,8 @@ namespace EMS.Repository
             try
             {
                 var query = from employee in datacontent.Employees
+                            join designation in datacontent.Designations
+                            on employee.designation equals designation.id
                             where employee.user_id == u_id 
                             select new EmployeeModel
                             {
@@ -208,7 +216,8 @@ namespace EMS.Repository
                                 pan_no = employee.pan_no,
                                 bank_account_no = employee.bank_account_no,
                                 blood_group = employee.blood_group,
-                                designation = employee.designation,
+                                designation_id = designation.id,
+                                designation = designation.name,
                                 emergency_contact_no = employee.emergency_contact_no,
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,
@@ -238,6 +247,8 @@ namespace EMS.Repository
                             on employee.user_id equals userrole.user_id
                             join salary in datacontent.Salary_Structure
                             on employee.id equals salary.emp_id
+                            join designation in datacontent.Designations
+                            on employee.designation equals designation.id
                             where employee.id == e_id
                             select new EmployeeModel
                             {
@@ -256,7 +267,8 @@ namespace EMS.Repository
                                 pan_no = employee.pan_no,
                                 bank_account_no = employee.bank_account_no,
                                 blood_group = employee.blood_group,
-                                designation = employee.designation,
+                                designation_id = designation.id,
+                                designation = designation.name,
                                 emergency_contact_no = employee.emergency_contact_no,
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,

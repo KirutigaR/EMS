@@ -197,13 +197,13 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/project_role/list/{e_id?}/{p_id?}/{reportingto_id?}")]
-        public HttpResponseMessage GetProjectRoleList(int e_id = 0, int p_id = 0, int reportingto_id=0)//e_id employee_id , p_id project_id
+        [Route("api/assigned/project_role/list/{e_id?}/{p_id?}/{reportingto_id?}")]
+        public HttpResponseMessage GetAssignedProjectRoleList(int e_id = 0, int p_id = 0, int reportingto_id=0)//e_id employee_id , p_id project_id
         {
             HttpResponseMessage response = null;
             try
             {
-                List<Project_role_model> project_role_list = ProjectRepo.GetProjectRoleList(e_id, p_id, reportingto_id);
+                List<Project_role_model> project_role_list = ProjectRepo.GetAssignedProjectRoleList(e_id, p_id, reportingto_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", project_role_list));
             }
             catch (Exception exception)
@@ -321,7 +321,7 @@ namespace EMS.Controllers
                         List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList(reporting_id, 0);
                         foreach (EmployeeModel items in Emp_List)
                         {
-                            List<Project_role_model> proj_list = ProjectRepo.GetProjectRoleList(items.id,0,0);
+                            List<Project_role_model> proj_list = ProjectRepo.GetAssignedProjectRoleList(items.id,0,0);
                             emp_prj_list.Add(proj_list);
                         }
                         // List<Project_role_model> proj_list = ProjectRepo.EmpProjDetailsByManager(manager_id);

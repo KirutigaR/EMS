@@ -21,6 +21,8 @@ namespace EMS.Controllers
             {
                 if (incometax != null)
                 {
+                    incometax.is_active = 1;
+                    incometax.to_date = null;
                     IncometaxRepo.AddNewTaxDeclaration(incometax);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Tax declaration added Successfully"));
                 }

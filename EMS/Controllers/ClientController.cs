@@ -22,15 +22,16 @@ namespace EMS.Controllers
             {
                 if (client != null)
                 {
-                    Client existingInstance = ClientRepo.GetClientById(client.id);
+                    Client existingInstance = ClientRepo.GetExistingClientInstance(client.client_name, client.type_id);
                     if (existingInstance == null)
                     {
+                        client.is_active = 1;
                         ClientRepo.CreateNewClient(client);
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client added successfully"));
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Client ID already exists", "Client ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Client already exists", "Client already exists"));
                     }
                 }
                 else

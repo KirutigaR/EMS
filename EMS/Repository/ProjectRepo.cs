@@ -216,7 +216,7 @@ namespace EMS.Repository
                         int empl_status = EmployeeRepo.GetEmployeeStatusById(project_role.employee_id);
                         ProjectModel proj = ProjectRepo.GetProjectDetailsById(project_role.project_id);
                         int actual_resource_count = proj.resources_req;
-                        List<Project_role_model> assigned_resource = ProjectRepo.GetProjectRoleList(0, proj.project_id,0);
+                        List<Project_role_model> assigned_resource = ProjectRepo.GetAssignedProjectRoleList(0, proj.project_id,0);
                         if ((empl_status == 1) && (proj != null) && (assigned_resource.Count < actual_resource_count) )
                         {
                             datacontext.Project_role.Add(project_role);
@@ -251,7 +251,7 @@ namespace EMS.Repository
                         int empl_status = EmployeeRepo.GetEmployeeStatusById(Project_role.employee_id);
                         ProjectModel proj = ProjectRepo.GetProjectDetailsById(Project_role.project_id);
                         int actual_resource_count = proj.resources_req;
-                        List<Project_role_model> assigned_resource = ProjectRepo.GetProjectRoleList(0, proj.project_id, 0);
+                        List<Project_role_model> assigned_resource = ProjectRepo.GetAssignedProjectRoleList(0, proj.project_id, 0);
                         if ((empl_status == 1) && (proj != null) && (assigned_resource.Count <= actual_resource_count))
                         {
                             datacontext.Entry(Project_role).State = EntityState.Modified;
@@ -430,7 +430,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<Project_role_model> GetProjectRoleList(int e_id, int p_id, int reportingto_id)//e_id employee_id , p_id project_id
+        public static List<Project_role_model> GetAssignedProjectRoleList(int e_id, int p_id, int reportingto_id)//e_id employee_id , p_id project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try

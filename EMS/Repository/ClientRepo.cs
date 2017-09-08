@@ -31,6 +31,28 @@ namespace EMS.Repository
 
         }
 
+        public static Client GetExistingClientInstance(string client_name, int type_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Clients
+                            where x.client_name == client_name && x.type_id == type_id
+                            select x;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
         public static Client GetClientById(int c_id)
         {
             EMSEntities datacontext = new EMSEntities();

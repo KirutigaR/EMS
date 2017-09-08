@@ -32,12 +32,13 @@ namespace EMS.Controllers
                 {
 
                     int user_id = CommonRepo.GetUserID(user);
-                    string user_role = CommonRepo.GetUserRole(user_id);
+                    Role role = CommonRepo.GetUserRole(user_id);
                     EmployeeModel employee = EmployeeRepo.GetEmployeeDetailsByUserId(user_id);
                     resultSet.Add("employee_id", employee.id);
                     resultSet.Add("user_id", user_id);
                     resultSet.Add("UserName", employee.first_name + employee.last_name);
-                    resultSet.Add("role", user_role);
+                    resultSet.Add("role_name", role.role_name);
+                    resultSet.Add("role_id", role.id);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", resultSet));
                 }
             }

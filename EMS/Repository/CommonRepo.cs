@@ -39,7 +39,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static string GetUserRole(int id)
+        public static Role GetUserRole(int id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -47,8 +47,8 @@ namespace EMS.Repository
                 var query = from r in datacontext.Roles
                             join ur in datacontext.User_role on r.id equals ur.role_id
                             join u in datacontext.Users on ur.user_id equals u.id
-                            where u.id == id
-                            select r.role_name;
+                            where u.id == id && r.role_type == "System Role"
+                            select r;
                 return query.FirstOrDefault();
             }
             catch (Exception e)

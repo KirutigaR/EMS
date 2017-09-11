@@ -108,7 +108,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/list/{reportingto_id?}/{designation_id?}")]
+        [Route("api/employee/list/{reportingto_id?}/{designation_id?}")]//active employee list 
         public HttpResponseMessage GetEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id
         {
             HttpResponseMessage Response = null;
@@ -126,8 +126,8 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/available/list/{reportingto_id?}/{designation_id?}")]
-        public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id (available employees = employees assigned in bench [bench project id =1])
+        [Route("api/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
+        public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id 
         {
             HttpResponseMessage Response = null;
             try

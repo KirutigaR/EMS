@@ -590,7 +590,8 @@ namespace EMS.Repository
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
                                 reporting_to = e.reporting_to,
-                                leave_status = st.leave_status
+                                leave_status = st.leave_status,
+                                leave_id = l.id
                             };
                 return query.ToList();
             }

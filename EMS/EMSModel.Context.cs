@@ -16,7 +16,7 @@ namespace EMS
     public partial class EMSEntities : DbContext
     {
         public EMSEntities()
-            : base("name=EMSEntities")
+            :  base("name=EMSEntities")
         {
         }
     

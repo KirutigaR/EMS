@@ -17,5 +17,6 @@ namespace EMS.Models
         public int reporting_to { get; set; }
         public string leave_status { get; set; }
         public int leave_id { get; set; }
+        public string remark { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace EMS.Utility
             }
             //  }
         }
-        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid)
+        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string remarks)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace EMS.Utility
                     
                     //Console.WriteLine("Subject");
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi<br>" + user_name + " Your leave application   " + from_date + "-" + to_date + "has been Rejected";
+                    mail.Body = "Hi<br>" + user_name + " Your leave application   " + from_date + "-" + to_date + "has been Rejected" + "<br> Remarks:" + remarks;
                 }
                 else 
                 {

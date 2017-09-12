@@ -118,7 +118,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
+                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.id);
                 string gender = employee_instance.gender;
 
                 if (leave.from_date < DateTime.Now)
@@ -150,7 +150,7 @@ namespace EMS.Controllers
                             //ViewData["MlMessage"] = "Leave successfully Applied";
                             ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                              
-                            MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                            MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                         }
                         else
@@ -184,7 +184,7 @@ namespace EMS.Controllers
                                 if (Cl_leave_type < noofdays)
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_109", "casual leave less than applied leave", "Applied Leave more than Casual Leave. Choose Another LeaveType"));
                                 }
                                 else if (Cl_leave_type >= noofdays)
@@ -197,7 +197,7 @@ namespace EMS.Controllers
                                     {
                                         ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                     }
                                 }
@@ -219,7 +219,7 @@ namespace EMS.Controllers
                                 if (noofdays != 0)
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
                             }
@@ -233,7 +233,7 @@ namespace EMS.Controllers
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
 
@@ -258,7 +258,7 @@ namespace EMS.Controllers
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
                             }
@@ -290,7 +290,7 @@ namespace EMS.Controllers
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
                             }
@@ -416,8 +416,8 @@ namespace EMS.Controllers
             return response;
         }
         //[HttpPost]
-        [Route("api/approval/{leave_id?}/{is_approved?}")]
-        public HttpResponseMessage GetApproval(int leave_id, int is_approved)
+        [Route("api/approval/{leave_id?}/{is_approved?}/{remarks?}")]
+        public HttpResponseMessage GetApproval(int leave_id, int is_approved, string remarks)
         {
             HttpResponseMessage response = null;
             try
@@ -437,7 +437,7 @@ namespace EMS.Controllers
                     Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave1.employee_id);
 
-                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_APPROVED, employee.email, reporting_to.mailid);
+                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_APPROVED, employee.email, reporting_to.mailid, remarks);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave Approved"));
                 }
                 else if (is_approved == 3)
@@ -447,7 +447,7 @@ namespace EMS.Controllers
                     LeaveRepo.EditLeave(leave1);
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave1.employee_id);
                     Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
-                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_REJECTED, employee.email, reporting_to.mailid);
+                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_REJECTED, employee.email, reporting_to.mailid, remarks);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_117", "Leave not approved", "Leave cancel"));
                 }
             }

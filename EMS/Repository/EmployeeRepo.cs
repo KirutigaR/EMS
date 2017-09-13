@@ -130,19 +130,19 @@ namespace EMS.Repository
             }
         }
 
-        public static List<EmployeeModel> GetAvailableEmployeeList(int r_id, int d_id) //r_id reportingto id, d_id designation id of the employee
+        public static List<EmployeeModel> GetAvailableEmployeeList(int reportingto_id, int designation_id) //r_id reportingto id, d_id designation id of the employee
         {
             EMSEntities datacontent = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
-                if (r_id != 0)
+                if (reportingto_id != 0)
                 {
-                    predicate = predicate.And(i => i.reporting_to == r_id);
+                    predicate = predicate.And(i => i.reporting_to == reportingto_id);
                 }
-                if (d_id != 0)
+                if (designation_id != 0)
                 {
-                    predicate = predicate.And(i => i.designation == d_id);
+                    predicate = predicate.And(i => i.designation == designation_id);
                 }
 
                 var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
@@ -152,7 +152,7 @@ namespace EMS.Repository
                             on employee.designation equals designation.id
                             join project_role in datacontent.Project_role
                             on employee.id equals project_role.employee_id
-                            where (user.is_active == 1) && (project_role.project_id == 1)//available employees are the employees who are all in bench(project id 1 = bench ) 
+                            where (user.is_active == 1) && (project_role.project_id == Constants.PROJECT_BENCH_ID)//available employees are the employees who are all in bench(project id 1 = bench ) 
                             select new EmployeeModel
                             {
                                 id = employee.id,
@@ -191,15 +191,19 @@ namespace EMS.Repository
             }
         }
 
-        public static EmployeeModel GetEmployeeDetailsByUserId(int u_id)//u_id user_id 
+        public static EmployeeModel GetEmployeeDetailsByUserId(int user_id)//u_id user_id 
         {
             EMSEntities datacontent = new EMSEntities();
             try
             {
                 var query = from employee in datacontent.Employees
+                            join userrole in datacontent.User_role
+                            on employee.user_id equals userrole.user_id
+                            join salary in datacontent.Salary_Structure
+                            on employee.id equals salary.emp_id
                             join designation in datacontent.Designations
                             on employee.designation equals designation.id
-                            where employee.user_id == u_id 
+                            where employee.id == user_id
                             select new EmployeeModel
                             {
                                 id = employee.id,
@@ -211,6 +215,7 @@ namespace EMS.Repository
                                 date_of_joining = employee.date_of_joining,
                                 contact_no = employee.contact_no,
                                 user_id = employee.user_id,
+                                role_id = userrole.role_id,
                                 reporting_to = employee.reporting_to,
                                 Year_of_experence = employee.Year_of_experence,
                                 pan_no = employee.pan_no,
@@ -221,7 +226,8 @@ namespace EMS.Repository
                                 emergency_contact_no = employee.emergency_contact_no,
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,
-                                PF_no = employee.PF_no
+                                PF_no = employee.PF_no,
+                                ctc = salary.ctc
                             };
                 return query.FirstOrDefault();
             }
@@ -237,7 +243,7 @@ namespace EMS.Repository
             }
         }
 
-        public static EmployeeModel GetEmployeeDetailsById(int e_id)//e_id employee_id 
+        public static EmployeeModel GetEmployeeDetailsById(int employee_id)//e_id employee_id 
         {
             EMSEntities datacontent = new EMSEntities();
             try
@@ -249,7 +255,7 @@ namespace EMS.Repository
                             on employee.id equals salary.emp_id
                             join designation in datacontent.Designations
                             on employee.designation equals designation.id
-                            where employee.id == e_id
+                            where employee.id == employee_id
                             select new EmployeeModel
                             {
                                 id = employee.id,
@@ -289,13 +295,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Employee GetEmployeeById(int e_id)//e_id employee_id
+        public static Employee GetEmployeeById(int employee_id)//e_id employee_id
         {
             EMSEntities datacontent = new EMSEntities();
             try
             {
                 var query = from x in datacontent.Employees
-                            where x.id == e_id
+                            where x.id == employee_id
                             select x;
                 return query.FirstOrDefault();
             }
@@ -390,14 +396,14 @@ namespace EMS.Repository
             }
         }
 
-        public static int GetEmployeeStatusById(int e_id)//e_id employee_id
+        public static int GetEmployeeStatusById(int employee_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from empl in datacontext.Employees
-                            join user in datacontext.Users
-                            on empl.user_id equals user.id
+                            join user in datacontext.Users on empl.user_id equals user.id
+                            where empl.id == employee_id
                             select user.is_active;
                 return query.FirstOrDefault();
             }

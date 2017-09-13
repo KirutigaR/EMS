@@ -32,13 +32,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Project GetProjectById(int p_id)// p_id - project_id
+        public static Project GetProjectById(int project_id)// p_id - project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from x in datacontext.Projects
-                            where x.id == p_id
+                            where x.id == project_id
                             select x;
                 return query.FirstOrDefault();
             }
@@ -54,7 +54,7 @@ namespace EMS.Repository
             }
         }
 
-        public static ProjectModel GetProjectDetailsById(int p_id)// p_id - project_id
+        public static ProjectModel GetProjectDetailsById(int project_id)// p_id - project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -62,7 +62,7 @@ namespace EMS.Repository
                 var query = from project in datacontext.Projects
                             join client in datacontext.Clients
                             on project.client_id equals client.id
-                            where project.id == p_id
+                            where project.id == project_id
                             select new ProjectModel
                             {
                                 project_id = project.id,
@@ -91,15 +91,15 @@ namespace EMS.Repository
             }
         }
 
-        public static List<ProjectModel> GetProjectList(int c_id, string status)//c_id Client Id , Status = Project status 
+        public static List<ProjectModel> GetProjectList(int client_id, string status)//c_id Client Id , Status = Project status 
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Project>();
-                if(c_id!=0)
+                if(client_id != 0)
                 {
-                    predicate = predicate.And(i => i.client_id == c_id);
+                    predicate = predicate.And(i => i.client_id == client_id);
                 }
                 if(status != null)
                 {
@@ -172,15 +172,15 @@ namespace EMS.Repository
             }
         }
 
-        public static List<ProjectModel> GetEntireProjectList(int c_id, string status)//c_id Client Id , Status = Project status 
+        public static List<ProjectModel> GetEntireProjectList(int client_id, string status)//c_id Client Id , Status = Project status 
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Project>();
-                if (c_id != 0)
+                if (client_id != 0)
                 {
-                    predicate = predicate.And(i => i.client_id == c_id);
+                    predicate = predicate.And(i => i.client_id == client_id);
                 }
                 if (status != null)
                 {
@@ -351,28 +351,6 @@ namespace EMS.Repository
             }
         }
 
-        public static string GetRoleNameById(int id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from r in datacontext.Roles
-                            where r.id == id && r.role_type == "Project Role"
-                            select r.role_name;
-                return query.FirstOrDefault();
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                return null;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
         public static List<ReportingTo> GetProjectManagerList()
         {
             EMSEntities datacontext = new EMSEntities();
@@ -464,20 +442,20 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<Project_role_model> GetAssignedProjectRoleList(int e_id, int p_id, int reportingto_id)//e_id employee_id , p_id project_id
+        public static List<Project_role_model> GetAssignedProjectRoleList(int employee_id, int project_id, int reportingto_id)//e_id employee_id , p_id project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Project_role>();
                 var emp_repoting_predicate = LinqKit.PredicateBuilder.True<Employee>();
-                if(e_id!=0)
+                if(employee_id != 0)
                 {
-                    predicate = predicate.And(i => i.employee_id == e_id);
+                    predicate = predicate.And(i => i.employee_id == employee_id);
                 }
-                if (p_id != 0)
+                if (project_id != 0)
                 {
-                    predicate = predicate.And(i => i.project_id == p_id);
+                    predicate = predicate.And(i => i.project_id == project_id);
                 }
                 if (reportingto_id != 0)
                 {
@@ -515,7 +493,7 @@ namespace EMS.Repository
             }
         }
 
-        public static List<Project_role_model > EmpProjDetailsByManager (int m_id)//m_id manager_id
+        public static List<Project_role_model > EmpProjDetailsByManager (int manager_id)//m_id manager_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -527,7 +505,7 @@ namespace EMS.Repository
                             on prj_role.project_id equals proj.id
                             join role in datacontext.Roles
                             on prj_role.role_id equals role.id
-                            where x.reporting_to == m_id
+                            where x.reporting_to == manager_id
                             select new Project_role_model
                             {
                                 employee_name = x.first_name,

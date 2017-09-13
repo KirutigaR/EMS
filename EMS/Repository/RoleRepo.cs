@@ -93,13 +93,13 @@ namespace EMS.Repository
             }
         }
 
-        public static RoleModel GetRoleById(int r_id)
+        public static RoleModel GetRoleById(int role_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from role in datacontext.Roles
-                            where role.id == r_id
+                            where role.id == role_id
                             select new RoleModel
                             {
                                 id = role.id,
@@ -190,13 +190,13 @@ namespace EMS.Repository
             }
         }
 
-        public static void DeleteRoleById(int r_id)
+        public static void DeleteRoleById(int role_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from x in datacontext.Roles
-                            where x.id == r_id
+                            where x.id == role_id
                             select x;
 
                 datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;

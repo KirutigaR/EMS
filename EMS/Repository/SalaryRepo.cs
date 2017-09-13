@@ -50,13 +50,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Salary_Structure GetSalaryStructureByEmpId(int e_id)//e_id employee_id
+        public static Salary_Structure GetSalaryStructureByEmpId(int employee_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from sal_structure in datacontext.Salary_Structure
-                            where sal_structure.emp_id == e_id && sal_structure.is_active == 1
+                            where sal_structure.emp_id == employee_id && sal_structure.is_active == 1
                             select sal_structure;
                 return query.FirstOrDefault(); 
             }
@@ -71,13 +71,13 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<SalaryStructureModel> GetSalaryStructureList(int e_id)//e_id employee_id
+        public static List<SalaryStructureModel> GetSalaryStructureList(int employee_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from ss in datacontext.Salary_Structure
-                            where ss.emp_id == e_id
+                            where ss.emp_id == employee_id
                             select new SalaryStructureModel
                             {
                                 id = ss.id,

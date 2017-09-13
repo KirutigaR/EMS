@@ -11,12 +11,12 @@ namespace EMS.Repository
 {
     public class TaskRepo
     {
-        public static List<TaskModel> GetTaskList(int p_id)
+        public static List<TaskModel> GetTaskList(int project_id)
         {
             var predicate = LinqKit.PredicateBuilder.True<Task>();
-            if(p_id !=0)
+            if(project_id != 0)
             {
-                predicate = predicate.And(i => i.project_id == p_id);
+                predicate = predicate.And(i => i.project_id == project_id);
             }
             EMSEntities datacontext = new EMSEntities();
             try
@@ -63,13 +63,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Task GetTaskById(int t_id)//t_id task_id
+        public static Task GetTaskById(int task_id)//t_id task_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from task in datacontext.Tasks
-                            where task.id == t_id
+                            where task.id == task_id
                             select task;
                 return query.FirstOrDefault();
             }
@@ -85,13 +85,13 @@ namespace EMS.Repository
             }
         }
 
-        public static TaskModel GetTaskDetailsById(int t_id)//t_id task_id
+        public static TaskModel GetTaskDetailsById(int task_id)//t_id task_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from task in datacontext.Tasks
-                            where task.id == t_id
+                            where task.id == task_id
                             select new TaskModel
                             {
                                 id = task.id,

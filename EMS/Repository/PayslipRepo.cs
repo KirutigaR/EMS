@@ -52,13 +52,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Payslip GetExistingPayslip(int e_id, int month, int year)
+        public static Payslip GetExistingPayslip(int employee_id, int month, int year)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from ps in datacontext.Payslips
-                            where ps.emp_id == e_id && ps.payslip_month == month && ps.payslip_year == year
+                            where ps.emp_id == employee_id && ps.payslip_month == month && ps.payslip_year == year
                             select ps;
                 return query.FirstOrDefault();
             }

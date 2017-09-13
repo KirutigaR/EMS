@@ -50,13 +50,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Incometax GetIncometaxById(int i_id)//i_id income_tax_id
+        public static Incometax GetIncometaxById(int it_id)//i_id income_tax_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from tax in datacontext.Incometaxes
-                            where tax.id == i_id
+                            where tax.id == it_id
                             select tax;
                 return query.FirstOrDefault();
             }
@@ -72,13 +72,13 @@ namespace EMS.Repository
             }
         }
 
-        public static Incometax GetTaxValueByEmpId(int e_id)//e_id employee_id
+        public static Incometax GetTaxValueByEmpId(int employee_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from tax in datacontext.Incometaxes
-                            where tax.is_active == 1 && tax.from_date <= DateTime.Now && tax.to_date == null
+                            where tax.is_active == 1 && tax.from_date <= DateTime.Now && tax.to_date == null && tax.emp_id == employee_id
                             select tax;
                 return query.FirstOrDefault();
             }
@@ -94,13 +94,13 @@ namespace EMS.Repository
             }
         }
 
-        public static List<IncometaxModel> GetIncometaxListByEmpId(int e_id)//e_id employee_id
+        public static List<IncometaxModel> GetIncometaxListByEmpId(int employee_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from tax in datacontext.Incometaxes
-                            where tax.emp_id == e_id
+                            where tax.emp_id == employee_id
                             select new IncometaxModel
                             {
                                 id = tax.id,

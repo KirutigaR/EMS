@@ -33,13 +33,13 @@ namespace EMS.Repository
             }
         }
 
-        public static TimeSheetModel GetSheetById(int s_id)//s_id timesheet_id
+        public static TimeSheetModel GetSheetById(int timesheet_id)//s_id timesheet_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from sheet in datacontext.Timesheets
-                            where sheet.id == s_id
+                            where sheet.id == timesheet_id
                             select new TimeSheetModel {
                                 id = sheet.id,
                                 employee_id = sheet.employee_id,
@@ -82,13 +82,13 @@ namespace EMS.Repository
             }
         }
 
-        public static List<TimeSheetModel> GetSheetByEmpId(int e_id)//e_id employee_id
+        public static List<TimeSheetModel> GetSheetByEmpId(int employee_id)//e_id employee_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from sheet in datacontext.Timesheets
-                            where sheet.employee_id == e_id
+                            where sheet.employee_id == employee_id
                             select new TimeSheetModel
                             {
                                 id = sheet.id,
@@ -112,13 +112,13 @@ namespace EMS.Repository
             }
         }
 
-        public static List<TimeSheetModel> GetSheetByProjId(int p_id)//p_id project_id
+        public static List<TimeSheetModel> GetSheetByProjId(int project_id)//p_id project_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from sheet in datacontext.Timesheets
-                            where sheet.project_id == p_id
+                            where sheet.project_id == project_id
                             select new TimeSheetModel
                             {
                                 id = sheet.id,
@@ -142,13 +142,13 @@ namespace EMS.Repository
             }
         }
         
-        public static void DeleteTimeSheetRecord(int s_id)//timesheet_id
+        public static void DeleteTimeSheetRecord(int timesheet_id)//timesheet_id
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from sheet in datacontext.Timesheets
-                            where sheet.id == s_id
+                            where sheet.id == timesheet_id
                             select sheet;
                 datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;
                 datacontext.SaveChanges();

@@ -501,5 +501,47 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static User_role GetUserRoleByUserid(int userid)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from userrole in datacontext.User_role
+                            where userrole.user_id == userid
+                            select userrole;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void UpdateUserRole(User_role userrole)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(userrole).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

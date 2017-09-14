@@ -37,7 +37,7 @@ namespace EMS.Utility
             }
             else if(Leavetype_id == 3)
             {
-                return 180;
+                return 182;
             }
             else if (Leavetype_id == 4)
             {

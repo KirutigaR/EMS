@@ -64,25 +64,32 @@ namespace EMS.Utility
         }
         public static Payslip FirstMonthSalary(DateTime DOJ, Salary_Structure salary)
         {
-            int working_days = (DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DOJ.Day)+1;
-            Payslip payslip = new Payslip();
-            decimal per_day_salary = (salary.basic_pay / 12) / 30;
-            Debug.WriteLine(working_days);
-            payslip.emp_id = salary.emp_id;
-            payslip.basic_pay = per_day_salary * working_days;
-            payslip.HRA = ((salary.HRA / 12) / 30) * working_days;
-            payslip.FA = (Constants.FOOD_ALLOWANCE / 30) * working_days;
-            payslip.MA = (Constants.MEDICAL_ALLOWANCE / 30) * working_days;
-            payslip.CA = (Constants.CONVEYANCE_ALLOWANCE / 30) * working_days;
-            payslip.PF = ((salary.PF / 12) / 30) * working_days;
-            payslip.MI = ((salary.MI / 12) / 30) * working_days;
-            payslip.Gratuity = ((salary.Gratuity / 12) / 30) * working_days;
-            payslip.SA = ((salary.SA / 12) / 30) * working_days;
-            payslip.ESI = ((salary.ESI / 12) / 30) * working_days;
-            payslip.PT = (Constants.PT / 30) * working_days;
-            payslip.payslip_month = DOJ.Month;
-            payslip.payslip_year = DOJ.Year;
-            return payslip;
+            if(salary.is_active==1)
+            {
+                int working_days = (DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DOJ.Day) + 1;
+                Payslip payslip = new Payslip();
+                decimal per_day_salary = (salary.basic_pay / 12) / 30;
+                Debug.WriteLine(working_days);
+                payslip.emp_id = salary.emp_id;
+                payslip.basic_pay = per_day_salary * working_days;
+                payslip.HRA = ((salary.HRA / 12) / 30) * working_days;
+                payslip.FA = (Constants.FOOD_ALLOWANCE / 30) * working_days;
+                payslip.MA = (Constants.MEDICAL_ALLOWANCE / 30) * working_days;
+                payslip.CA = (Constants.CONVEYANCE_ALLOWANCE / 30) * working_days;
+                payslip.PF = ((salary.PF / 12) / 30) * working_days;
+                payslip.MI = ((salary.MI / 12) / 30) * working_days;
+                payslip.Gratuity = ((salary.Gratuity / 12) / 30) * working_days;
+                payslip.SA = ((salary.SA / 12) / 30) * working_days;
+                payslip.ESI = ((salary.ESI / 12) / 30) * working_days;
+                payslip.PT = (Constants.PT / 30) * working_days;
+                payslip.payslip_month = DOJ.Month;
+                payslip.payslip_year = DOJ.Year;
+                return payslip;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

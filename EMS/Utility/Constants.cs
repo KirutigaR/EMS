@@ -17,7 +17,7 @@ namespace EMS.Utility
         public static decimal MEDICAL_ALLOWANCE = 1250; //15000 per year
         public static decimal CONVEYANCE_ALLOWANCE = 1600; //19200 per year
         public static decimal FOOD_ALLOWANCE = 1500; //18000 per year
-        public static decimal PT = 183 ;//2196 per year
+        public static decimal PT = 0 ;//2196 per year -183 per month
         public static int PROJECT_BENCH_ID = 1;
 
         public static int[] male_leave_type = { 1, 2, 4, 5 };

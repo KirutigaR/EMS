@@ -83,11 +83,17 @@ namespace EMS.Controllers
 
                         Payslip payslip = new Payslip();
                         payslip = SalaryCalculation.FirstMonthSalary(employee_details.date_of_joining, salary);
-                        PayslipRepo.AddPayslip(payslip);
-
-                        string username = employee.first_name +" "+ employee.last_name;
-                        MailHandler.PasswordMailingFunction(username, employee.email , Temp_password);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
+                        if (payslip != null)
+                        {
+                            PayslipRepo.AddPayslip(payslip);
+                            string username = employee.first_name + " " + employee.last_name;
+                            MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
+                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
+                        }
+                        else
+                        {
+                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_500", "Active Salary structure not available", "Error in salary structure generation or payslip generation"));
+                        }
                     }
                     else
                     {
@@ -129,6 +135,9 @@ namespace EMS.Controllers
         [Route("api/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
         public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id 
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             HttpResponseMessage Response = null;
             try
             {
@@ -141,6 +150,8 @@ namespace EMS.Controllers
                 Debug.WriteLine(exception.GetBaseException());
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
+            stopwatch.Stop();
+            Debug.WriteLine("\n\n\n"+stopwatch.Elapsed+"\n\n\n");
             return Response;
         }
 
@@ -206,41 +217,6 @@ namespace EMS.Controllers
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
             return Response;
-        }
-
-        [HttpPost]
-        [Route("api/employee/edit")]
-        public HttpResponseMessage EditEmployee(Employee employee)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                if (employee != null)
-                {
-                    Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
-                    if (existingInstance != null)
-                    {
-                        employee.user_id = existingInstance.user_id;
-                        EmployeeRepo.EditEmployee(employee);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee details Updated successfully!"));
-                    }
-                    else
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Employee ID", "Invalid Employee ID"));
-                    }
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
-                }
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
-            }
-            return response;
         }
 
         [HttpGet]
@@ -333,7 +309,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/employee/add/update")]
+        [Route("api/employee/update")]
         public HttpResponseMessage EmployeeAddandUpdate(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
@@ -364,57 +340,23 @@ namespace EMS.Controllers
 
                     if (existingInstance == null)
                     {
-                        User user = new User();
-                        user.user_name = employee.email;
-                        //user.password = employee.first_name + "jaishu";
-                        string Temp_password = PasswordGenerator.GeneratePassword();
-                        user.password = EncryptPassword.CalculateHash(Temp_password);
-                        //user.password = passwod;
-                        user.is_active = 1;
-                        EmployeeRepo.CreateNewUser(user);
-                        employee.user_id = user.id;
-                        EmployeeRepo.CreateNewEmployee(employee);
-                        User_role user_role = new User_role();
-                        user_role.user_id = user.id;
-                        user_role.role_id = employee_details.role_id;
-                        EmployeeRepo.AssignEmployeeRole(user_role);
-                        if (employee.gender == "male")
-                        {
-                            EmployeeRepo.InsertLeaveBalance(employee, Constants.male_leave_type);
-                        }
-                        else
-                        {
-                            EmployeeRepo.InsertLeaveBalance(employee, Constants.female_leave_type);
-                        }
-
-                        Salary_Structure salary = new Salary_Structure();
-                        salary = SalaryCalculation.CalculateSalaryStructure(employee_details.ctc);
-                        salary.emp_id = employee_details.id;
-                        salary.is_active = 1;
-                        salary.from_date = DateTime.Now;
-                        salary.to_date = null;
-                        SalaryRepo.CreateSalaryStructure(salary);
-
-                        Payslip payslip = new Payslip();
-                        payslip = SalaryCalculation.FirstMonthSalary(employee_details.date_of_joining, salary);
-                        PayslipRepo.AddPayslip(payslip);
-
-                        string username = employee.first_name + " " + employee.last_name;
-                        MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "New Employee added Successfully"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Failure", "Employee record doesnot exists!"));
                     }
                     else//(if existingInstance != null)
                     {
                         employee.user_id = existingInstance.user_id;
 
-                        Salary_Structure active_instance = SalaryRepo.GetSalaryStructureByEmpId(employee.id);
-                        if (active_instance != null)
+                        User_role userrole_instance = EmployeeRepo.GetUserRoleByUserid(employee.user_id);
+                        userrole_instance.role_id = employee_details.role_id;
+                        EmployeeRepo.UpdateUserRole(userrole_instance);
+
+                        Salary_Structure active_sal_instance = SalaryRepo.GetSalaryStructureByEmpId(employee.id);
+
+                        if (active_sal_instance != null && active_sal_instance.ctc != employee_details.ctc )
                         {
-                            if(active_instance.ctc != employee_details.ctc)
-                            {
-                                active_instance.is_active = 0;
-                                active_instance.to_date = DateTime.Now;
-                                SalaryRepo.UpdateSalaryStructure(active_instance);
+                                active_sal_instance.is_active = 0;
+                                active_sal_instance.to_date = DateTime.Now;
+                                SalaryRepo.UpdateSalaryStructure(active_sal_instance);
 
                                 Salary_Structure new_sal_structure = new Salary_Structure();
                                 new_sal_structure = SalaryCalculation.CalculateSalaryStructure(employee_details.ctc);
@@ -423,20 +365,9 @@ namespace EMS.Controllers
                                 new_sal_structure.from_date = DateTime.Now;
                                 new_sal_structure.to_date = null;
                                 SalaryRepo.CreateSalaryStructure(new_sal_structure);
-                                EmployeeRepo.EditEmployee(employee);
-                                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Updated Successfully!", "Employee ID already exists and employee details along with salary details are updated now!"));
-                            }
-                            else
-                            {
-                                EmployeeRepo.EditEmployee(employee);
-                                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Updated Successfully!", "Employee ID already exists and details are updated now, old salary structure is maintained since exixting ctc is equal to the updated ctc"));
-                            }       
                         }
-                        else
-                        {
-                            EmployeeRepo.EditEmployee(employee);
-                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Updated Successfully!", "Employee ID already exists and details are updated now, active salary structure of this employee does not exixts!"));
-                        }
+                        EmployeeRepo.EditEmployee(employee);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "Employee record updated!"));
                     }//(existingInstance != null) ELSE PART
                 }//employee_details != null IF PART 
                 else //IF employee_details == null

@@ -269,12 +269,10 @@ namespace EMS.Controllers
                             }
                             else if (El_leave_type == 0 && Cl_leave_type > 0)
                             {
-
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_111", "You have CL leave", "you can apply the Leave in 'CL'"));
                             }
                             else if (Cl_leave_type > 0 && El_leave_type > 0)
                             {
-
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_111", "You have CL, EL leave", "You have CL, EL leave balance"));
                             }
                         }
@@ -289,7 +287,6 @@ namespace EMS.Controllers
                                 if (noofdays != 0)
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-
                                     MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
@@ -299,8 +296,6 @@ namespace EMS.Controllers
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_113", "allow only 2 days for WFH", "you can apply only two days"));
                             }
                         }
-
-
                     }
                     else
                     {
@@ -325,10 +320,7 @@ namespace EMS.Controllers
             try
             {
                 List<LeavehistoryModel> leave_history_model = LeaveRepo.GetLeaveHistoryById(employee_id);
-
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_119", "approved", leave_history_model));
-
-
             }
             catch (Exception exception)
             {
@@ -429,7 +421,7 @@ namespace EMS.Controllers
                     Leave leave1 = LeaveRepo.GetLeaveById(leave_id);
                     leave1.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                     LeaveRepo.EditLeave(leave1);
-                    Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave1.employee_id);
+                    Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave1.employee_id, leave1.leavetype_id);
 
                     decimal? no_of_days = LeaveRepo.GetNoofdaysByLeaveTypeId(leave1.leavetype_id);
                     leave_balance_instance.no_of_days = (decimal)no_of_days - leave1.no_of_days;

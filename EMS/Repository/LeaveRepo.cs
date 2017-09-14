@@ -423,13 +423,13 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static Leavebalance_sheet LeaveBalanceById(int id)
+        public static Leavebalance_sheet LeaveBalanceById(int employee_id, int leavetype_id )
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from lbs in datacontext.Leavebalance_sheet
-                            where lbs.employee_id == id
+                            where lbs.employee_id == employee_id && lbs.leavetype_id == leavetype_id
                             select lbs;
                 return query.FirstOrDefault();
             }

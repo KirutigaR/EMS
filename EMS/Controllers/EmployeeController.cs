@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -23,7 +24,7 @@ namespace EMS.Controllers
 
             try
             {
-                if (employee_details != null)
+                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0)
                 {
                     Employee employee = new Employee();
                     employee.id = employee_details.id;
@@ -102,8 +103,14 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json some mandatory fields are missing"));
                 }
+            }
+            catch (DbEntityValidationException DBexception)
+            {
+                Debug.WriteLine(DBexception.Message);
+                Debug.WriteLine(DBexception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Mandatory fields missing", DBexception.Message));
             }
             catch (Exception exception)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -38,6 +39,12 @@ namespace EMS.Controllers
                 {
                     Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
                 }
+            }
+            catch (DbEntityValidationException DBexception)
+            {
+                Debug.WriteLine(DBexception.Message);
+                Debug.WriteLine(DBexception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Mandatory fields missing", DBexception.Message));
             }
             catch (Exception exception)
             {

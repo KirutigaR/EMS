@@ -44,7 +44,7 @@
           <Property Name="contact_no" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
-          <Property Name="Year_of_experence" Type="decimal" Precision="3" Scale="1" Nullable="false" />
+          <Property Name="year_of_experience" Type="decimal" Precision="3" Scale="1" Nullable="false" />
           <Property Name="gender" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="pan_no" Type="varchar" MaxLength="50" />
           <Property Name="bank_account_no" Type="varchar" MaxLength="50" />
@@ -986,7 +986,6 @@
           <Property Name="contact_no" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="reporting_to" Type="Int32" Nullable="false" />
-          <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
           <Property Name="gender" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="pan_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="bank_account_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -1006,6 +1005,7 @@
           <NavigationProperty Name="Incometaxes" Relationship="EMSModel.FK__Incometax__emp_i__29221CFB" FromRole="Employee" ToRole="Incometax" />
           <NavigationProperty Name="Salary_Structure" Relationship="EMSModel.FK__Salary_St__emp_i__2EDAF651" FromRole="Employee" ToRole="Salary_Structure" />
           <NavigationProperty Name="Payslips" Relationship="EMSModel.FK__Payslip__emp_id__2BFE89A6" FromRole="Employee" ToRole="Payslip" />
+          <Property Name="year_of_experience" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -1354,6 +1354,7 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="EMSModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="year_of_experience" ColumnName="year_of_experience" />
                 <ScalarProperty Name="blood_group" ColumnName="blood_group" />
                 <ScalarProperty Name="designation" ColumnName="designation" />
                 <ScalarProperty Name="emergency_contact_person" ColumnName="emergency_contact_person" />
@@ -1363,7 +1364,6 @@
                 <ScalarProperty Name="bank_account_no" ColumnName="bank_account_no" />
                 <ScalarProperty Name="pan_no" ColumnName="pan_no" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="Year_of_experence" ColumnName="Year_of_experence" />
                 <ScalarProperty Name="reporting_to" ColumnName="reporting_to" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="contact_no" ColumnName="contact_no" />

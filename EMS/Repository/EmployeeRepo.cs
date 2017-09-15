@@ -203,7 +203,7 @@ namespace EMS.Repository
                             on employee.id equals salary.emp_id
                             join designation in datacontent.Designations
                             on employee.designation equals designation.id
-                            where employee.id == user_id
+                            where employee.user_id == user_id
                             select new EmployeeModel
                             {
                                 id = employee.id,

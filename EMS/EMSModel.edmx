@@ -986,7 +986,6 @@
           <Property Name="contact_no" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="reporting_to" Type="Int32" Nullable="false" />
-          <Property Name="Year_of_experence" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
           <Property Name="gender" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="pan_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="bank_account_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />

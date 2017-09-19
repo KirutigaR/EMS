@@ -36,7 +36,6 @@ namespace EMS
         public string contact_no { get; set; }
         public int user_id { get; set; }
         public int reporting_to { get; set; }
-        public decimal Year_of_experence { get; set; }
         public string gender { get; set; }
         public string pan_no { get; set; }
         public string bank_account_no { get; set; }
@@ -46,6 +45,7 @@ namespace EMS
         public string emergency_contact_person { get; set; }
         public int designation { get; set; }
         public string blood_group { get; set; }
+        public decimal year_of_experience { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employee1 { get; set; }

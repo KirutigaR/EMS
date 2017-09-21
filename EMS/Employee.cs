@@ -46,6 +46,7 @@ namespace EMS
         public int designation { get; set; }
         public string blood_group { get; set; }
         public decimal year_of_experience { get; set; }
+        public Nullable<System.DateTime> created_on { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employee1 { get; set; }

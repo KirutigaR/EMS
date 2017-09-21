@@ -16,7 +16,7 @@ namespace EMS.Models
         public string contact_no { get; set; }
         public int user_id { get; set; }
         public int reporting_to { get; set; }
-        public decimal Year_of_experence { get; set; }
+        public decimal Year_of_experience { get; set; }
         public string gender { get; set; }
         public int role_id { get; set; }
         public string pan_no { get; set; }
@@ -29,5 +29,6 @@ namespace EMS.Models
         public string designation { get; set; }
         public string blood_group { get; set; }
         public decimal ctc { get; set; }
+        public DateTime created_on { get; set; }
     }
 }

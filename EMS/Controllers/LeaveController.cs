@@ -176,6 +176,10 @@ namespace EMS.Controllers
                         List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
                         decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
                         //string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                        if(noofdays == 0)
+                        {
+
+                        }
                         Leave leave_instance = new Leave();
                         if (leave_type1 == "CL")
                         {

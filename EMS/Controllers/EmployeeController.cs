@@ -24,7 +24,7 @@ namespace EMS.Controllers
 
             try
             {
-                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0)
+                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id!=0 && employee_details.reporting_to!=0 && employee_details.designation_id!=0)
                 {
                     Employee employee = new Employee();
                     employee.id = employee_details.id;
@@ -94,17 +94,17 @@ namespace EMS.Controllers
                         }
                         else
                         {
-                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_500", "Active Salary structure not available", "Error in salary structure generation or payslip generation"));
+                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "Active Salary structure not available", "Error in salary structure generation or payslip generation"));
                         }
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Employee ID already exists", "Employee ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists", "Employee ID already exists"));
                     }
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json some mandatory fields are missing"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Invalid Input", "Please check input Json some mandatory fields are missing"));
                 }
             }
             catch (DbEntityValidationException DBexception)
@@ -178,7 +178,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Employee ID doesnot exists", "Employee ID doesnot exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee ID doesnot exists", "Employee ID doesnot exists"));
                     }
                 }
                 else
@@ -210,7 +210,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Employee ID doesnot exists", "Employee ID doesnot exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee ID doesnot exists", "Employee ID doesnot exists"));
                     }
                 }
                 else
@@ -244,7 +244,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Employee ID", "Invalid Employee ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee ID doesnot exists", "Invalid Employee ID"));
                     }
                 }
                 else
@@ -349,7 +349,7 @@ namespace EMS.Controllers
 
                     if (existingInstance == null)
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Failure", "Employee record doesnot exists!"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Failure", "Employee record doesnot exists!"));
                     }
                     else//(if existingInstance != null)
                     {
@@ -374,6 +374,7 @@ namespace EMS.Controllers
                                 new_sal_structure.from_date = DateTime.Now;
                                 new_sal_structure.to_date = null;
                                 SalaryRepo.CreateSalaryStructure(new_sal_structure);
+
                         }
                         EmployeeRepo.EditEmployee(employee);
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "Employee record updated!"));

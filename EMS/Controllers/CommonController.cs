@@ -26,7 +26,7 @@ namespace EMS.Controllers
                 
                 if (!b)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_120", "Username or password didn't match", "login failed"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_301", "Username or password didn't match", "login failed"));
                 }
                 else
                 {
@@ -69,7 +69,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_110", "fail", "password didnot match"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "fail", "password didnot match"));
                 }
             }
             catch (Exception exception)

@@ -60,7 +60,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid", "TimeSheet doesnot exists!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_901", "Invalid", "TimeSheet doesnot exists!"));
                     }
                 }
                 else
@@ -92,7 +92,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid", "TimeSheet doesnot exists!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_901", "Invalid", "TimeSheet doesnot exists!"));
                     }
                 }
                 else
@@ -184,7 +184,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid", "TimeSheet doesnot exists!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_901", "Invalid", "TimeSheet doesnot exists!"));
                     }
                 }
                 else

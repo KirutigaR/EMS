@@ -40,7 +40,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_107", "No active Salary Structure", "No active Salary Structure - unable to find active record "));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "No active Salary Structure", "No active Salary Structure - unable to find active record "));
                     }
                 }
                 else

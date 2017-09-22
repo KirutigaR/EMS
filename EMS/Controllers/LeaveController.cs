@@ -125,7 +125,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.id);
+                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
                 string gender = employee_instance.gender;
 
                 if (leave.from_date < DateTime.Now)

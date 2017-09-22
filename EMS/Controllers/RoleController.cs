@@ -79,7 +79,7 @@ namespace EMS.Controllers
                     RoleModel existing_instance = RoleRepo.GetExistingRole(role);
                     if (existing_instance != null)
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Role already exists", "Role already exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_701", "Role already exists", "Role already exists"));
                     }
                     else
                     {
@@ -116,7 +116,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid role ID", "Invalid role ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_702", "Invalid role ID", "Invalid role ID"));
                     }
                 }
                 else
@@ -148,7 +148,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid role object", "Invalid role object"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_702", "Invalid role object", "Invalid role object"));
                     }
                 }
                 else
@@ -181,7 +181,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid role object", "Invalid role object"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_702", "Invalid role object", "Invalid role object"));
                     }
                 }
                 else

@@ -32,7 +32,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Client already exists", "Client already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_201", "Client already exists", "Client already exists"));
                     }
                 }
                 else
@@ -107,7 +107,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Client ID doesnot exists", "Client ID doesnot exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", "Client ID doesnot exists", "Client ID doesnot exists"));
                     }
                 }
                 else
@@ -141,7 +141,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", " Client ID does not exists", "Invalid Client ID"));
                     }
                 }
                 else
@@ -176,7 +176,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", "Client ID doesnot exists", "Invalid Client ID"));
                     }
                 }
                 else
@@ -208,7 +208,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Invalid Client ID", "Invalid Client ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", "Client ID doesnot exists", "Invalid Client ID"));
                     }
                 }
                 else

@@ -63,7 +63,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_108", "Null Object", "Employee tax value doesnot exists!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_601", "Null Object", "Employee tax value doesnot exists!"));
                     }
                 }
                 else
@@ -93,7 +93,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input or ID doesnot exists", "Please check input Json and ID "));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_602", "Invalid Input or ID doesnot exists", "Please check input Json and ID "));
                 }
             }
             catch (Exception exception)

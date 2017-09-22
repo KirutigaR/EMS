@@ -54,6 +54,7 @@
           <Property Name="emergency_contact_person" Type="varchar" MaxLength="50" />
           <Property Name="designation" Type="int" Nullable="false" />
           <Property Name="blood_group" Type="varchar" MaxLength="50" />
+          <Property Name="created_on" Type="datetime" />
         </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
@@ -1006,6 +1007,7 @@
           <NavigationProperty Name="Salary_Structure" Relationship="EMSModel.FK__Salary_St__emp_i__2EDAF651" FromRole="Employee" ToRole="Salary_Structure" />
           <NavigationProperty Name="Payslips" Relationship="EMSModel.FK__Payslip__emp_id__2BFE89A6" FromRole="Employee" ToRole="Payslip" />
           <Property Name="year_of_experience" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -1354,6 +1356,7 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="EMSModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
                 <ScalarProperty Name="year_of_experience" ColumnName="year_of_experience" />
                 <ScalarProperty Name="blood_group" ColumnName="blood_group" />
                 <ScalarProperty Name="designation" ColumnName="designation" />

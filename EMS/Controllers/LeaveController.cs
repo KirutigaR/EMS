@@ -125,7 +125,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.id);
+                Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
                 string gender = employee_instance.gender;
 
                 if (leave.from_date < DateTime.Now)
@@ -176,12 +176,14 @@ namespace EMS.Controllers
                         List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
                         decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
                         //string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
-                        if(noofdays == 0)
-                        {
-
-                        }
                         Leave leave_instance = new Leave();
-                        if (leave_type1 == "CL")
+                        if (noofdays == 0)
+                        {
+                            response.RequestMessage.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_124", "your leave date on holiday date", "your leave date on holiday date"));
+                        }
+
+                        
+                        else if (leave_type1 == "CL")
                         {
                             //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
                             decimal? Cl_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);

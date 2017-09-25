@@ -24,7 +24,7 @@ namespace EMS.Controllers
 
             try
             {
-                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id!=0 && employee_details.reporting_to!=0 && employee_details.designation_id!=0)
+                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0)
                 {
                     Employee employee = new Employee();
                     employee.id = employee_details.id;
@@ -48,7 +48,9 @@ namespace EMS.Controllers
                     employee.created_on = DateTime.Now;
 
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
-                    if (existingInstance == null)
+                    List<Employee> employeeByMailid = EmployeeRepo.GetEmployeeByMailId(employee_details.email); 
+
+                    if (existingInstance == null && employeeByMailid.Count == 0)
                     {
                         User user = new User();
                         user.user_name = employee.email;
@@ -99,7 +101,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists", "Employee ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists or Mailid arleady in use", "Employee ID already exists"));
                     }
                 }
                 else
@@ -318,7 +320,7 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Route("api/employee/update")]
-        public HttpResponseMessage EmployeeAddandUpdate(EmployeeModel employee_details)
+        public HttpResponseMessage EmployeeUpdate(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
             try

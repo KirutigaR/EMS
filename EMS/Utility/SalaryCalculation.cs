@@ -17,24 +17,33 @@ namespace EMS.Utility
             salarypobj.CA = Constants.CONVEYANCE_ALLOWANCE * 12;
             salarypobj.PT = Constants.PT * 12;
             salarypobj.PF = ((salarypobj.basic_pay*12)/ 100);
+
+            #region FA calculation
+            if (salarypobj.ctc < 252000)
+                salarypobj.FA = 0;  // CTC Less than 252000 NO need of Food Allowance
+            else
+                salarypobj.FA = Constants.FOOD_ALLOWANCE * 12;
+            #endregion
+
             salarypobj.SA = salarypobj.ctc - (salarypobj.basic_pay + salarypobj.HRA + salarypobj.MA + salarypobj.CA + salarypobj.FA + salarypobj.PF + salarypobj.Gratuity);
+            if (salarypobj.SA < 0)
+                salarypobj.SA = 0;
             salarypobj.MI = 0;
             salarypobj.Gratuity = 0;
-            #region ESI and FA calculation
+
+            #region ESI calculation
             //ESI Calculation starts
             if (salarypobj.ctc<252000)   
             {
-                salarypobj.FA = 0;
-                // CTC Less than 252000 NO need of Food Allowance
                 decimal temp = (salarypobj.basic_pay + salarypobj.HRA + salarypobj.MA + salarypobj.CA + salarypobj.FA + salarypobj.SA + salarypobj.PF);
                 salarypobj.ESI = (temp * 475)/10000;
             }
             else
             {
-                salarypobj.FA = Constants.FOOD_ALLOWANCE * 12;
                 salarypobj.ESI = 0;
             }
             #endregion
+
             return salarypobj;
         }
 

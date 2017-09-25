@@ -91,6 +91,8 @@ namespace EMS.Repository
                                 on employee.user_id equals user.id
                                 join designation in datacontent.Designations
                                 on employee.designation equals designation.id
+                                join employee1 in datacontent.Employees
+                                on employee.reporting_to equals employee1.id
                                 where (user.is_active == 1)
                                 select new EmployeeModel
                                 {
@@ -104,6 +106,7 @@ namespace EMS.Repository
                                     contact_no = employee.contact_no,
                                     user_id = employee.user_id,
                                     reporting_to = employee.reporting_to,
+                                    reportingto_name = employee1.first_name + employee1.last_name,
                                     Year_of_experience = employee.year_of_experience,
                                     pan_no = employee.pan_no,
                                     bank_account_no =employee.bank_account_no,
@@ -152,6 +155,8 @@ namespace EMS.Repository
                             on employee.designation equals designation.id
                             join project_role in datacontent.Project_role
                             on employee.id equals project_role.employee_id
+                            join employee1 in datacontent.Employees
+                            on employee.reporting_to equals employee1.id
                             where (user.is_active == 1) && (project_role.project_id == Constants.PROJECT_BENCH_ID)//available employees are the employees who are all in bench(project id 1 = bench ) 
                             select new EmployeeModel
                             {
@@ -165,6 +170,7 @@ namespace EMS.Repository
                                 contact_no = employee.contact_no,
                                 user_id = employee.user_id,
                                 reporting_to = employee.reporting_to,
+                                reportingto_name = employee1.first_name + employee1.last_name,
                                 Year_of_experience = employee.year_of_experience,
                                 pan_no = employee.pan_no,
                                 bank_account_no = employee.bank_account_no,
@@ -203,6 +209,8 @@ namespace EMS.Repository
                             on employee.id equals salary.emp_id
                             join designation in datacontent.Designations
                             on employee.designation equals designation.id
+                            join employee1 in datacontent.Employees
+                            on employee.reporting_to equals employee1.id
                             where employee.user_id == user_id
                             select new EmployeeModel
                             {
@@ -217,6 +225,7 @@ namespace EMS.Repository
                                 user_id = employee.user_id,
                                 role_id = userrole.role_id,
                                 reporting_to = employee.reporting_to,
+                                reportingto_name = employee1.first_name + employee1.last_name,
                                 Year_of_experience = employee.year_of_experience,
                                 pan_no = employee.pan_no,
                                 bank_account_no = employee.bank_account_no,
@@ -255,6 +264,8 @@ namespace EMS.Repository
                             on employee.id equals salary.emp_id
                             join designation in datacontent.Designations
                             on employee.designation equals designation.id
+                            join employee1 in datacontent.Employees
+                            on employee.reporting_to equals employee1.id
                             where employee.id == employee_id
                             select new EmployeeModel
                             {
@@ -269,6 +280,7 @@ namespace EMS.Repository
                                 user_id = employee.user_id,
                                 role_id = userrole.role_id,
                                 reporting_to = employee.reporting_to,
+                                reportingto_name = employee1.first_name + employee1.last_name,
                                 Year_of_experience = employee.year_of_experience,
                                 pan_no = employee.pan_no,
                                 bank_account_no = employee.bank_account_no,
@@ -531,6 +543,28 @@ namespace EMS.Repository
             {
                 datacontext.Entry(userrole).State = EntityState.Modified;
                 datacontext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<Employee> GetEmployeeByMailId(string mailid)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from employee in datacontext.Employees
+                            where employee.email == mailid
+                            select employee;
+                return query.ToList();
             }
             catch (Exception exception)
             {

@@ -80,7 +80,7 @@ namespace EMS.Utility
         {
             if(salary.is_active==1)
             {
-                int working_days = (DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month) - DOJ.Day) + 1;
+                int working_days = (DateTime.DaysInMonth(DOJ.Year, DOJ.Month) - DOJ.Day) + 1;
                 Payslip payslip = new Payslip();
                 decimal per_day_salary = (salary.basic_pay / 12) / 30;
                 Debug.WriteLine(working_days);

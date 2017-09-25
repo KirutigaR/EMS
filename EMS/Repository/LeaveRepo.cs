@@ -668,7 +668,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
-                            where (l.leave_statusid == Constants.LEAVE_STATUS_PENDING || l.leave_statusid == Constants.LEAVE_STATUS_APPROVED) && l.from_date > DateTime.Now
+                            where l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
                                 id = e.id,

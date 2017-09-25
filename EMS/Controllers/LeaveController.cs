@@ -48,7 +48,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "Invalid holiday id", "updated failed"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_501", "Invalid holiday id", "updated failed"));
                 }
             }
             catch (Exception exception)
@@ -74,7 +74,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "Invalid holiday id", "updated failed"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_501", "Invalid holiday id", "updated failed"));
                 }
 
             }
@@ -130,7 +130,7 @@ namespace EMS.Controllers
 
                 if (leave.from_date < DateTime.Now)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_106", "invalid date", "Your date is past date. or to date is emplty. so please select valid Date"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "invalid date", "Your date is past date. or to date is emplty. so please select valid Date"));
                 }
                 //else if(leave.to_date == DateTime.MinValue)
                 //{
@@ -163,13 +163,13 @@ namespace EMS.Controllers
                         else
                         {
                             //ViewData["MLError"] = "you already applied Maternity Leave";
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_107", "Already applied", "you already applied Maternity Leave"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "Already applied", "you already applied Maternity Leave"));
                         }
                         //}
                     }
                     else if(gender == "male" && leave_type1 == "ML")
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_123", "invalid leave type", "Invalid leave type"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "invalid leave type", "Invalid leave type"));
                     }
                     else if (leave.leavetype_id != 0 && leave.from_date != null && leave.to_date != null && leave.to_date != DateTime.MinValue && (leave.to_date > DateTime.Now) && leave.to_date >= leave.from_date)
                     {
@@ -179,7 +179,7 @@ namespace EMS.Controllers
                         Leave leave_instance = new Leave();
                         if (noofdays == 0)
                         {
-                            response.RequestMessage.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_124", "your leave date on holiday date", "your leave date on holiday date"));
+                            response.RequestMessage.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "your leave date on holiday date", "your leave date on holiday date"));
                         }
 
                         
@@ -190,7 +190,7 @@ namespace EMS.Controllers
                             if (noofdays > 3)
                             {
 
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_108", "Can apply only 3 CL", "CL can't be more than three days"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "Can apply only 3 CL", "CL can't be more than three days"));
                             }
                             else if (noofdays <= 3)
                             {
@@ -198,7 +198,7 @@ namespace EMS.Controllers
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                                     MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_109", "casual leave less than applied leave", "Applied Leave more than Casual Leave. Choose Another LeaveType"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "casual leave less than applied leave", "Applied Leave more than Casual Leave. Choose Another LeaveType"));
                                 }
                                 else if (Cl_leave_type >= noofdays)
                                 {
@@ -278,15 +278,15 @@ namespace EMS.Controllers
                             else if (Cl_leave_type == 0 && El_leave_type > 0)
                             {
 
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_110", "You have EL leave", "you can apply the Leave in 'EL'"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You have EL leave", "you can apply the Leave in 'EL'"));
                             }
                             else if (El_leave_type == 0 && Cl_leave_type > 0)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_111", "You have CL leave", "you can apply the Leave in 'CL'"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "You have CL leave", "you can apply the Leave in 'CL'"));
                             }
                             else if (Cl_leave_type > 0 && El_leave_type > 0)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_111", "You have CL, EL leave", "You have CL, EL leave balance"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_510", "You have CL, EL leave", "You have CL, EL leave balance"));
                             }
                         }
                         else if (leave_type1 == "WFH")
@@ -306,13 +306,13 @@ namespace EMS.Controllers
                             }
                             else if (noofdays > 2)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_113", "allow only 2 days for WFH", "you can apply only two days"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "allow only 2 days for WFH", "you can apply only two days"));
                             }
                         }
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_114", "dont leave the fields", "dont leave the fields"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_512", "dont leave the fields", "dont leave the fields"));
                     }
                 }
 
@@ -333,7 +333,7 @@ namespace EMS.Controllers
             try
             {
                 List<LeavehistoryModel> leave_history_model = LeaveRepo.GetLeaveHistoryById(employee_id);
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_119", "approved", leave_history_model));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_513", "approved", leave_history_model));
             }
             catch (Exception exception)
             {
@@ -402,13 +402,13 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_115", "password not matched", "password mismatch"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "password not matched", "password mismatch"));
                     }
 
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_116", "confirm password not match", "new password and confirm password doesnot match"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "confirm password not match", "new password and confirm password doesnot match"));
                 }
 
             }
@@ -453,7 +453,7 @@ namespace EMS.Controllers
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave1.employee_id);
                     Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
                     MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_REJECTED, employee.email, reporting_to.mailid, remarks);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_117", "Leave not approved", "Leave cancel"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave not approved", "Leave cancel"));
                 }
             }
             catch (Exception exception)

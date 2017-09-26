@@ -93,6 +93,7 @@ namespace EMS.Repository
                                 on employee.designation equals designation.id
                                 join employee1 in datacontent.Employees
                                 on employee.reporting_to equals employee1.id
+                                orderby employee.created_on descending
                                 where (user.is_active == 1)
                                 select new EmployeeModel
                                 {
@@ -116,7 +117,8 @@ namespace EMS.Repository
                                     emergency_contact_no = employee.emergency_contact_no,
                                     emergency_contact_person = employee.emergency_contact_person,
                                     medical_insurance_no = employee.medical_insurance_no,
-                                    PF_no = employee.PF_no
+                                    PF_no = employee.PF_no,
+                                    created_on = (DateTime)employee.created_on
                                 };
                 return query.ToList();
        

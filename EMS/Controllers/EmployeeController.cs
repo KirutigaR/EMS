@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Security;
 using EMS.Models;
@@ -48,9 +49,16 @@ namespace EMS.Controllers
                     employee.created_on = DateTime.Now;
 
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
-                    List<Employee> employeeByMailid = EmployeeRepo.GetEmployeeByMailId(employee_details.email); 
+                    List<Employee> employeeByMailid = EmployeeRepo.GetEmployeeByMailId(employee_details.email);
 
-                    if (existingInstance == null && employeeByMailid.Count == 0)
+                    bool isEmail = Regex.IsMatch(employee.email,
+                    @"^([0-9a-zA-Z]" + //Start with a digit or alphabetical
+                    @"([\+\-_\.][0-9a-zA-Z]+)*" + // No continuous or ending +-_. chars in email
+                    @")+" +
+                    @"@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$"
+                        , RegexOptions.IgnoreCase);
+
+                    if (existingInstance == null && employeeByMailid.Count == 0 && isEmail == true)
                     {
                         User user = new User();
                         user.user_name = employee.email;

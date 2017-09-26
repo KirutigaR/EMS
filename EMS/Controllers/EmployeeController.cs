@@ -109,7 +109,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists or Mailid arleady in use", "Employee ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists or Mailid arleady in use or Invalid Mailid", "Employee ID already exists"));
                     }
                 }
                 else

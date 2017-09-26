@@ -504,7 +504,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/pendingapproval/hr")] // pending approval in hr manager
+        [Route("api/entire/leave/history/pending")] // pending approval in hr manager
         public HttpResponseMessage GetPendingApproval()
         {
             HttpResponseMessage response = null;
@@ -544,7 +544,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/leave/pending/approved/list/hr/{reportingto_id?}")] // pending approval in hr manager
+        [Route("api/leave/fullhistoryby/{reportingto_id?}")] // pending approval in hr manager
         public HttpResponseMessage GetPendingApprovedList(int reportingto_id = 0)
         {
             HttpResponseMessage response = null;
@@ -567,7 +567,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/leave/history/list/hr")] // leave history in hr manager
+        [Route("api/entire/leave/history")] // leave history of all employee (HR only can view this history list)
         public HttpResponseMessage GetLeaveHistoryList()
         {
             HttpResponseMessage response = null;

@@ -414,7 +414,10 @@ namespace EMS.Controllers
                 if (employee_id != 0 || employee_name!=null)
                 {
                     List<EmployeeModel> employee_list = EmployeeRepo.SearchEmployee(employee_id, employee_name);
-                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", employee_list));
+                    if(employee_list.Count!=0)
+                        Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", employee_list));
+                    else
+                        Response = Request.CreateResponse(new EMSResponseMessage("EMS_404", "No Employees Found", "No employee found for given name or ID"));
                 }
                 else
                 {

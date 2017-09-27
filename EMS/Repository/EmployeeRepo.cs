@@ -592,13 +592,11 @@ namespace EMS.Repository
                 }
                 if (Employee_name != null)
                 {
-                    predicate = predicate.And(i => i.first_name == Employee_name);
+                    predicate = predicate.And(i => i.first_name == Employee_name).Or(i=>i.last_name == Employee_name);
                 }
                 var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
                             join userrole in datacontent.User_role
                             on employee.user_id equals userrole.user_id
-                            join salary in datacontent.Salary_Structure
-                            on employee.id equals salary.emp_id
                             join designation in datacontent.Designations
                             on employee.designation equals designation.id
                             join employee1 in datacontent.Employees
@@ -627,7 +625,6 @@ namespace EMS.Repository
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,
                                 PF_no = employee.PF_no,
-                                ctc = salary.ctc
                             };
                 return query.ToList();
             }

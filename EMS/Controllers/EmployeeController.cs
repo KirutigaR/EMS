@@ -406,7 +406,7 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/employee/search/{employee_id?}/{employee_name?}")]
-        public HttpResponseMessage EmployeeSearch(int employee_id, string employee_name)
+        public HttpResponseMessage EmployeeSearch(int employee_id = 0 , string employee_name = null)
         {
             HttpResponseMessage Response = null;
             try

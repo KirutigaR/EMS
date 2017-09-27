@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity.Validation;
+using System.Collections;
 
 namespace EMS.Controllers
 {
@@ -140,6 +141,20 @@ namespace EMS.Controllers
                 {
                     Leavebalance_sheet leave_balance = new Leavebalance_sheet();
                     string leave_type1 = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                    List<Leave> leavelist = LeaveRepo.GetActiveLeaveListByEmpId(leave.employee_id);
+                    foreach (Leave leaveinstance in leavelist)
+                    {
+                        if (leave.from_date <= leaveinstance.from_date && leave.to_date >= leaveinstance.to_date)
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "leave application is already registered inbetween these days", "Error in leave application, check the dates"));
+                            return response;
+                        }
+                        else if ((leaveinstance.from_date <= leave.from_date && leave.from_date <= leaveinstance.to_date) || (leaveinstance.from_date <= leave.to_date && leave.to_date <= leaveinstance.to_date))
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_517", "Already a leave is applied in these days", "Error in leave application, check the dates"));
+                            return response;
+                        }
+                    }
                     if (gender == "female" && leave_type1 == "ML")
                     {
                         //if (leave_type1 == "ML")
@@ -179,7 +194,7 @@ namespace EMS.Controllers
                         Leave leave_instance = new Leave();
                         if (noofdays == 0)
                         {
-                            response.RequestMessage.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "your leave date on holiday date", "your leave date on holiday date"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "your leave date on holiday date", "your leave date on holiday date"));
                         }
 
                         

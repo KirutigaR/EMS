@@ -13,7 +13,7 @@ namespace EMS.Repository
     public class LeaveRepo
     {
         public static List<Holiday_List> GetHoliday()
-        { 
+        {
             EMSEntities datacontext = new EMSEntities();
             try
             {
@@ -360,7 +360,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        
+
         public static int GetUserIdById(int id)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -423,7 +423,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static Leavebalance_sheet LeaveBalanceById(int employee_id, int leavetype_id )
+        public static Leavebalance_sheet LeaveBalanceById(int employee_id, int leavetype_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -658,7 +658,7 @@ namespace EMS.Repository
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
-                if(r_id != 0)
+                if (r_id != 0)
                 {
                     predicate = predicate.And(X => X.reporting_to == r_id);
                 }
@@ -705,7 +705,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
-                            where l.from_date > DateTime.Now 
+                            where l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
                                 id = e.id,
@@ -731,6 +731,26 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-
+        public static List<Leave> GetActiveLeaveListByEmpId(int employee_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from l in datacontext.Leaves
+                            where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= DateTime.Now)
+                            select l;
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

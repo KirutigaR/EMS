@@ -129,9 +129,9 @@ namespace EMS.Controllers
                 Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
                 string gender = employee_instance.gender;
 
-                if (leave.from_date < DateTime.Now)
+                if (leave.from_date < DateTime.Now || leave.to_date < DateTime.Now || leave.from_date > leave.to_date)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "invalid date", "Your date is past date. or to date is emplty. so please select valid Date"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "invalid date", "so please select valid Date"));
                 }
                 //else if(leave.to_date == DateTime.MinValue)
                 //{
@@ -194,7 +194,7 @@ namespace EMS.Controllers
                         Leave leave_instance = new Leave();
                         if (noofdays == 0)
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "your leave date on holiday date", "your leave date on holiday date"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "selected date falls on holiday", "selected date falls on holiday"));
                         }
 
                         
@@ -205,7 +205,7 @@ namespace EMS.Controllers
                             if (noofdays > 3)
                             {
 
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "Can apply only 3 CL", "CL can't be more than three days"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "CL can't be more than three days", "CL can't be more than three days"));
                             }
                             else if (noofdays <= 3)
                             {
@@ -213,7 +213,7 @@ namespace EMS.Controllers
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                                     MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "casual leave less than applied leave", "Applied Leave more than Casual Leave. Choose Another LeaveType"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "you dont have enough CL leavebalance", "you dont have enough CL leavebalance"));
                                 }
                                 else if (Cl_leave_type >= noofdays)
                                 {
@@ -293,15 +293,15 @@ namespace EMS.Controllers
                             else if (Cl_leave_type == 0 && El_leave_type > 0)
                             {
 
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You have EL leave", "you can apply the Leave in 'EL'"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "you can apply the Leave in 'EL'", "you can apply the Leave in 'EL'"));
                             }
                             else if (El_leave_type == 0 && Cl_leave_type > 0)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "You have CL leave", "you can apply the Leave in 'CL'"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "you can apply the Leave in 'CL'", "you can apply the Leave in 'CL'"));
                             }
                             else if (Cl_leave_type > 0 && El_leave_type > 0)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_510", "You have CL, EL leave", "You have CL, EL leave balance"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_510", "You have CL, EL leave balance", "You have CL, EL leave balance"));
                             }
                         }
                         else if (leave_type1 == "WFH")
@@ -321,7 +321,7 @@ namespace EMS.Controllers
                             }
                             else if (noofdays > 2)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "allow only 2 days for WFH", "you can apply only two days"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "work from home cant be applied more than two days", "work from home cant be applied more than two dayss"));
                             }
                         }
                     }

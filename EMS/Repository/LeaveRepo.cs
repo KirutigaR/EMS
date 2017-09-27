@@ -286,7 +286,8 @@ namespace EMS.Repository
                             on l.leavetype_id equals lt.id
                             join ls in datacontext.Status_leave
                             on l.leave_statusid equals ls.id
-                            where l.employee_id == id //&& l.leavetype_id == 2
+                            orderby l.id descending
+                            where l.employee_id == id//&& l.leavetype_id == 2
                             select new LeavehistoryModel
                             {
                                 //id = e.id,
@@ -540,6 +541,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
+                            orderby l.id descending
                             where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now //&& l.leave_statusid == ls.id
                             select new LeavehistoryModel
                             {
@@ -579,6 +581,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            orderby l.id descending
                             where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
@@ -668,6 +671,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            orderby l.id descending
                             where l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
@@ -705,6 +709,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            orderby l.id descending
                             where l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {

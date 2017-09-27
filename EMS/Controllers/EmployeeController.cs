@@ -25,7 +25,7 @@ namespace EMS.Controllers
 
             try
             {
-                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0)
+                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0 && employee_details.contact_no != employee_details.emergency_contact_no )
                 {
                     Employee employee = new Employee();
                     employee.id = employee_details.id;

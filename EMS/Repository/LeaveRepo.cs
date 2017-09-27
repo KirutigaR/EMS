@@ -737,7 +737,7 @@ namespace EMS.Repository
             try
             {
                 var query = from l in datacontext.Leaves
-                            where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= DateTime.Now)
+                            where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING) && l.from_date >= DateTime.Now
                             select l;
                 return query.ToList();
             }

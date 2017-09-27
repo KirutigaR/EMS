@@ -579,5 +579,68 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static List<EmployeeModel> SearchEmployee(int employee_id, string Employee_name)
+        {
+            EMSEntities datacontent = new EMSEntities();
+            try
+            {
+                var predicate = LinqKit.PredicateBuilder.True<Employee>();
+                if (employee_id != 0)
+                {
+                    predicate = predicate.And(i => i.id == employee_id);
+                }
+                if (Employee_name != null)
+                {
+                    predicate = predicate.And(i => i.first_name == Employee_name);
+                }
+                var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
+                            join userrole in datacontent.User_role
+                            on employee.user_id equals userrole.user_id
+                            join salary in datacontent.Salary_Structure
+                            on employee.id equals salary.emp_id
+                            join designation in datacontent.Designations
+                            on employee.designation equals designation.id
+                            join employee1 in datacontent.Employees
+                            on employee.reporting_to equals employee1.id
+                            select new EmployeeModel
+                            {
+                                id = employee.id,
+                                first_name = employee.first_name,
+                                last_name = employee.last_name,
+                                email = employee.email,
+                                date_of_birth = employee.date_of_birth,
+                                gender = employee.gender,
+                                date_of_joining = employee.date_of_joining,
+                                contact_no = employee.contact_no,
+                                user_id = employee.user_id,
+                                role_id = userrole.role_id,
+                                reporting_to = employee.reporting_to,
+                                reportingto_name = employee1.first_name + " " + employee1.last_name,
+                                Year_of_experience = employee.year_of_experience,
+                                pan_no = employee.pan_no,
+                                bank_account_no = employee.bank_account_no,
+                                blood_group = employee.blood_group,
+                                designation_id = designation.id,
+                                designation = designation.name,
+                                emergency_contact_no = employee.emergency_contact_no,
+                                emergency_contact_person = employee.emergency_contact_person,
+                                medical_insurance_no = employee.medical_insurance_no,
+                                PF_no = employee.PF_no,
+                                ctc = salary.ctc
+                            };
+                return query.ToList();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontent.Dispose();
+            }
+        }
     }
 }

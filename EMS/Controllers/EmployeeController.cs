@@ -404,5 +404,30 @@ namespace EMS.Controllers
             return Response;
         }
 
+        [HttpGet]
+        [Route("api/employee/search/{employee_id?}/{employee_name?}")]
+        public HttpResponseMessage EmployeeSearch(int employee_id, string employee_name)
+        {
+            HttpResponseMessage Response = null;
+            try
+            {
+                if (employee_id != 0 || employee_name!=null)
+                {
+                    List<EmployeeModel> employee_list = EmployeeRepo.SearchEmployee(employee_id, employee_name);
+                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", employee_list));
+                }
+                else
+                {
+                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_102", "Failure", "No id or name found to search"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return Response;
+        }
     }
 }

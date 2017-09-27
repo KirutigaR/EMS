@@ -46,11 +46,11 @@ namespace EMS.Controllers
                         if (proj_details != null)
                         {
                             TaskRepo.AssignProjectTask(items);
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project tasks assigned successfully"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success : Project tasks assigned successfully", "Project tasks assigned successfully"));
                         }
                         else
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_204", "Failure", "Project ID doesnot Exists"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_204", "Failure : Project ID doesnot Exists", "Project ID doesnot Exists"));
                         }
                     }
                 }
@@ -89,7 +89,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Failure", "Task doesnot Exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Failure : Task doesnot Exists", "Task doesnot Exists"));
                     }
                 }
                 else
@@ -121,12 +121,12 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Error", "Task doesnot exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Error : Task doesnot exists", "Task doesnot exists"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_802", "URL Error", "Please check the input and datatype"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_802", "URL Error : Please check the input and datatype", "Please check the input and datatype"));
                 }
             }
             catch (Exception exception)
@@ -155,12 +155,12 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Error", "Task doesnot exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Error : Task doesnot exists", "Task doesnot exists"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_802", "URL Error", "Please check the input and datatype"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_802", "URL Error : Please check the input and datatype", "Please check the input and datatype"));
                 }
             }
             catch (Exception exception)

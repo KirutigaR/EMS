@@ -191,7 +191,7 @@ namespace EMS.Controllers
 
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json, Project details and employee status"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)
@@ -254,7 +254,7 @@ namespace EMS.Controllers
 
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json, Project details and employee status"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)
@@ -281,12 +281,12 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "failure", "Given employee is not specifically assigned to the role in that project"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "failure : Given employee is not specifically assigned to the role in that project", "Given employee is not specifically assigned to the role in that project"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json, Project details and employee status"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)
@@ -305,7 +305,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(employee_id!=0 && project_id!=0&& role_id!=0)
+                if(employee_id!=0 && project_id!=0 && role_id!=0)
                 {
                     Project_role project_role = ProjectRepo.GetAssignedEmployeebyid(employee_id, project_id, role_id);
                     if (project_role != null)
@@ -315,7 +315,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "check employe id role id and project id"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Failure : check employe id, role id and project id", "check employe id role id and project id"));
                     }
                 }
                 else

@@ -25,7 +25,7 @@ namespace EMS.Controllers
 
             try
             {
-                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0 && employee_details.contact_no != employee_details.emergency_contact_no )
+                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0)
                 {
                     Employee employee = new Employee();
                     employee.id = employee_details.id;
@@ -109,7 +109,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists or Mailid arleady in use or Invalid Mailid", "Employee ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID and Mailid should be unique or Invalid Mailid", "Employee ID already exists"));
                     }
                 }
                 else
@@ -359,7 +359,7 @@ namespace EMS.Controllers
 
                     if (existingInstance == null)
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Failure", "Employee record doesnot exists!"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Failure : Employee record doesnot exists!", "Employee record doesnot exists!"));
                     }
                     else//(if existingInstance != null)
                     {
@@ -387,7 +387,7 @@ namespace EMS.Controllers
 
                         }
                         EmployeeRepo.EditEmployee(employee);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "Employee record updated!"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success : Employee record updated!", "Employee record updated!"));
                     }//(existingInstance != null) ELSE PART
                 }//employee_details != null IF PART 
                 else //IF employee_details == null

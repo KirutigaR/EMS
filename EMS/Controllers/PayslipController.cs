@@ -31,7 +31,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_603", "Failure", "Pay slip generation Error or payslip for specified month is already exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_603", "Failure : Pay slip generation Error or payslip for specified month is already exists", "Pay slip generation Error or payslip for specified month is already exists"));
                     }
                 }
                 else

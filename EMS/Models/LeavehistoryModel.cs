@@ -14,7 +14,8 @@ namespace EMS.Models
         public DateTime from_date { get; set; }
         public DateTime to_date { get; set; }
         public decimal no_of_days { get; set; }
-        public int reporting_to { get; set; }
+        public int reportingto { get; set; }
+        public string reporting_to { get; set; }
         public string leave_status { get; set; }
         public int leave_id { get; set; }
         public string remark { get; set; }

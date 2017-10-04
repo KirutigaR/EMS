@@ -128,6 +128,13 @@ namespace EMS.Controllers
             {
                 Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
                 string gender = employee_instance.gender;
+                string leave_type1 = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+
+
+                if (leave_type1 == "ML" && leave.from_date > DateTime.Now )
+                {
+                    leave.to_date = leave.from_date.AddDays(182);
+                }
 
                 if (leave.from_date < DateTime.Now || leave.to_date < DateTime.Now || leave.from_date > leave.to_date)
                 {
@@ -140,7 +147,6 @@ namespace EMS.Controllers
                 else
                 {
                     Leavebalance_sheet leave_balance = new Leavebalance_sheet();
-                    string leave_type1 = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
                     List<Leave> leavelist = LeaveRepo.GetActiveLeaveListByEmpId(leave.employee_id);
                     foreach (Leave leaveinstance in leavelist)
                     {
@@ -155,6 +161,9 @@ namespace EMS.Controllers
                             return response;
                         }
                     }
+
+                #region ML_Leave 
+
                     if (gender == "female" && leave_type1 == "ML")
                     {
                         //if (leave_type1 == "ML")
@@ -186,13 +195,17 @@ namespace EMS.Controllers
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "invalid leave type", "Invalid leave type"));
                     }
+
+                #endregion ML_Leave
+
                     else if (leave.leavetype_id != 0 && leave.from_date != null && leave.to_date != null && leave.to_date != DateTime.MinValue && (leave.to_date > DateTime.Now) && leave.to_date >= leave.from_date)
                     {
                         List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
+                        decimal AppliedNoOfDates = (decimal)((leave.to_date - leave.from_date).TotalDays)+1;
                         decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
                         //string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
                         Leave leave_instance = new Leave();
-                        if (noofdays == 0)
+                        if (noofdays == 0 || noofdays < AppliedNoOfDates)
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "selected date falls on holiday", "selected date falls on holiday"));
                         }

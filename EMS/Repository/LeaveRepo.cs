@@ -555,7 +555,7 @@ namespace EMS.Repository
                                 //is_approved = l.is_approved,
                                 leave_id = l.id,
                                 leave_status = ls.leave_status,
-                                reporting_to = e.reporting_to
+                                reportingto = e.reporting_to
                             };
                 return query.ToList();
             }
@@ -592,7 +592,7 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                reporting_to = e.reporting_to,
+                                reportingto = e.reporting_to,
                                 leave_status = st.leave_status,
                                 leave_id = l.id
                             };
@@ -671,6 +671,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            join emp in datacontext.Employees on e.reporting_to equals emp.id
                             orderby l.id descending
                             where l.from_date > DateTime.Now
                             select new LeavehistoryModel
@@ -682,7 +683,7 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                reporting_to = e.reporting_to,
+                                reporting_to = emp.first_name + " " +emp.last_name,
                                 leave_status = st.leave_status
                             };
                 return query.ToList();
@@ -720,7 +721,7 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                reporting_to = e.reporting_to,
+                                reportingto = e.reporting_to,
                                 leave_status = st.leave_status
                             };
                 return query.ToList();

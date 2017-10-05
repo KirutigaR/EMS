@@ -109,19 +109,19 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID and Mailid should be unique or Invalid Mailid", "Employee ID already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID or MailID already exists , or Enter valid E-Mail Id ", "Employee ID or MailID already exists , or Enter valid E-Mail Id "));
                     }
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Invalid Input", "Please check input Json some mandatory fields are missing"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Invalid Input - check the fileds", "Please check input Json some mandatory fields are missing"));
                 }
             }
             catch (DbEntityValidationException DBexception)
             {
                 Debug.WriteLine(DBexception.Message);
                 Debug.WriteLine(DBexception.GetBaseException());
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Mandatory fields missing", DBexception.Message));
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Mandatory fields missing or Type mismatch", DBexception.Message));
             }
             catch (Exception exception)
             {

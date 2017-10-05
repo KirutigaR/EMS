@@ -25,7 +25,7 @@ namespace EMS.Controllers
             {
                 if (project != null)
                 {
-                    Project existingInstance = ProjectRepo.GetProjectById(project.id);
+                    Project existingInstance = ProjectRepo.GetExistingProject(project.project_name, project.client_id);
                     if (existingInstance == null)
                     {
                         ProjectRepo.CreateNewProject(project);

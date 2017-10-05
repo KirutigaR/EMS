@@ -476,8 +476,8 @@ namespace EMS.Controllers
                     LeaveRepo.EditLeave(leave1);
                     Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave1.employee_id, leave1.leavetype_id);
 
-                    decimal? no_of_days = LeaveRepo.GetNoofdaysByLeaveTypeId(leave1.leavetype_id);
-                    leave_balance_instance.no_of_days = (decimal)no_of_days - leave1.no_of_days;
+                    
+                    leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave1.no_of_days;
                     LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
                     Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave1.employee_id);

@@ -130,15 +130,27 @@ namespace EMS.Controllers
                 string gender = employee_instance.gender;
                 string leave_type1 = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
 
+                leave.from_date = leave.from_date.Date;
+                leave.to_date = leave.to_date.Date;
+                DateTime timeNow = DateTime.Now.Date;
 
-                if (leave_type1 == "ML" && leave.from_date > DateTime.Now )
+                int applied_from_year = leave.from_date.Year;
+                int applied_to_year = leave.to_date.Year;
+
+                if(applied_from_year>DateTime.Now.Year || applied_to_year>DateTime.Now.Year && leave_type1!="ML")
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Invalid date", "Leave cannot be applied for the future year"));
+                }
+
+
+                if (leave_type1 == "ML" && leave.from_date >= timeNow)
                 {
                     leave.to_date = leave.from_date.AddDays(182);
                 }
 
-                if (leave.from_date < DateTime.Now || leave.to_date < DateTime.Now || leave.from_date > leave.to_date)
+                if (leave.from_date <= timeNow || leave.to_date <= timeNow || leave.from_date > leave.to_date)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "invalid date", "so please select valid Date"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Invalid date", "Please select valid date"));
                 }
                 //else if(leave.to_date == DateTime.MinValue)
                 //{
@@ -146,7 +158,7 @@ namespace EMS.Controllers
                 //}
                 else
                 {
-                    Leavebalance_sheet leave_balance = new Leavebalance_sheet();
+                   // Leavebalance_sheet leave_balance = new Leavebalance_sheet();
                     List<Leave> leavelist = LeaveRepo.GetActiveLeaveListByEmpId(leave.employee_id);
                     foreach (Leave leaveinstance in leavelist)
                     {
@@ -198,7 +210,7 @@ namespace EMS.Controllers
 
                 #endregion ML_Leave
 
-                    else if (leave.leavetype_id != 0 && leave.from_date != null && leave.to_date != null && leave.to_date != DateTime.MinValue && (leave.to_date > DateTime.Now) && leave.to_date >= leave.from_date)
+                    else if (leave.leavetype_id != 0 && leave.from_date != null && leave.to_date != null && leave.to_date != DateTime.MinValue && (leave.to_date > timeNow) && leave.to_date >= leave.from_date)
                     {
                         List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
                         decimal AppliedNoOfDates = (decimal)((leave.to_date - leave.from_date).TotalDays)+1;

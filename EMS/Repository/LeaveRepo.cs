@@ -673,7 +673,7 @@ namespace EMS.Repository
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
                             join emp in datacontext.Employees on e.reporting_to equals emp.id
                             orderby l.id descending
-                            where l.from_date > DateTime.Now
+                            where l.from_date > DateTime.Now && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED)
                             select new LeavehistoryModel
                             {
                                 id = e.id,

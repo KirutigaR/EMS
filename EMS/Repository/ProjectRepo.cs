@@ -54,6 +54,28 @@ namespace EMS.Repository
             }
         }
 
+        public static Project GetExistingProject(string project_name, int client_Id)// p_id - project_id
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from project in datacontext.Projects
+                            where project.project_name == project_name && project.client_id == client_Id
+                            select project;
+                return query.FirstOrDefault();
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
         public static ProjectModel GetProjectDetailsById(int project_id)// p_id - project_id
         {
             EMSEntities datacontext = new EMSEntities();

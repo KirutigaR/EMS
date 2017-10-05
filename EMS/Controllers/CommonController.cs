@@ -39,6 +39,7 @@ namespace EMS.Controllers
                     resultSet.Add("UserName", employee.first_name + employee.last_name);
                     resultSet.Add("role_name", role.role_name);
                     resultSet.Add("role_id", role.id);
+                    resultSet.Add("gender", employee.gender);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", resultSet));
                 }
             }

@@ -87,6 +87,7 @@
           <Property Name="to_date" Type="date" Nullable="false" />
           <Property Name="no_of_days" Type="int" Nullable="false" />
           <Property Name="leave_statusid" Type="int" Nullable="false" />
+          <Property Name="EL_flag" Type="int" />
         </EntityType>
         <EntityType Name="Leave_type">
           <Key>
@@ -242,7 +243,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Employee__report__778AC167">
+        <Association Name="FK__Employee__report__4E53A1AA">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -254,7 +255,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Employee__user_i__787EE5A0">
+        <Association Name="FK__Employee__user_i__4F47C5E3">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
           <ReferentialConstraint>
@@ -506,11 +507,11 @@
             <End Role="Client_type" EntitySet="Client_type" />
             <End Role="Client" EntitySet="Client" />
           </AssociationSet>
-          <AssociationSet Name="FK__Employee__report__778AC167" Association="Self.FK__Employee__report__778AC167">
+          <AssociationSet Name="FK__Employee__report__4E53A1AA" Association="Self.FK__Employee__report__4E53A1AA">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Employee1" EntitySet="Employee" />
           </AssociationSet>
-          <AssociationSet Name="FK__Employee__user_i__787EE5A0" Association="Self.FK__Employee__user_i__787EE5A0">
+          <AssociationSet Name="FK__Employee__user_i__4F47C5E3" Association="Self.FK__Employee__user_i__4F47C5E3">
             <End Role="Users" EntitySet="Users" />
             <End Role="Employee" EntitySet="Employee" />
           </AssociationSet>
@@ -714,6 +715,7 @@
           <Property Name="leave_statusid" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___74AE54BC" FromRole="Leave" ToRole="Employee" />
           <NavigationProperty Name="Status_leave" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Leave" ToRole="Status_leave" />
+          <Property Name="EL_flag" Type="Int32" />
         </EntityType>
         <EntityType Name="Leave_type">
           <Key>
@@ -1215,6 +1217,7 @@
           <EntitySetMapping Name="Leaves">
             <EntityTypeMapping TypeName="EMSModel.Leave">
               <MappingFragment StoreEntitySet="Leave">
+                <ScalarProperty Name="EL_flag" ColumnName="EL_flag" />
                 <ScalarProperty Name="leave_statusid" ColumnName="leave_statusid" />
                 <ScalarProperty Name="no_of_days" ColumnName="no_of_days" />
                 <ScalarProperty Name="to_date" ColumnName="to_date" />

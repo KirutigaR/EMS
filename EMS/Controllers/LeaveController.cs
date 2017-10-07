@@ -488,10 +488,15 @@ namespace EMS.Controllers
                 {
                     Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                     string leave_type_name = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+
+                    #region CL and ML
                     if(leave_type_name == "CL" || leave_type_name =="ML")
                     {
                         leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
                     }
+                    #endregion
+
+                    #region EL
                     else if(leave_type_name == "EL")
                     {
                         if (leave.EL_flag > 0)
@@ -507,10 +512,15 @@ namespace EMS.Controllers
                             leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
                         }
                     }
+                    #endregion
+
+                    #region LOP and WFH
                     else if(leave_type_name =="LOP" || leave_type_name =="WFH")
                     {
                         leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
                     }
+                    #endregion
+
                     LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
 
                     leave.leave_statusid = Constants.LEAVE_STATUS_REJECTED;

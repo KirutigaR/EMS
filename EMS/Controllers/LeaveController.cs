@@ -32,6 +32,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/editholidaylist")]
         [HttpPost]
         public HttpResponseMessage EditHolidayList(Holiday_List holiday)
@@ -60,6 +61,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/holiday/delete/{holiday_id?}")]
         [HttpGet]
         public HttpResponseMessage DeleteHolidayList(int holiday_id)
@@ -87,6 +89,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [HttpPost]
         [Route("api/holiday/create")]
         public HttpResponseMessage CreateHoliday(Holiday_List holiday_list)
@@ -128,7 +131,7 @@ namespace EMS.Controllers
             {
                 Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
                 string gender = employee_instance.gender;
-                string leave_type1 = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
 
                 leave.from_date = leave.from_date.Date;
                 leave.to_date = leave.to_date.Date;
@@ -137,30 +140,25 @@ namespace EMS.Controllers
                 int applied_from_year = leave.from_date.Year;
                 int applied_to_year = leave.to_date.Year;
 
-                if(applied_from_year>DateTime.Now.Year || applied_to_year>DateTime.Now.Year && leave_type1!="ML")
+                if(applied_from_year>DateTime.Now.Year || applied_to_year>DateTime.Now.Year && leave_type!="ML")
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Invalid date", "Leave cannot be applied for the future year"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Leave cannot be applied for the future year", "Leave cannot be applied for the future year"));
                 }
 
-
-                if (leave_type1 == "ML" && leave.from_date >= timeNow)
+                if (leave_type == "ML" && leave.from_date >= timeNow)
                 {
                     leave.to_date = leave.from_date.AddDays(182);
                 }
 
                 if (leave.from_date <= timeNow || leave.to_date <= timeNow || leave.from_date > leave.to_date)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Invalid date", "Please select valid date"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Please select valid date ", "Please select valid date"));
                 }
-                //else if(leave.to_date == DateTime.MinValue)
-                //{
-                //    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_121", "", "Your date is past date or . so please select valid Date"));
-                //}
+
                 else
                 {
-                   // Leavebalance_sheet leave_balance = new Leavebalance_sheet();
-                    List<Leave> leavelist = LeaveRepo.GetActiveLeaveListByEmpId(leave.employee_id);
-                    foreach (Leave leaveinstance in leavelist)
+                    List<Leave> leavelist = LeaveRepo.GetActiveLeaveListByEmpId(leave.employee_id);// to get the pending and approved leave list 
+                    foreach (Leave leaveinstance in leavelist)//to check if leave is already applied for the given days 
                     {
                         if (leave.from_date <= leaveinstance.from_date && leave.to_date >= leaveinstance.to_date)
                         {
@@ -174,150 +172,150 @@ namespace EMS.Controllers
                         }
                     }
 
-                #region ML_Leave 
+                    #region ML_Leave 
 
-                    if (gender == "female" && leave_type1 == "ML")
+                    if (gender == "female" && leave_type == "ML")
                     {
-                        //if (leave_type1 == "ML")
-                        //{ 
-                        //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
-                        decimal Ml_leaves = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
-                        if (Ml_leaves != 0)
+                        Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
+                        if (leave_balance_instance.no_of_days != 0 && leave_balance_instance.no_of_days == 182)
                         {
-                            DateTime MLnoofdays = ((DateTime)leave.from_date).AddDays(182);
-                            //leave.maternity_leave = 0;
                             leave.no_of_days = 182;
-                            leave.to_date = MLnoofdays;
+
+                            leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
+                            LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+
                             LeaveRepo.AddLeaveHistory(leave);
-                            //LMSRepo.EditEmployeeLeaveByApplyLeave(leave.employee_id, LeaveType, FromDate, MLnoofdays, 182);
-                            //ViewData["MlMessage"] = "Leave successfully Applied";
                             ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                             
                             MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                         }
                         else
                         {
-                            //ViewData["MLError"] = "you already applied Maternity Leave";
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "Already applied", "you already applied Maternity Leave"));
                         }
-                        //}
                     }
-                    else if(gender == "male" && leave_type1 == "ML")
+                    else if(gender == "male" && leave_type == "ML")
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "invalid leave type", "Invalid leave type"));
                     }
 
-                #endregion ML_Leave
+                    #endregion ML_Leave
 
-                    else if (leave.leavetype_id != 0 && leave.from_date != null && leave.to_date != null && leave.to_date != DateTime.MinValue && (leave.to_date > timeNow) && leave.to_date >= leave.from_date)
+                    else if (leave.leavetype_id != 0 && leave.from_date != DateTime.MinValue && leave.to_date != DateTime.MinValue && (leave.to_date > timeNow) && leave.to_date >= leave.from_date)
                     {
                         List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
-                        decimal AppliedNoOfDates = (decimal)((leave.to_date - leave.from_date).TotalDays)+1;
                         decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
-                        //string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
-                        Leave leave_instance = new Leave();
-                        if (noofdays == 0 || noofdays < AppliedNoOfDates)
+                        if (noofdays == 0)
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "selected date falls on holiday", "selected date falls on holiday"));
                         }
 
-                        
-                        else if (leave_type1 == "CL")
+                        #region CL_Leave 
+                        else if (leave_type == "CL")
                         {
                             //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
-                            decimal? Cl_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
+                            Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                             if (noofdays > 3)
                             {
-
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "CL can't be more than three days", "CL can't be more than three days"));
                             }
                             else if (noofdays <= 3)
                             {
-                                if (Cl_leave_type < noofdays)
+                                if (leave_balance_instance.no_of_days < noofdays)
                                 {
                                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                                     MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "you dont have enough CL leavebalance", "you dont have enough CL leavebalance"));
                                 }
-                                else if (Cl_leave_type >= noofdays)
+                                else if (leave_balance_instance.no_of_days >= noofdays)
                                 {
-                                    Cl_leave_type = Cl_leave_type - noofdays;
-                                    //leave.LOP = 0;
                                     leave.no_of_days = (int)noofdays;
+
+                                    leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
+                                    LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+
                                     LeaveRepo.AddLeaveHistory(leave);
-                                    if (noofdays != 0)
-                                    {
-                                        ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
-                                    }
+                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                                 }
                             }
                         }
-                        else if (leave_type1 == "EL")
+                        #endregion CL_Leave
+
+                        #region EL_Leave 
+                        else if (leave_type == "EL")
                         {
-                            //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
                             int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
-                            decimal Lop_leave_type = LeaveRepo.GetNoofDaysById(LOP_leave_type_id, leave.employee_id);
-                            decimal? El_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
-                            if (El_leave_type < noofdays)
+                            decimal Lop_leave_balance = LeaveRepo.GetNoofDaysById(LOP_leave_type_id, leave.employee_id);
+                            decimal El_leave_balance = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
+                            if (El_leave_balance < noofdays)
                             {
-                                El_leave_type = noofdays - El_leave_type;
-                                Lop_leave_type = Math.Abs(Lop_leave_type + (decimal)El_leave_type);
-                                El_leave_type = 0;
+                                El_leave_balance = noofdays - El_leave_balance;
+                                Lop_leave_balance = Math.Abs(Lop_leave_balance + (decimal)El_leave_balance);
+                                El_leave_balance = 0;
                                 leave.no_of_days = (int)noofdays;
+
+                                Leavebalance_sheet EL_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
+                                leave.EL_flag = (int)EL_balance_instance.no_of_days;
+                                EL_balance_instance.no_of_days = El_leave_balance;
+                                LeaveRepo.UpdateLeaveBalanceSheet(EL_balance_instance);
+
+                                Leavebalance_sheet lop_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, LOP_leave_type_id);
+                                lop_balance_instance.no_of_days = Lop_leave_balance;
+                                LeaveRepo.UpdateLeaveBalanceSheet(lop_balance_instance);
+                                
                                 LeaveRepo.AddLeaveHistory(leave);
-                                if (noofdays != 0)
-                                {
-                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
-                                }
+
+                                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
+
                             }
-                            else if (El_leave_type >= noofdays)
+                            else if (El_leave_balance >= noofdays)
                             {
-                                El_leave_type = El_leave_type - noofdays;
-                                LOP_leave_type_id = 0;
+                                El_leave_balance = El_leave_balance - noofdays;
                                 leave.no_of_days = (int)noofdays;
+
+                                Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
+                                leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
+                                LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+
                                 LeaveRepo.AddLeaveHistory(leave);
-                                if (noofdays != 0)
-                                {
-                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
-                                }
-
-
+                                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                             }
                         }
-                        else if (leave_type1 == "LOP")
+                        #endregion EL_Leave
+
+                        #region LOP
+                        else if (leave_type == "LOP")
                         {
-                            //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
-                            //int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
-                            decimal Lop_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
+                            decimal Lop_leave_balance = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
                             int Cl_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype("CL");
                             int El_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype("EL");
                             decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(Cl_leave_id, leave.employee_id);
                             decimal El_leave_type = LeaveRepo.GetNoofDaysById(El_leave_id, leave.employee_id);
                             if (Cl_leave_type == 0 && El_leave_type == 0)
                             {
-                                Lop_leave_type = Lop_leave_type + noofdays;
+                                Lop_leave_balance = Lop_leave_balance + noofdays;
                                 leave.no_of_days = (int)noofdays;
-                                LeaveRepo.AddLeaveHistory(leave);
-                                if (noofdays != 0)
-                                {
-                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
 
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
-                                }
+                                Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
+                                leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
+                                LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+
+                                LeaveRepo.AddLeaveHistory(leave);
+
+                                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                             }
                             else if (Cl_leave_type == 0 && El_leave_type > 0)
                             {
-
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "you can apply the Leave in 'EL'", "you can apply the Leave in 'EL'"));
                             }
                             else if (El_leave_type == 0 && Cl_leave_type > 0)
@@ -329,26 +327,32 @@ namespace EMS.Controllers
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_510", "You have CL, EL leave balance", "You have CL, EL leave balance"));
                             }
                         }
-                        else if (leave_type1 == "WFH")
+                        #endregion LOP
+
+                        #region Wrok_From _Home
+                        else if (leave_type == "WFH")
                         {
-                            //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
-                            decimal? WFH_leave_type = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
+                            decimal? WFH_leave_balance = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
                             if (noofdays <= 2)
                             {
                                 leave.no_of_days = (int)noofdays;
+
+                                Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
+                                leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
+                                LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+
                                 LeaveRepo.AddLeaveHistory(leave);
-                                if (noofdays != 0)
-                                {
-                                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
-                                }
+
+                                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null);
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave successfully Applied"));
                             }
                             else if (noofdays > 2)
                             {
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "work from home cant be applied more than two days", "work from home cant be applied more than two dayss"));
                             }
                         }
+                        #endregion
                     }
                     else
                     {
@@ -365,6 +369,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         //[HttpPost]
         [Route("api/leavehistory/id/{employee_id?}")] // display Leavehistory in leavepage by id
         public HttpResponseMessage GetLeaveHistoryById(int employee_id)
@@ -383,6 +388,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         //[Route("api/leavepage/holidaylist")] //display holiday in apply leave page
         //public HttpResponseMessage GetHolidayListById()
         //{
@@ -401,6 +407,7 @@ namespace EMS.Controllers
         //    }
         //    return response;
         //}
+
         //[HttpPost]
         [Route("api/balanceleave/{employee_id?}")] //balance CL EL Ml Lop leave in applyleave page
         public HttpResponseMessage GetLeavePageBalanceLeave(int employee_id)
@@ -423,6 +430,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/changepassword")]
         [HttpPost]
         public HttpResponseMessage ChangePassword(ChangePasswordModel changepassword)
@@ -460,41 +468,59 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         //[HttpPost]
         [Route("api/approval/{leave_id?}/{is_approved?}/{remarks?}")]
         public HttpResponseMessage GetApproval(int leave_id, int is_approved, string remarks)
         {
             HttpResponseMessage response = null;
+            Leave leave = LeaveRepo.GetLeaveById(leave_id);
             try
             {
-                if (is_approved == 2)
+                if (is_approved == Constants.LEAVE_STATUS_APPROVED)
                 {
-                    //LeaveRepo.GetLeaveById(leave.employee_id, leave.id);
-                    //Leavebalance_sheet leave_balance = new Leavebalance_sheet();
-                    Leave leave1 = LeaveRepo.GetLeaveById(leave_id);
-                    leave1.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
-                    LeaveRepo.EditLeave(leave1);
-                    Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave1.employee_id, leave1.leavetype_id);
+                    leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
+                    LeaveRepo.EditLeave(leave);
 
-                    
-                    leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave1.no_of_days;
-                    LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
-                    Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
-                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave1.employee_id);
-
-                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_APPROVED, employee.email, reporting_to.mailid, remarks);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave Approved"));
                 }
-                else if (is_approved == 3)
+                else if (is_approved == Constants.LEAVE_STATUS_REJECTED)
                 {
-                    Leave leave1 = LeaveRepo.GetLeaveById(leave_id);
-                    leave1.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
-                    LeaveRepo.EditLeave(leave1);
-                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave1.employee_id);
-                    Employee employee = EmployeeRepo.GetEmployeeById(leave1.employee_id);
-                    MailHandler.LeaveMailing(leave1.from_date, leave1.to_date, employee.first_name, Constants.LEAVE_STATUS_REJECTED, employee.email, reporting_to.mailid, remarks);
+                    Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
+                    string leave_type_name = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                    if(leave_type_name == "CL" || leave_type_name =="ML")
+                    {
+                        leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
+                    }
+                    else if(leave_type_name == "EL")
+                    {
+                        if (leave.EL_flag > 0)
+                        {
+                            int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
+                            Leavebalance_sheet lop_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, LOP_leave_type_id);
+                            leave_balance_instance.no_of_days = (decimal)leave.EL_flag;
+                            lop_balance_instance.no_of_days = (lop_balance_instance.no_of_days - (decimal)(leave.no_of_days - leave.EL_flag));
+                            LeaveRepo.UpdateLeaveBalanceSheet(lop_balance_instance);
+                        }
+                        else
+                        {
+                            leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
+                        }
+                    }
+                    else if(leave_type_name =="LOP" || leave_type_name =="WFH")
+                    {
+                        leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
+                    }
+                    LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+
+                    leave.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
+                    LeaveRepo.EditLeave(leave);
+
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave not approved", "Leave cancel"));
                 }
+                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                Employee employee = EmployeeRepo.GetEmployeeById(leave.employee_id);
+                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, remarks);
             }
             catch (Exception exception)
             {
@@ -504,6 +530,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/employeelist/byrole/{employee_id?}")]// Get employee list by hr/project manager id
         [HttpGet]
         public HttpResponseMessage EmployeeListByRole(int employee_id)
@@ -526,6 +553,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [HttpGet]
         [Route("api/leave/pending/{employee_id?}")] //leave request project manager page
         public HttpResponseMessage GetLeaveRequestByRole(int employee_id)
@@ -544,6 +572,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/entire/leave/history/pending")] // pending approval in hr manager
         public HttpResponseMessage GetPendingApproval()
         {
@@ -567,6 +596,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/typesofleaves/list")] //for leave type list dropdown
         public HttpResponseMessage GetLeaveTypesList()
         {
@@ -584,6 +614,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/leave/fullhistoryby/{reportingto_id?}")] // pending approval in hr manager
         public HttpResponseMessage GetPendingApprovedList(int reportingto_id = 0)
         {
@@ -607,6 +638,7 @@ namespace EMS.Controllers
             }
             return response;
         }
+
         [Route("api/entire/leave/history")] // leave history of all employee (HR only can view this history list)
         public HttpResponseMessage GetLeaveHistoryList()
         {

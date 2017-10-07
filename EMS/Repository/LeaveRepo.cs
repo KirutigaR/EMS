@@ -545,7 +545,7 @@ namespace EMS.Repository
                             where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now //&& l.leave_statusid == ls.id
                             select new LeavehistoryModel
                             {
-                                id = e.id,
+                                employee_id = e.id,
                                 first_name = e.first_name,
                                 last_name = e.last_name,
                                 type_name = lt.type_name,
@@ -585,7 +585,7 @@ namespace EMS.Repository
                             where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
-                                id = e.id,
+                                employee_id = e.id,
                                 first_name = e.first_name,
                                 last_name = e.last_name,
                                 type_name = lt.type_name,
@@ -676,7 +676,7 @@ namespace EMS.Repository
                             where l.from_date > DateTime.Now && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED)
                             select new LeavehistoryModel
                             {
-                                id = e.id,
+                                employee_id = e.id,
                                 first_name = e.first_name,
                                 last_name = e.last_name,
                                 type_name = lt.type_name,
@@ -714,7 +714,7 @@ namespace EMS.Repository
                             where l.from_date > DateTime.Now
                             select new LeavehistoryModel
                             {
-                                id = e.id,
+                                employee_id = e.id,
                                 first_name = e.first_name,
                                 last_name = e.last_name,
                                 type_name = lt.type_name,
@@ -746,6 +746,38 @@ namespace EMS.Repository
                             where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING) && l.from_date >= DateTime.Now
                             select l;
                 return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+        public static LeavehistoryModel GetLeaveDetailsByLeaveId(int leave_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from l in datacontext.Leaves
+                            join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
+                            join e in datacontext.Employees on l.employee_id equals e.id
+                            where l.id == leave_id
+                            select new LeavehistoryModel
+                            {
+                                leave_id = l.id,
+                                from_date = l.from_date,
+                                to_date = l.to_date,
+                                no_of_days = l.no_of_days,
+                                leave_status = ls.leave_status,
+                                first_name = e.first_name,
+                                employee_id = e.id
+                            };
+                return query.FirstOrDefault();
             }
             catch (Exception e)
             {

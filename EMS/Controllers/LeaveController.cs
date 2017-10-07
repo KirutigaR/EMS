@@ -672,5 +672,30 @@ namespace EMS.Controllers
             }
             return response;
         }
+        [Route("api/get/leave/{leave_id?}")]
+        public HttpResponseMessage GetLeaveHistoryList(int leave_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(leave_id <= 0)
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Request", "Invalid Request"));
+                }
+                else
+                {
+                    LeavehistoryModel leavehistory = LeaveRepo.GetLeaveDetailsByLeaveId(leave_id);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leavehistory));
+                }
+                    
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

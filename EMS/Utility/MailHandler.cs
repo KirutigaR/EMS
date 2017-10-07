@@ -56,35 +56,21 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com");
                 mail.CC.Add("kirutiga96@gmail.com");
                 //Console.WriteLine("Your Message");
-                if (status == 2)
+                if (status == Constants.LEAVE_STATUS_APPROVED)
                 {
-                    //Console.WriteLine("Mail To");
-                    MailAddress to = new MailAddress(user_mail);
-
-                    //Console.WriteLine("Mail From");
-                    
-                    //Console.WriteLine("Subject");
+                    mail.To.Add(user_mail);
                     mail.Subject = "Employee Leave Status";
                     mail.Body = "Hi<br>" + user_name + "Your leave application    " + from_date + "-" + to_date + "has been approved";
                 }
-                else if(status == 3)
+                else if(status == Constants.LEAVE_STATUS_REJECTED)
                 {
-                    //Console.WriteLine("Mail To");
-                    MailAddress to = new MailAddress(user_mail);
-
-                    //Console.WriteLine("Mail From");
-                    
-                    //Console.WriteLine("Subject");
+                    mail.To.Add(user_mail);
                     mail.Subject = "Employee Leave Status";
                     mail.Body = "Hi<br>" + user_name + " Your leave application   " + from_date + "-" + to_date + "has been Rejected" + "<br> Remarks:" + remarks;
                 }
                 else 
                 {
-                    //Console.WriteLine("Mail To");
-                    MailAddress to = new MailAddress(reporting_to_mailid);
-
-                    
-                    //Console.WriteLine("Subject");
+                    mail.To.Add(user_mail);
                     mail.Subject = "Employee Leave Application";
                     mail.Body = "hi,<br>" + user_name  + " applied leave from" + from_date +" "+ "to" +" "+ to_date;
                     

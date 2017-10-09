@@ -20,12 +20,10 @@ namespace EMS.Utility
         public static decimal PT = 0 ;//2196 per year -183 per month
         public static int PROJECT_BENCH_ID = 1;
 
-        public static int[] male_leave_type = { 1, 2, 4, 5 };
-        public static int[] female_leave_type = { 1, 2, 3, 4, 5 };
-        public static int HR = 3;
-        public static int Systemrole_Manager = 8;
-        public static int Projectrole_Manager = 5;
-        public static int Projectrole_TeamLeader = 6;
-        public static int Systemrole_TeamLeader = 9;
+        public static int SYSTEMROLE_MANAGER = 8;
+        public static int PROJECTROLE_MANAGER = 5;
+        public static int PROJECTROLE_TEAMLEAD = 6;
+        public static int PROJECTROLE_TEAMMEMBER = 7;
+        public static int SYSTEMROLE_TEAMLEAD = 9;
     }
 }

@@ -78,11 +78,11 @@ namespace EMS.Controllers
                         EmployeeRepo.AssignEmployeeRole(user_role);
                         if (employee.gender == "male")
                         {
-                            EmployeeRepo.InsertLeaveBalance(employee, Constants.male_leave_type);
+                            EmployeeRepo.InsertLeaveBalance(employee, Constants.MALE_LEAVE_TYPES);
                         }
                         else
                         {
-                            EmployeeRepo.InsertLeaveBalance(employee, Constants.female_leave_type);
+                            EmployeeRepo.InsertLeaveBalance(employee, Constants.FEMALE_LEAVE_TYPES);
                         }
 
                         Salary_Structure salary = new Salary_Structure();

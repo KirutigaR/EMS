@@ -381,7 +381,7 @@ namespace EMS.Repository
                 var query = from x in datacontext.Employees
                             join y in datacontext.User_role
                             on x.user_id equals y.user_id
-                            where y.role_id == Constants.Systemrole_Manager || y.role_id == Constants.Systemrole_TeamLeader || y.role_id == Constants.Projectrole_Manager
+                            where y.role_id == Constants.SYSTEMROLE_MANAGER || y.role_id == Constants.SYSTEMROLE_TEAMLEAD || y.role_id == Constants.PROJECTROLE_MANAGER
                             select new ReportingTo
                             {
                                 emp_name = x.first_name,

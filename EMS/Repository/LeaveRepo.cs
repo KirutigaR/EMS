@@ -790,5 +790,27 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static List<Holiday_List> GetsortedHoliday()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from h in datacontext.Holiday_List
+                            where h.holiday_date >= DateTime.Now
+                            select h;
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

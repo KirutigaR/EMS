@@ -33,6 +33,24 @@ namespace EMS.Controllers
             return response;
         }
 
+        [Route("api/sorted/holiday/list")]
+        public HttpResponseMessage GetsortedHolidayList()
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                List<Holiday_List> holidayList = LeaveRepo.GetsortedHoliday();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", holidayList));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
         [Route("api/editholidaylist")]
         [HttpPost]
         public HttpResponseMessage EditHolidayList(Holiday_List holiday)

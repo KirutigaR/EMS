@@ -639,5 +639,27 @@ namespace EMS.Repository
                 datacontent.Dispose();
             }
         }
+
+        public static int GetLastAddedEmployee()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from e in datacontext.Employees orderby e.created_on descending
+                            select e.id;
+                var id = query.FirstOrDefault();
+                return id;
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                throw exception;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

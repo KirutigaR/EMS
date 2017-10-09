@@ -432,5 +432,24 @@ namespace EMS.Controllers
             }
             return Response;
         }
+
+        [HttpGet]
+        [Route("api/get/employee/recentid")]
+        public HttpResponseMessage GetLastEmployeeId(int employee_id = 0, string employee_name = null)
+        {
+            HttpResponseMessage Response = null;
+            try
+            {
+                int recent_id = EmployeeRepo.GetLastAddedEmployee();
+                Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", recent_id));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return Response;
+        }
     }
 }

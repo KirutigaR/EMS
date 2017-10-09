@@ -168,7 +168,7 @@ namespace EMS.Controllers
                     leave.to_date = leave.from_date.AddDays(182);
                 }
 
-                if (leave.from_date <= timeNow || leave.to_date <= timeNow || leave.from_date > leave.to_date)
+                if (leave.from_date < timeNow || leave.to_date < timeNow || leave.from_date > leave.to_date)
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Please select valid date ", "Please select valid date"));
                 }

@@ -546,9 +546,9 @@ namespace EMS.Controllers
 
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave not approved", "Leave cancel"));
                 }
-                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                Employee employee = EmployeeRepo.GetEmployeeById(leave.employee_id);
-                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, remarks);
+                //ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                //Employee employee = EmployeeRepo.GetEmployeeById(leave.employee_id);
+                //MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, remarks);
             }
             catch (Exception exception)
             {

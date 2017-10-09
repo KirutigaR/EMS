@@ -60,19 +60,19 @@ namespace EMS.Utility
                 {
                     mail.To.Add(user_mail);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi<br>" + user_name + "Your leave application    " + from_date + "-" + to_date + "has been approved";
+                    mail.Body = "Hi" + user_name + "<br>Your leave application    " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been approved";
                 }
                 else if(status == Constants.LEAVE_STATUS_REJECTED)
                 {
                     mail.To.Add(user_mail);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi<br>" + user_name + " Your leave application   " + from_date + "-" + to_date + "has been Rejected" + "<br> Remarks:" + remarks;
+                    mail.Body = "Hi" + user_name + "<br>Your leave application   " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been Rejected" + "<br> Remarks:" + remarks;
                 }
                 else 
                 {
                     mail.To.Add(user_mail);
                     mail.Subject = "Employee Leave Application";
-                    mail.Body = "hi,<br>" + user_name  + " applied leave from" + from_date +" "+ "to" +" "+ to_date;
+                    mail.Body = "hi,<br>" + user_name  + " applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString();
                     
                 }
 

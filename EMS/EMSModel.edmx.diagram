@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="eafacf974d634a63936a94db4f481d42" Name="Diagram1" ZoomLevel="100">
         <EntityTypeShape EntityType="EMSModel.Holiday_List" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="8.25" PointY="10.5" />
         <EntityTypeShape EntityType="EMSModel.Leave_type" Width="1.5" PointX="3" PointY="2.75" />
         <EntityTypeShape EntityType="EMSModel.Leavebalance_sheet" Width="1.5" PointX="5.25" PointY="7.75" />
         <EntityTypeShape EntityType="EMSModel.Project" Width="1.5" PointX="5" PointY="16.125" />
@@ -16,7 +15,6 @@
         <EntityTypeShape EntityType="EMSModel.Timesheet" Width="1.5" PointX="9.5" PointY="15" />
         <EntityTypeShape EntityType="EMSModel.User_role" Width="1.5" PointX="3" PointY="6.125" />
         <EntityTypeShape EntityType="EMSModel.User" Width="1.5" PointX="0.75" PointY="8" />
-        <AssociationConnector Association="EMSModel.FK__Leave__leavetype__440B1D61" />
         <AssociationConnector Association="EMSModel.FK__Leavebala__leave__47DBAE45" />
         <AssociationConnector Association="EMSModel.FK__Project_r__proje__38996AB5" />
         <AssociationConnector Association="EMSModel.FK__Task__project_id__3C69FB99" />
@@ -32,18 +30,21 @@
         <EntityTypeShape EntityType="EMSModel.Employee" Width="1.5" PointX="3" PointY="9.125" />
         <AssociationConnector Association="EMSModel.FK__Employee__report__5BE2A6F2" />
         <AssociationConnector Association="EMSModel.FK__Employee__user_i__5CD6CB2B" />
-        <AssociationConnector Association="EMSModel.FK__Leave__employee___74AE54BC" />
         <AssociationConnector Association="EMSModel.FK__Leavebala__emplo__46E78A0C" />
         <AssociationConnector Association="EMSModel.FK__Project_r__emplo__37A5467C" />
         <AssociationConnector Association="EMSModel.FK__Timesheet__emplo__3F466844" />
         <EntityTypeShape EntityType="EMSModel.Status_leave" Width="1.5" PointX="7.375" PointY="3.875" />
-        <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0A9D95DB" />
         <EntityTypeShape EntityType="EMSModel.Incometax" Width="1.5" PointX="5.5" PointY="26.375" />
         <EntityTypeShape EntityType="EMSModel.Salary_Structure" Width="1.5" PointX="2.625" PointY="24.125" />
         <AssociationConnector Association="EMSModel.FK__Incometax__emp_i__29221CFB" />
         <AssociationConnector Association="EMSModel.FK__Salary_St__emp_i__2EDAF651" />
         <EntityTypeShape EntityType="EMSModel.Payslip" Width="1.5" PointX="5.25" PointY="20.375" />
         <AssociationConnector Association="EMSModel.FK__Payslip__emp_id__2BFE89A6" />
+        <EntityTypeShape EntityType="EMSModel.Leave" Width="1.5" PointX="9.625" PointY="7.625" />
+        <AssociationConnector Association="EMSModel.FK__Leave__employee___09A971A2" />
+        <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0A9D95DB" />
+        <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0C85DE4D" />
+        <AssociationConnector Association="EMSModel.FK__Leave__leavetype__0B91BA14" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -21,10 +21,11 @@ namespace EMS
         public System.DateTime to_date { get; set; }
         public int no_of_days { get; set; }
         public int leave_statusid { get; set; }
-        public Nullable<int> EL_flag { get; set; }
+        public Nullable<decimal> EL_flag { get; set; }
     
-        public virtual Leave_type Leave_type { get; set; }
         public virtual Employee Employee { get; set; }
         public virtual Status_leave Status_leave { get; set; }
+        public virtual Status_leave Status_leave1 { get; set; }
+        public virtual Leave_type Leave_type { get; set; }
     }
 }

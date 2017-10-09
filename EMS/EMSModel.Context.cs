@@ -26,7 +26,6 @@ namespace EMS
         }
     
         public virtual DbSet<Holiday_List> Holiday_List { get; set; }
-        public virtual DbSet<Leave> Leaves { get; set; }
         public virtual DbSet<Leave_type> Leave_type { get; set; }
         public virtual DbSet<Leavebalance_sheet> Leavebalance_sheet { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
@@ -44,5 +43,6 @@ namespace EMS
         public virtual DbSet<Incometax> Incometaxes { get; set; }
         public virtual DbSet<Salary_Structure> Salary_Structure { get; set; }
         public virtual DbSet<Payslip> Payslips { get; set; }
+        public virtual DbSet<Leave> Leaves { get; set; }
     }
 }

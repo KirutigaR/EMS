@@ -18,6 +18,7 @@ namespace EMS
         public Status_leave()
         {
             this.Leaves = new HashSet<Leave>();
+            this.Leaves1 = new HashSet<Leave>();
         }
     
         public int id { get; set; }
@@ -26,5 +27,7 @@ namespace EMS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leave> Leaves { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Leave> Leaves1 { get; set; }
     }
 }

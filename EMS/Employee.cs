@@ -18,13 +18,13 @@ namespace EMS
         public Employee()
         {
             this.Employee1 = new HashSet<Employee>();
-            this.Leaves = new HashSet<Leave>();
             this.Leavebalance_sheet = new HashSet<Leavebalance_sheet>();
             this.Project_role = new HashSet<Project_role>();
             this.Timesheets = new HashSet<Timesheet>();
             this.Incometaxes = new HashSet<Incometax>();
             this.Salary_Structure = new HashSet<Salary_Structure>();
             this.Payslips = new HashSet<Payslip>();
+            this.Leaves = new HashSet<Leave>();
         }
     
         public int id { get; set; }
@@ -53,8 +53,6 @@ namespace EMS
         public virtual Employee Employee2 { get; set; }
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Leave> Leaves { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leavebalance_sheet> Leavebalance_sheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Project_role> Project_role { get; set; }
@@ -66,5 +64,7 @@ namespace EMS
         public virtual ICollection<Salary_Structure> Salary_Structure { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payslip> Payslips { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Leave> Leaves { get; set; }
     }
 }

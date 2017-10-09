@@ -17,8 +17,8 @@ namespace EMS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Leave_type()
         {
-            this.Leaves = new HashSet<Leave>();
             this.Leavebalance_sheet = new HashSet<Leavebalance_sheet>();
+            this.Leaves = new HashSet<Leave>();
         }
     
         public int id { get; set; }
@@ -27,8 +27,8 @@ namespace EMS
         public int days_per_year { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Leave> Leaves { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leavebalance_sheet> Leavebalance_sheet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Leave> Leaves { get; set; }
     }
 }

@@ -219,7 +219,7 @@ namespace EMS.Controllers
 
                     #endregion ML_Leave
 
-                    else if (leave.leavetype_id != 0 && leave.from_date != DateTime.MinValue && leave.to_date != DateTime.MinValue && (leave.to_date > timeNow) && leave.to_date >= leave.from_date)
+                    else if (leave.leavetype_id != 0 && leave.from_date != DateTime.MinValue && leave.to_date != DateTime.MinValue && (leave.to_date >= timeNow) && leave.to_date >= leave.from_date)
                     {
                         List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
                         decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
@@ -522,7 +522,7 @@ namespace EMS.Controllers
                             int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
                             Leavebalance_sheet lop_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, LOP_leave_type_id);
                             leave_balance_instance.no_of_days = (decimal)leave.EL_flag;
-                            lop_balance_instance.no_of_days = (lop_balance_instance.no_of_days - (decimal)(leave.no_of_days - leave.EL_flag));
+                            lop_balance_instance.no_of_days =(decimal)(lop_balance_instance.no_of_days - (decimal)(leave.no_of_days - leave.EL_flag));
                             LeaveRepo.UpdateLeaveBalanceSheet(lop_balance_instance);
                         }
                         else

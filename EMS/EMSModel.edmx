@@ -87,7 +87,7 @@
           <Property Name="to_date" Type="date" Nullable="false" />
           <Property Name="no_of_days" Type="int" Nullable="false" />
           <Property Name="leave_statusid" Type="int" Nullable="false" />
-          <Property Name="EL_flag" Type="int" />
+          <Property Name="EL_flag" Type="decimal" Precision="3" Scale="1" />
         </EntityType>
         <EntityType Name="Leave_type">
           <Key>
@@ -106,6 +106,7 @@
           <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="leavetype_id" Type="int" Nullable="false" />
           <Property Name="no_of_days" Type="decimal" Precision="5" Scale="1" Nullable="false" />
+          <Property Name="actual_balance" Type="decimal" Precision="3" Scale="1" />
         </EntityType>
         <EntityType Name="Payslip">
           <Key>
@@ -594,7 +595,6 @@
       <Schema Namespace="EMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="EMSEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Holiday_List" EntityType="EMSModel.Holiday_List" />
-          <EntitySet Name="Leaves" EntityType="EMSModel.Leave" />
           <EntitySet Name="Leave_type" EntityType="EMSModel.Leave_type" />
           <EntitySet Name="Leavebalance_sheet" EntityType="EMSModel.Leavebalance_sheet" />
           <EntitySet Name="Projects" EntityType="EMSModel.Project" />
@@ -604,10 +604,6 @@
           <EntitySet Name="Timesheets" EntityType="EMSModel.Timesheet" />
           <EntitySet Name="User_role" EntityType="EMSModel.User_role" />
           <EntitySet Name="Users" EntityType="EMSModel.User" />
-          <AssociationSet Name="FK__Leave__leavetype__440B1D61" Association="EMSModel.FK__Leave__leavetype__440B1D61">
-            <End Role="Leave_type" EntitySet="Leave_type" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
           <AssociationSet Name="FK__Leavebala__leave__47DBAE45" Association="EMSModel.FK__Leavebala__leave__47DBAE45">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
@@ -656,10 +652,6 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__employee___74AE54BC" Association="EMSModel.FK__Leave__employee___74AE54BC">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
           <AssociationSet Name="FK__Leavebala__emplo__46E78A0C" Association="EMSModel.FK__Leavebala__emplo__46E78A0C">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
@@ -673,10 +665,6 @@
             <End Role="Timesheet" EntitySet="Timesheets" />
           </AssociationSet>
           <EntitySet Name="Status_leave" EntityType="EMSModel.Status_leave" />
-          <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="EMSModel.FK__Leave__leave_sta__0A9D95DB">
-            <End Role="Status_leave" EntitySet="Status_leave" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
           <EntitySet Name="Incometaxes" EntityType="EMSModel.Incometax" />
           <EntitySet Name="Salary_Structure" EntityType="EMSModel.Salary_Structure" />
           <AssociationSet Name="FK__Incometax__emp_i__29221CFB" Association="EMSModel.FK__Incometax__emp_i__29221CFB">
@@ -692,6 +680,23 @@
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Payslip" EntitySet="Payslips" />
           </AssociationSet>
+          <EntitySet Name="Leaves" EntityType="EMSModel.Leave" />
+          <AssociationSet Name="FK__Leave__employee___09A971A2" Association="EMSModel.FK__Leave__employee___09A971A2">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="EMSModel.FK__Leave__leave_sta__0A9D95DB">
+            <End Role="Status_leave" EntitySet="Status_leave" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__leave_sta__0C85DE4D" Association="EMSModel.FK__Leave__leave_sta__0C85DE4D">
+            <End Role="Status_leave" EntitySet="Status_leave" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__leavetype__0B91BA14" Association="EMSModel.FK__Leave__leavetype__0B91BA14">
+            <End Role="Leave_type" EntitySet="Leave_type" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
@@ -701,22 +706,6 @@
           <Property Name="holiday_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="holiday_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Leave">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="employee_id" Type="Int32" Nullable="false" />
-          <Property Name="leavetype_id" Type="Int32" Nullable="false" />
-          <Property Name="from_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="no_of_days" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leave__leavetype__440B1D61" FromRole="Leave" ToRole="Leave_type" />
-          <Property Name="leave_statusid" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___74AE54BC" FromRole="Leave" ToRole="Employee" />
-          <NavigationProperty Name="Status_leave" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Leave" ToRole="Status_leave" />
-          <Property Name="EL_flag" Type="Int32" />
-        </EntityType>
         <EntityType Name="Leave_type">
           <Key>
             <PropertyRef Name="id" />
@@ -725,8 +714,8 @@
           <Property Name="type_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="description" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="days_per_year" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leavetype__440B1D61" FromRole="Leave_type" ToRole="Leave" />
           <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__leave__47DBAE45" FromRole="Leave_type" ToRole="Leavebalance_sheet" />
+          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leavetype__0B91BA14" FromRole="Leave_type" ToRole="Leave" />
         </EntityType>
         <EntityType Name="Leavebalance_sheet">
           <Key>
@@ -738,6 +727,7 @@
           <Property Name="no_of_days" Type="Decimal" Precision="5" Scale="1" Nullable="false" />
           <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leavebala__leave__47DBAE45" FromRole="Leavebalance_sheet" ToRole="Leave_type" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Leavebalance_sheet" ToRole="Employee" />
+          <Property Name="actual_balance" Type="Decimal" Precision="3" Scale="1" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -827,18 +817,6 @@
           <NavigationProperty Name="User_role" Relationship="EMSModel.FK__User_role__user___2D27B809" FromRole="User" ToRole="User_role" />
           <NavigationProperty Name="Employees" Relationship="EMSModel.FK__Employee__user_i__5CD6CB2B" FromRole="User" ToRole="Employee" />
         </EntityType>
-        <Association Name="FK__Leave__leavetype__440B1D61">
-          <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Leave_type">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="leavetype_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Leavebala__leave__47DBAE45">
           <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
           <End Type="EMSModel.Leavebalance_sheet" Role="Leavebalance_sheet" Multiplicity="*" />
@@ -1001,7 +979,6 @@
           <NavigationProperty Name="Employee1" Relationship="EMSModel.FK__Employee__report__5BE2A6F2" FromRole="Employee" ToRole="Employee1" />
           <NavigationProperty Name="Employee2" Relationship="EMSModel.FK__Employee__report__5BE2A6F2" FromRole="Employee1" ToRole="Employee" />
           <NavigationProperty Name="User" Relationship="EMSModel.FK__Employee__user_i__5CD6CB2B" FromRole="Employee" ToRole="User" />
-          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___74AE54BC" FromRole="Employee" ToRole="Leave" />
           <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Employee" ToRole="Leavebalance_sheet" />
           <NavigationProperty Name="Project_role" Relationship="EMSModel.FK__Project_r__emplo__37A5467C" FromRole="Employee" ToRole="Project_role" />
           <NavigationProperty Name="Timesheets" Relationship="EMSModel.FK__Timesheet__emplo__3F466844" FromRole="Employee" ToRole="Timesheet" />
@@ -1010,6 +987,7 @@
           <NavigationProperty Name="Payslips" Relationship="EMSModel.FK__Payslip__emp_id__2BFE89A6" FromRole="Employee" ToRole="Payslip" />
           <Property Name="year_of_experience" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
           <Property Name="created_on" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Employee" ToRole="Leave" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -1032,18 +1010,6 @@
             </Principal>
             <Dependent Role="Employee">
               <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Leave__employee___74AE54BC">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="employee_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1091,19 +1057,8 @@
           <Property Name="leave_status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="leave_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Status_leave" ToRole="Leave" />
+          <NavigationProperty Name="Leaves1" Relationship="EMSModel.FK__Leave__leave_sta__0C85DE4D" FromRole="Status_leave" ToRole="Leave" />
         </EntityType>
-        <Association Name="FK__Leave__leave_sta__0A9D95DB">
-          <End Type="EMSModel.Status_leave" Role="Status_leave" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status_leave">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="leave_statusid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Incometax">
           <Key>
             <PropertyRef Name="id" />
@@ -1199,6 +1154,71 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Leave">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employee_id" Type="Int32" Nullable="false" />
+          <Property Name="leavetype_id" Type="Int32" Nullable="false" />
+          <Property Name="from_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="no_of_days" Type="Int32" Nullable="false" />
+          <Property Name="leave_statusid" Type="Int32" Nullable="false" />
+          <Property Name="EL_flag" Type="Decimal" Precision="3" Scale="1" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Leave" ToRole="Employee" />
+          <NavigationProperty Name="Status_leave" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Leave" ToRole="Status_leave" />
+          <NavigationProperty Name="Status_leave1" Relationship="EMSModel.FK__Leave__leave_sta__0C85DE4D" FromRole="Leave" ToRole="Status_leave" />
+          <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leave__leavetype__0B91BA14" FromRole="Leave" ToRole="Leave_type" />
+        </EntityType>
+        <Association Name="FK__Leave__employee___09A971A2">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__leave_sta__0A9D95DB">
+          <End Type="EMSModel.Status_leave" Role="Status_leave" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_leave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="leave_statusid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__leave_sta__0C85DE4D">
+          <End Type="EMSModel.Status_leave" Role="Status_leave" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_leave">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="leave_statusid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__leavetype__0B91BA14">
+          <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leave_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="leavetype_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1210,20 +1230,6 @@
               <MappingFragment StoreEntitySet="Holiday_List">
                 <ScalarProperty Name="holiday_name" ColumnName="holiday_name" />
                 <ScalarProperty Name="holiday_date" ColumnName="holiday_date" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Leaves">
-            <EntityTypeMapping TypeName="EMSModel.Leave">
-              <MappingFragment StoreEntitySet="Leave">
-                <ScalarProperty Name="EL_flag" ColumnName="EL_flag" />
-                <ScalarProperty Name="leave_statusid" ColumnName="leave_statusid" />
-                <ScalarProperty Name="no_of_days" ColumnName="no_of_days" />
-                <ScalarProperty Name="to_date" ColumnName="to_date" />
-                <ScalarProperty Name="from_date" ColumnName="from_date" />
-                <ScalarProperty Name="leavetype_id" ColumnName="leavetype_id" />
-                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1241,6 +1247,7 @@
           <EntitySetMapping Name="Leavebalance_sheet">
             <EntityTypeMapping TypeName="EMSModel.Leavebalance_sheet">
               <MappingFragment StoreEntitySet="Leavebalance_sheet">
+                <ScalarProperty Name="actual_balance" ColumnName="actual_balance" />
                 <ScalarProperty Name="no_of_days" ColumnName="no_of_days" />
                 <ScalarProperty Name="leavetype_id" ColumnName="leavetype_id" />
                 <ScalarProperty Name="employee_id" ColumnName="employee_id" />
@@ -1446,6 +1453,20 @@
                 <ScalarProperty Name="basic_pay" ColumnName="basic_pay" />
                 <ScalarProperty Name="payslip_month" ColumnName="payslip_month" />
                 <ScalarProperty Name="emp_id" ColumnName="emp_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="EMSModel.Leave">
+              <MappingFragment StoreEntitySet="Leave">
+                <ScalarProperty Name="EL_flag" ColumnName="EL_flag" />
+                <ScalarProperty Name="leave_statusid" ColumnName="leave_statusid" />
+                <ScalarProperty Name="no_of_days" ColumnName="no_of_days" />
+                <ScalarProperty Name="to_date" ColumnName="to_date" />
+                <ScalarProperty Name="from_date" ColumnName="from_date" />
+                <ScalarProperty Name="leavetype_id" ColumnName="leavetype_id" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

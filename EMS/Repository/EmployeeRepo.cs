@@ -467,14 +467,14 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from x in datacontext.Employees
-                            join y in datacontext.User_role
-                            on x.user_id equals y.user_id
-                            where y.role_id == Constants.ROLE_HR || y.role_id == Constants.SYSTEMROLE_MANAGER || y.role_id == Constants.SYSTEMROLE_TEAMLEAD
+                var query = from employee in datacontext.Employees
+                            join userrole in datacontext.User_role on employee.user_id equals userrole.user_id
+                            join user in datacontext.Users on employee.user_id equals user.id
+                            where (user.is_active == 1) && (userrole.role_id == Constants.ROLE_HR || userrole.role_id == Constants.SYSTEMROLE_MANAGER || userrole.role_id == Constants.SYSTEMROLE_TEAMLEAD)
                             select new ReportingTo
                             {
-                                emp_name = x.first_name,
-                                emp_id = x.id
+                                emp_name = employee.first_name,
+                                emp_id = employee.id
                             };
                 return query.ToList();
             }
@@ -598,12 +598,9 @@ namespace EMS.Repository
                     predicate = predicate.And(i => i.first_name == Employee_name).Or(i=>i.last_name == Employee_name);
                 }
                 var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
-                            join userrole in datacontent.User_role
-                            on employee.user_id equals userrole.user_id
-                            join designation in datacontent.Designations
-                            on employee.designation equals designation.id
-                            join employee1 in datacontent.Employees
-                            on employee.reporting_to equals employee1.id
+                            join userrole in datacontent.User_role on employee.user_id equals userrole.user_id
+                            join designation in datacontent.Designations on employee.designation equals designation.id
+                            join employee1 in datacontent.Employees on employee.reporting_to equals employee1.id
                             select new EmployeeModel
                             {
                                 id = employee.id,
@@ -648,8 +645,10 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from e in datacontext.Employees orderby e.created_on descending
-                            select e.id;
+                var query = from emp in datacontext.Employees orderby emp.created_on descending
+                            join user in datacontext.Users on emp.user_id equals user.id
+                            where user.is_active == 1
+                            select emp.id;
                 var id = query.FirstOrDefault();
                 return id;
             }

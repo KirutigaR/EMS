@@ -297,7 +297,10 @@ namespace EMS.Controllers
             try
             {
                 List<ReportingTo> reporting_to_list = EmployeeRepo.GetReportingtoList();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", reporting_to_list));
+                if(reporting_to_list != null)
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", reporting_to_list));
+                else
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_405", "No active reporters found", "No active reporters found"));
             }
             catch (Exception exception)
             {

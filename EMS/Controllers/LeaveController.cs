@@ -161,6 +161,7 @@ namespace EMS.Controllers
                 if(applied_from_year>DateTime.Now.Year || applied_to_year>DateTime.Now.Year && leave_type!="ML")
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Leave cannot be applied for the future year", "Leave cannot be applied for the future year"));
+                    return response;
                 }
 
                 if (leave_type == "ML" && leave.from_date >= timeNow)

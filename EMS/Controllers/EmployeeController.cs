@@ -100,11 +100,11 @@ namespace EMS.Controllers
                             PayslipRepo.AddPayslip(payslip);
                             string username = employee.first_name + " " + employee.last_name;
                             MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
-                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee added Successfully"));
+                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee added Successfully", "Employee added Successfully"));
                         }
                         else
                         {
-                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "Active Salary structure not available", "Error in salary structure generation or payslip generation"));
+                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "Error in salary structure generation or payslip generation", "Error in salary structure generation or payslip generation"));
                         }
                     }
                     else
@@ -193,7 +193,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json", "Invalid Input : Please check input Json"));
                 }
             }
             catch (Exception exception)
@@ -225,7 +225,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check input Json"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json", "Invalid Input : Please check input Json"));
                 }
             }
             catch (Exception exception)
@@ -254,7 +254,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee ID doesnot exists", "Invalid Employee ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee ID doesnot exists", "Employee ID doesnot exists"));
                     }
                 }
                 else
@@ -421,7 +421,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_102", "Failure", "No id or name found to search"));
+                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_102", "Failure : No id or name found to search", "No id or name found to search"));
                 }
             }
             catch (Exception exception)
@@ -434,7 +434,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/get/employee/recentid")]
+        [Route("api/get/last/employee/id")]
         public HttpResponseMessage GetLastEmployeeId(int employee_id = 0, string employee_name = null)
         {
             HttpResponseMessage Response = null;

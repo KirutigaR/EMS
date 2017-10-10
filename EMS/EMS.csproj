@@ -251,6 +251,7 @@
     <Compile Include="Utility\DecryptPassword.cs" />
     <Compile Include="Utility\EMSResponseMessage.cs" />
     <Compile Include="Utility\EncryptPassword.cs" />
+    <Compile Include="Utility\GetSheet.cs" />
     <Compile Include="Utility\MailHandler.cs" />
     <Compile Include="Utility\PasswordGenerator.cs" />
     <Compile Include="Utility\SalaryCalculation.cs" />
@@ -274,7 +275,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

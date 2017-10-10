@@ -8,6 +8,13 @@ using System.Diagnostics;
 using EMS.Repository;
 using EMS.Utility;
 using EMS.Models;
+using System.Threading.Tasks;
+using System.Web;
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.OleDb;
+using System.IO;
+using System.Configuration;
 
 namespace EMS.Controllers
 {
@@ -81,8 +88,130 @@ namespace EMS.Controllers
             }
             return response;
         }
-        
 
+        [HttpPost]
+        [Route("api/bulkupload")]
+        public async Task<HttpResponseMessage> PostFormData()
+        {
+            // Check if the request contains multipart/form-data.
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            string root = HttpContext.Current.Server.MapPath("~/App_Data");
+            var provider = new MultipartFormDataStreamProvider(root);
+
+            DataSet ds = new DataSet();
+            DataSet ospDS = new DataSet();
+            SqlConnection con = null;
+            OleDbDataAdapter oda = null;
+            SqlBulkCopy objbulk = null;
+
+            try
+            {
+                // Read the form data.
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                // This illustrates how to get the file names.
+                foreach (MultipartFileData file in provider.FileData)
+                {
+                    Trace.WriteLine(file.Headers.ContentDisposition.FileName);
+                    Trace.WriteLine("Server file path: " + file.LocalFileName);
+                }
+                MultipartFileData fileData = provider.FileData.First();
+                string fileName = fileData.Headers.ContentDisposition.FileName;
+
+                if (fileName.StartsWith("\"") && fileName.EndsWith("\""))
+                {
+                    fileName = fileName.Trim('"');
+                }
+
+                string destinationFileName = fileName + Guid.NewGuid().ToString() + Path.GetExtension(fileName.Replace(" ", "_"));
+                //string destinationFileName = fileName;
+                // Use the Path.Combine method to safely append the file name to the path.
+                // Will not overwrite if the destination file already exists.
+                File.Move(fileData.LocalFileName, Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data/Uploads/"), destinationFileName));
+                File.Delete(fileData.LocalFileName);
+
+                string fileExtension = Path.GetExtension(destinationFileName);
+                string fileLocation = HttpContext.Current.Server.MapPath("~/App_Data/Uploads/") + destinationFileName;
+
+                if (fileExtension == ".xls" || fileExtension == ".xlsx")
+                {
+
+                    string excelConnectionString = string.Empty;
+                    excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                    //connection String for xls file format.
+                    if (fileExtension == ".xls")
+                    {
+                        excelConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                    }
+                    //connection String for xlsx file format.
+                    else if (fileExtension == ".xlsx")
+                    {
+                        excelConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileLocation + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                    }
+                    //Create Connection to Excel work book and add oledb namespace
+                    OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
+                    excelConnection.Open();
+                    string[] sheets = Utility.GetSheet.GetSheetName(excelConnection);
+                    bool flag = false;
+                    if (sheets.Length == 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, "No Sheets available in the excel file", "Please upload valid excel file");
+                    }
+                    else
+                    {
+                        string query = string.Format("Select * FROM [{0}]", sheets.FirstOrDefault());
+                        oda = new OleDbDataAdapter(query, excelConnection);
+                        oda.Fill(ds);
+                        DataTable Exceldt = ds.Tables[0];
+
+                        string sqlconn = ConfigurationManager.ConnectionStrings["dbcon"].ConnectionString;
+                        con = new SqlConnection(sqlconn);
+                        //creating object of SqlBulkCopy    
+                        objbulk = new SqlBulkCopy(con);
+                        //assigning Destination table name    
+
+                        objbulk.DestinationTableName = "EMS_Leave_Balance_Temp";
+                        //Mapping Table column    
+                        objbulk.ColumnMappings.Add("Employee Id", "Employee_id");
+                        objbulk.ColumnMappings.Add("CL", "CL");
+                        objbulk.ColumnMappings.Add("EL", "EL");
+                        objbulk.ColumnMappings.Add("ML", "ML");
+                        objbulk.ColumnMappings.Add("LOP", "LOP");
+                        objbulk.ColumnMappings.Add("WFH", "WFH");
+
+                        //inserting Datatable Records to DataBase    
+                        con.Open();
+                        objbulk.WriteToServer(Exceldt);
+                        con.Close();
+                        flag = true;
+                    }
+
+                    //if (flag)
+                    //{
+                    //    if (!DefaultRepo.LoadDataFromTempTableSP())
+                    //    {
+                    //        return Request.CreateResponse(HttpStatusCode.OK, "Some problem in Stored Procedure");
+                    //    }
+                    //}
+                    return Request.CreateResponse(HttpStatusCode.OK, "table created");
+
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, "Please upload valid excel file");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
     }
     
 }

@@ -114,7 +114,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Invalid Input - check the fileds", "Please check input Json some mandatory fields are missing"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Invalid Input - check the fileds", "Invalid Input - check the fileds"));
                 }
             }
             catch (DbEntityValidationException DBexception)

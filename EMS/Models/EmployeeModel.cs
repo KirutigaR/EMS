@@ -31,5 +31,6 @@ namespace EMS.Models
         public string blood_group { get; set; }
         public decimal ctc { get; set; }
         public DateTime created_on { get; set; }
+        public string role_name { get; set; }
     }
 }

@@ -268,6 +268,7 @@ namespace EMS.Repository
                             on employee.designation equals designation.id
                             join employee1 in datacontent.Employees
                             on employee.reporting_to equals employee1.id
+                            join role in datacontent.Roles on userrole.role_id equals role.id
                             where employee.id == employee_id
                             select new EmployeeModel
                             {
@@ -293,7 +294,8 @@ namespace EMS.Repository
                                 emergency_contact_person = employee.emergency_contact_person,
                                 medical_insurance_no = employee.medical_insurance_no,
                                 PF_no = employee.PF_no,
-                                ctc = salary.ctc
+                                ctc = salary.ctc,
+                                role_name = role.role_name
                             };
                 return query.FirstOrDefault();
             }

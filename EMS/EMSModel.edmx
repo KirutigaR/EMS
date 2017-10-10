@@ -106,7 +106,7 @@
           <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="leavetype_id" Type="int" Nullable="false" />
           <Property Name="no_of_days" Type="decimal" Precision="5" Scale="1" Nullable="false" />
-          <Property Name="actual_balance" Type="decimal" Precision="3" Scale="1" />
+          <Property Name="actual_balance" Type="decimal" Precision="5" Scale="1" />
         </EntityType>
         <EntityType Name="Payslip">
           <Key>
@@ -727,7 +727,7 @@
           <Property Name="no_of_days" Type="Decimal" Precision="5" Scale="1" Nullable="false" />
           <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leavebala__leave__47DBAE45" FromRole="Leavebalance_sheet" ToRole="Leave_type" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leavebala__emplo__46E78A0C" FromRole="Leavebalance_sheet" ToRole="Employee" />
-          <Property Name="actual_balance" Type="Decimal" Precision="3" Scale="1" />
+          <Property Name="actual_balance" Type="Decimal" Precision="5" Scale="1" />
         </EntityType>
         <EntityType Name="Project">
           <Key>

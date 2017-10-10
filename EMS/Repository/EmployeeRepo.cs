@@ -342,6 +342,7 @@ namespace EMS.Repository
                     leave_balance.employee_id = employee.id;
                     leave_balance.leavetype_id = arr[i];
                     leave_balance.no_of_days = (decimal)Utils.LeaveCalculationBasedDOJ(employee.date_of_joining, arr[i]);
+                    leave_balance.actual_balance = (decimal)Utils.LeaveCalculationBasedDOJ(employee.date_of_joining, arr[i]);
                     datacontext.Leavebalance_sheet.Add(leave_balance);
                 }
                 datacontext.SaveChanges();

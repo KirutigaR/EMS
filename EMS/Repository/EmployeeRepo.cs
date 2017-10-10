@@ -281,7 +281,7 @@ namespace EMS.Repository
                                 date_of_joining = employee.date_of_joining,
                                 contact_no = employee.contact_no,
                                 //user_id = employee.user_id,
-                                //role_id = userrole.role_id,
+                                role_id = userrole.role_id,
                                 //reporting_to = employee.reporting_to,
                                 reportingto_name = employee1.first_name + " " + employee1.last_name,
                                 Year_of_experience = employee.year_of_experience,

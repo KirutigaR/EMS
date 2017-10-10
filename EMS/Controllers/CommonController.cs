@@ -212,6 +212,43 @@ namespace EMS.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
         }
+        [Route("api/changepassword")]
+        [HttpPost]
+        public HttpResponseMessage ChangePassword(ChangePasswordModel changepassword)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                int user_id = LeaveRepo.GetUserIdById(changepassword.id);
+                User user_instance = LeaveRepo.GetUserById(user_id);
+                if (changepassword.new_password == changepassword.confirm_password)
+                {
+                    if (changepassword.oldpassword == user_instance.password)
+                    {
+                        user_instance.password = changepassword.new_password;
+                        LeaveRepo.EditUserPassword(user_instance);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Password sucessfully changed"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "password not matched", "password mismatch"));
+                    }
+
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "confirm password not match", "new password and confirm password doesnot match"));
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
     
 }

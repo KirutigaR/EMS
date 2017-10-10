@@ -450,43 +450,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/changepassword")]
-        [HttpPost]
-        public HttpResponseMessage ChangePassword(ChangePasswordModel changepassword)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                int user_id = LeaveRepo.GetUserIdById(changepassword.id);
-                User user_instance = LeaveRepo.GetUserById(user_id);
-                if (changepassword.new_password == changepassword.confirm_password)
-                {
-                    if (changepassword.oldpassword == user_instance.password)
-                    {
-                        user_instance.password = changepassword.new_password;
-                        LeaveRepo.EditUserPassword(user_instance);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Password sucessfully changed"));
-                    }
-                    else
-                    {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "password not matched", "password mismatch"));
-                    }
-
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "confirm password not match", "new password and confirm password doesnot match"));
-                }
-
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
-            }
-            return response;
-        }
+        
 
         //[HttpPost]
         [Route("api/approval/{leave_id?}/{is_approved?}/{remarks?}")]
@@ -560,28 +524,28 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/employeelist/byrole/{employee_id?}")]// Get employee list by hr/project manager id
-        [HttpGet]
-        public HttpResponseMessage EmployeeListByRole(int employee_id)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                //Project_role project_role = ProjectRepo.GetProjectIdRoleId(e_id);
-                //string project_name = ProjectRepo.GetProjectName(project_role.project_id);
-                //string role_name = ProjectRepo.GetProjectRole(project_role.role_id);
-                List<EmployeeListByRoleModel> employee_list_byrole = LeaveRepo.GetEmployeeListByRole(employee_id);
-                //List<EmployeeListByRoleModel> emp_proj_details_byrole = LeaveRepo.emp_proj_details_byrole(employee_list_byrole);
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", employee_list_byrole));
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
-            }
-            return response;
-        }
+        //[Route("api/employeelist/byrole/{employee_id?}")]// Get employee list by hr/project manager id
+        //[HttpGet]
+        //public HttpResponseMessage EmployeeListByRole(int employee_id)
+        //{
+        //    HttpResponseMessage response = null;
+        //    try
+        //    {
+        //        //Project_role project_role = ProjectRepo.GetProjectIdRoleId(e_id);
+        //        //string project_name = ProjectRepo.GetProjectName(project_role.project_id);
+        //        //string role_name = ProjectRepo.GetProjectRole(project_role.role_id);
+        //        List<EmployeeListByRoleModel> employee_list_byrole = LeaveRepo.GetEmployeeListByRole(employee_id);
+        //        //List<EmployeeListByRoleModel> emp_proj_details_byrole = LeaveRepo.emp_proj_details_byrole(employee_list_byrole);
+        //        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", employee_list_byrole));
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        Debug.WriteLine(exception.Message);
+        //        Debug.WriteLine(exception.GetBaseException());
+        //        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+        //    }
+        //    return response;
+        //}
 
         [HttpGet]
         [Route("api/leave/pending/{employee_id?}")] //leave request project manager page
@@ -691,7 +655,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/get/leave/{leave_id?}")]
+        [Route("api/get/leave/{leave_id?}")] 
         public HttpResponseMessage GetLeaveHistoryList(int leave_id)
         {
             HttpResponseMessage response = null;

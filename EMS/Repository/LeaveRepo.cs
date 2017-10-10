@@ -286,8 +286,9 @@ namespace EMS.Repository
                             on l.leavetype_id equals lt.id
                             join ls in datacontext.Status_leave
                             on l.leave_statusid equals ls.id
+                            join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
-                            where l.employee_id == id//&& l.leavetype_id == 2
+                            where l.employee_id == id && u.is_active == 1//&& l.leavetype_id == 2
                             select new LeavehistoryModel
                             {
                                 //id = e.id,
@@ -333,15 +334,16 @@ namespace EMS.Repository
         //        datacontext.Dispose();
         //    }
         //}
-        public static List<LeaveBalanceModel> GetLeaveBalanceById(int id)
+        public static List<LeaveBalanceModel> GetLeaveBalanceById(int employee_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from lbs in datacontext.Leavebalance_sheet
-                            join lt in datacontext.Leave_type
-                            on lbs.leavetype_id equals lt.id
-                            where lbs.employee_id == id
+                            //join e in datacontext.Employees on lbs.employee_id equals e.id
+                            join lt in datacontext.Leave_type on lbs.leavetype_id equals lt.id
+                            //join u in datacontext.Users on e.
+                            where lbs.employee_id == employee_id
                             select new LeaveBalanceModel
                             {
                                 leavetype_id = lbs.leavetype_id,
@@ -541,8 +543,9 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
+                            join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
-                            where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now //&& l.leave_statusid == ls.id
+                            where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now && u.is_active ==1//&& l.leave_statusid == ls.id
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -581,8 +584,9 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
-                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now
+                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now && u.is_active ==1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -655,15 +659,15 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<LeavehistoryModel> GetPendingApprovedLeave(int r_id)
+        public static List<LeavehistoryModel> GetPendingApprovedLeave(int reportingto_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
-                if (r_id != 0)
+                if (reportingto_id != 0)
                 {
-                    predicate = predicate.And(X => X.reporting_to == r_id);
+                    predicate = predicate.And(X => X.reporting_to == reportingto_id);
                 }
                 var query = from l in datacontext.Leaves
                             join e in datacontext.Employees.AsExpandable().Where(predicate)
@@ -672,8 +676,9 @@ namespace EMS.Repository
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
                             join emp in datacontext.Employees on e.reporting_to equals emp.id
+                            join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
-                            where l.from_date > DateTime.Now && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED)
+                            where l.from_date > DateTime.Now && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED) && u.is_active ==1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -710,8 +715,9 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
-                            where l.from_date > DateTime.Now
+                            where l.from_date > DateTime.Now && u.is_active == 1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,

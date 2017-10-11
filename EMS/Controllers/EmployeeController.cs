@@ -184,11 +184,7 @@ namespace EMS.Controllers
                     EmployeeModel existingInstance = EmployeeRepo.GetEmployeeDetailsById(employee_id);
                     if (existingInstance != null)
                     {
-                        List<LeaveBalanceModel> leavebalance_list = LeaveRepo.GetLeaveBalanceById(employee_id);
-                        Dictionary<string, object> resultSet = new Dictionary<string, object>();
-                        resultSet.Add("employee_details", existingInstance);
-                        resultSet.Add("Leavebalance_details", leavebalance_list);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", resultSet));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", existingInstance));
                     }
                     else
                     {

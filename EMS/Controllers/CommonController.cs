@@ -190,13 +190,13 @@ namespace EMS.Controllers
                         flag = true;
                     }
 
-                    //if (flag)
-                    //{
-                    //    if (!DefaultRepo.LoadDataFromTempTableSP())
-                    //    {
-                    //        return Request.CreateResponse(HttpStatusCode.OK, "Some problem in Stored Procedure");
-                    //    }
-                    //}
+                    if (flag)
+                    {
+                        if (!CommonRepo.LoadDataFromTable())
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, "Some problem in Stored Procedure");
+                        }
+                    }
                     return Request.CreateResponse(HttpStatusCode.OK, "table created");
 
                 }

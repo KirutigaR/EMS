@@ -12,6 +12,8 @@ namespace EMS
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class EMSEntities : DbContext
     {
@@ -44,5 +46,23 @@ namespace EMS
         public virtual DbSet<Salary_Structure> Salary_Structure { get; set; }
         public virtual DbSet<Payslip> Payslips { get; set; }
         public virtual DbSet<Leave> Leaves { get; set; }
+    
+        public virtual int UpdateLeaveBalance()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateLeaveBalance");
+        }
+    
+        public virtual ObjectResult<string> availableemployee(Nullable<int> projectid, Nullable<int> useractive)
+        {
+            var projectidParameter = projectid.HasValue ?
+                new ObjectParameter("projectid", projectid) :
+                new ObjectParameter("projectid", typeof(int));
+    
+            var useractiveParameter = useractive.HasValue ?
+                new ObjectParameter("useractive", useractive) :
+                new ObjectParameter("useractive", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("availableemployee", projectidParameter, useractiveParameter);
+        }
     }
 }

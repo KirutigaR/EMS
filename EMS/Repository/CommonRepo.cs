@@ -145,6 +145,24 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        
+        public static bool LoadDataFromTable()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = datacontext.UpdateLeaveBalance();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

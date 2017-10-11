@@ -484,6 +484,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="availableemployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="projectid" Type="int" Mode="In" />
+          <Parameter Name="useractive" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateLeaveBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="EMSModelStoreContainer">
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client_type" EntityType="Self.Client_type" Schema="dbo" store:Type="Tables" />
@@ -697,6 +702,11 @@
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leaves" />
           </AssociationSet>
+          <FunctionImport Name="UpdateLeaveBalance" />
+          <FunctionImport Name="availableemployee" ReturnType="Collection(String)">
+            <Parameter Name="projectid" Mode="In" Type="Int32" />
+            <Parameter Name="useractive" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
@@ -1471,6 +1481,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="UpdateLeaveBalance" FunctionName="EMSModel.Store.UpdateLeaveBalance" />
+          <FunctionImportMapping FunctionImportName="availableemployee" FunctionName="EMSModel.Store.availableemployee" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

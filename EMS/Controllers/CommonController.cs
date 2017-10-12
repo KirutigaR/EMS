@@ -227,7 +227,7 @@ namespace EMS.Controllers
             try
             {
                 Employee employee = EmployeeRepo.GetEmployeeById(changepassword.employee_id);
-                User user_instance = LeaveRepo.GetUserById(employee.id);
+                User user_instance = LeaveRepo.GetUserById(employee.user_id);
                 if(user_instance.is_active==1)
                 {
                     if (changepassword.new_password == changepassword.confirm_password)

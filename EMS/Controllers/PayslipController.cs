@@ -27,7 +27,7 @@ namespace EMS.Controllers
                     if(payslip!= null && existing_instance == null)
                     {
                         PayslipRepo.AddPayslip(payslip);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Pay slip generated successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Pay slip generated successfully!", "Pay slip generated successfully!"));
                     }
                     else
                     {
@@ -61,7 +61,7 @@ namespace EMS.Controllers
                     pay_slip.incometax = payslip.incometax;
                     pay_slip.arrears = payslip.arrears;
                     PayslipRepo.UpdatePayslip(pay_slip);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "payslip successfully updated"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "payslip successfully updated", "payslip successfully updated"));
                 }
                 else
                 {

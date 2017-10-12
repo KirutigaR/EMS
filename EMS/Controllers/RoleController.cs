@@ -84,7 +84,7 @@ namespace EMS.Controllers
                     else
                     {
                         RoleRepo.CreateRole(role);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Role created Successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Role created Successfully!", "Role created Successfully!"));
                     }
                 }
                 else

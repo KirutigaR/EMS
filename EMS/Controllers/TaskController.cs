@@ -85,7 +85,7 @@ namespace EMS.Controllers
                     if (TaskRepo.GetTaskById(task.id) != null)
                     {
                         TaskRepo.EditTask(task);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project tasks updated successfully"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Task updated successfully", "Task updated successfully"));
                     }
                     else
                     {
@@ -121,12 +121,12 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Error : Task doesnot exists", "Task doesnot exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_801", "Error : Task doesnot exists", "Error : Task doesnot exists"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_802", "URL Error : Please check the input and datatype", "Please check the input and datatype"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_802", "URL Error : Please check the input and datatype", "URL Error : Please check the input and datatype"));
                 }
             }
             catch (Exception exception)

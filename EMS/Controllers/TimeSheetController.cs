@@ -23,7 +23,7 @@ namespace EMS.Controllers
                 if (sheetrecord != null)
                 {
                     TimeSheetRepo.AddTimeSheetRecord(sheetrecord);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "TimeSheet updated Succesfully"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "TimeSheet added Succesfully", "TimeSheet added Succesfully"));
                 }
                 else
                 {
@@ -180,7 +180,7 @@ namespace EMS.Controllers
                     if (TimeSheetRepo.GetSheetById(timesheet_id) != null)
                     {
                         TimeSheetRepo.DeleteTimeSheetRecord(timesheet_id);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Timesheet deleted successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Timesheet deleted successfully!", "Timesheet deleted successfully!"));
                     }
                     else
                     {

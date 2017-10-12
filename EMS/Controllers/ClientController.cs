@@ -28,7 +28,7 @@ namespace EMS.Controllers
                     {
                         client.is_active = 1;
                         ClientRepo.CreateNewClient(client);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client added successfully"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Client added successfully", "Client added successfully"));
                     }
                     else
                     {
@@ -137,7 +137,7 @@ namespace EMS.Controllers
                     if (existingInstance != null)
                     {
                         ClientRepo.EditClient(client);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details Updated successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Client details Updated successfully!", "Client details Updated successfully!"));
                     }
                     else
                     {
@@ -172,7 +172,7 @@ namespace EMS.Controllers
                     if (existinginstace != null)
                     {
                         ClientRepo.DropClient(client_id);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Client details dropped!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Client details dropped!", "Client details dropped!"));
                     }
                     else
                     {

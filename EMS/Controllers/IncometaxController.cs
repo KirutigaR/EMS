@@ -63,7 +63,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_601", "Employee tax value doesnot exists!", "Null Object"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_601", "Employee tax value doesnot exists!", "Employee tax value doesnot exists!"));
                     }
                 }
                 else
@@ -89,7 +89,7 @@ namespace EMS.Controllers
                 if (incometax != null && IncometaxRepo.GetIncometaxById(incometax.id) != null)
                 {
                     IncometaxRepo.UpdateTaxDeclaration(incometax);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Tax declaration added Successfully"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Tax declaration added Successfully", "Tax declaration added Successfully"));
                 }
                 else
                 {

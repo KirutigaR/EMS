@@ -29,7 +29,7 @@ namespace EMS.Controllers
                     if (existingInstance == null)
                     {
                         ProjectRepo.CreateNewProject(project);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project added successfully"));                    
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Project added successfully", "Project added successfully"));                    
                     }
                     else
                     {
@@ -38,14 +38,14 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check the Json input", "Please check the Json input"));
                 }
             }
             catch (DbEntityValidationException DBexception)
             {
                 Debug.WriteLine(DBexception.Message);
                 Debug.WriteLine(DBexception.GetBaseException());
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Mandatory fields missing", DBexception.Message));
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Check the fields : Some Mandatory fields are missing", DBexception.Message));
             }
             catch (Exception exception)
             {
@@ -186,7 +186,7 @@ namespace EMS.Controllers
                 if (project_roles != null)
                 {
                     ProjectRepo.ProjectRoleAssignment(project_roles);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project Role Assigned to the Employee Succesfully"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Project Role Assigned to the Employee Succesfully", "Project Role Assigned to the Employee Succesfully"));
                 }
 
                 else
@@ -249,7 +249,7 @@ namespace EMS.Controllers
                 if (project_roles != null)
                 {
                     ProjectRepo.EditEmployeeProjectRoleAssignmnet(project_roles);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee details assigned to the given project has been changed"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee details assigned to the given project has been changed", "Employee details assigned to the given project has been changed"));
                 }
 
                 else
@@ -311,11 +311,11 @@ namespace EMS.Controllers
                     if (project_role != null)
                     {
                         ProjectRepo.DeleteEmployeeProjectRoleAssignmnet(project_role);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Employee role deleted from the given project"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee deleted from the given project", "Employee deleted from the given project"));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Failure : check employe id, role id and project id", "check employe id role id and project id"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Failure : check employe id, role id and project id", "Failure : check employe id, role id and project id"));
                     }
                 }
                 else

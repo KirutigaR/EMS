@@ -465,7 +465,7 @@ namespace EMS.Controllers
                     leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                     LeaveRepo.EditLeave(leave);
 
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Leave Approved"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Approved!", "Leave Approved!"));
                 }
                 else if (is_approved == Constants.LEAVE_STATUS_REJECTED)
                 {
@@ -509,7 +509,7 @@ namespace EMS.Controllers
                     leave.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
                     LeaveRepo.EditLeave(leave);
 
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave not approved", "Leave cancel"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Rejected!", "Leave Rejected!"));
                 }
                 //ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                 //Employee employee = EmployeeRepo.GetEmployeeById(leave.employee_id);

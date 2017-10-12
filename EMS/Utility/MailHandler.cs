@@ -131,7 +131,6 @@ namespace EMS.Utility
         {
             try
             {
-
                 SmtpClient SmtpServer = new SmtpClient();
                 SmtpServer.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
                 SmtpServer.Port = 587;

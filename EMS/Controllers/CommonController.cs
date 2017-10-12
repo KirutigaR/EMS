@@ -65,19 +65,26 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(forgotpassword.new_password == forgotpassword.confirm_password)
+                Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.id);
+                User user = CommonRepo.GetuserById(employee.user_id);
+                if(user.is_active==1)
                 {
-                    Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.id);
-                    User user = CommonRepo.GetuserById(employee.user_id);
-                    user.password = EncryptPassword.CalculateHash(forgotpassword.new_password);
-                    CommonRepo.EditUserDetails(user);
-                    string user_name = employee.first_name + employee.last_name;
-                    MailHandler.ChangePasswordIntimation(user_name, employee.email);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success", "your password has been changed"));
+                    if (forgotpassword.new_password == forgotpassword.confirm_password)
+                    {
+                        user.password = EncryptPassword.CalculateHash(forgotpassword.new_password);
+                        CommonRepo.EditUserDetails(user);
+                        string user_name = employee.first_name +" "+ employee.last_name;
+                        MailHandler.ChangePasswordIntimation(user_name, employee.email);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success : your password has been changed", "your password has been changed"));
+                    }
+                    else
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "Password mismatch : New Password and Confirm Password must be same", "Password mismatch : New Password and Confirm Password must be same"));
+                    }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "fail", "password didnot match"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid user login", "Invalid user login"));
                 }
             }
             catch (Exception exception)
@@ -221,25 +228,33 @@ namespace EMS.Controllers
             {
                 int user_id = LeaveRepo.GetUserIdById(changepassword.id);
                 User user_instance = LeaveRepo.GetUserById(user_id);
-                if (changepassword.new_password == changepassword.confirm_password)
+                EmployeeModel employee = EmployeeRepo.GetEmployeeDetailsByUserId(user_id);
+                if(user_instance.is_active==1)
                 {
-                    if (changepassword.oldpassword == user_instance.password)
+                    if (changepassword.new_password == changepassword.confirm_password)
                     {
-                        user_instance.password = changepassword.new_password;
-                        LeaveRepo.EditUserPassword(user_instance);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Password sucessfully changed"));
+                        if (EncryptPassword.CalculateHash(changepassword.oldpassword) == user_instance.password)
+                        {
+                            user_instance.password = EncryptPassword.CalculateHash(changepassword.new_password);
+                            LeaveRepo.EditUserPassword(user_instance);
+                            string user_name = employee.first_name + " " + employee.last_name;
+                            MailHandler.ChangePasswordIntimation(user_name, employee.email);
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Password changed sucessfully", "Password changed sucessfully"));
+                        }
+                        else
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "Wrong Password : Entered Old Password is WRONG", "Wrong Password : Entered Old Password is WRONG"));
+                        }
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "password not matched", "password mismatch"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "Password mismatch : New Password and Confirm Password must be same", "Password mismatch : New Password and Confirm Password must be same"));
                     }
-
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "confirm password not match", "new password and confirm password doesnot match"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid user login", "Invalid user login"));
                 }
-
             }
             catch (Exception exception)
             {

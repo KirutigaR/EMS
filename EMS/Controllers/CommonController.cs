@@ -65,7 +65,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.id);
+                Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.employee_id);
                 User user = CommonRepo.GetuserById(employee.user_id);
                 if(user.is_active==1)
                 {
@@ -226,9 +226,8 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                int user_id = LeaveRepo.GetUserIdById(changepassword.id);
-                User user_instance = LeaveRepo.GetUserById(user_id);
-                EmployeeModel employee = EmployeeRepo.GetEmployeeDetailsByUserId(user_id);
+                Employee employee = EmployeeRepo.GetEmployeeById(changepassword.employee_id);
+                User user_instance = LeaveRepo.GetUserById(employee.id);
                 if(user_instance.is_active==1)
                 {
                     if (changepassword.new_password == changepassword.confirm_password)

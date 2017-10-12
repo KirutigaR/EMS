@@ -364,28 +364,6 @@ namespace EMS.Repository
             }
         }
 
-        public static int GetUserIdById(int id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from e in datacontext.Employees
-                            where e.id == id
-                            select e.user_id;
-                return query.FirstOrDefault();
-
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
         public static User GetUserById(int id)
         {
             EMSEntities datacontext = new EMSEntities();

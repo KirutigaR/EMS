@@ -114,7 +114,7 @@ namespace EMS.Utility
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com");
                 mail.To.Add(user_mail);
-                mail.Subject = "Change Password Link ";
+                mail.Subject = "Jaishu Consulting pvt. ltd.";
                 mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=http://192.168.1.21:8080/>here</a> to change your password...<br><br> Thank You";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
@@ -139,7 +139,7 @@ namespace EMS.Utility
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com");
                 mail.To.Add(user_mail);
-                mail.Subject = "Change Password Link ";
+                mail.Subject = "Jaishu Consulting pvt. ltd.";
                 mail.Body = "Hi " + username + ".." + "<br><br>Your password has been changed...kindly login again to confirm...<br><br> Thank You";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);

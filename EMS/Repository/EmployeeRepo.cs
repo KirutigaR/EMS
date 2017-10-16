@@ -645,9 +645,9 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from emp in datacontext.Employees orderby emp.created_on descending
-                            join user in datacontext.Users on emp.user_id equals user.id
-                            where user.is_active == 1
+                var query = from emp in datacontext.Employees 
+                            join user in datacontext.Users on emp.user_id equals user.id 
+                            where user.is_active == 1 orderby emp.created_on descending
                             select emp.id;
                 var id = query.FirstOrDefault();
                 return id;

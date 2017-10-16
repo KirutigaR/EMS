@@ -173,7 +173,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Http]
+        
         [Route("api/get/employee/{employee_id?}")]
         public HttpResponseMessage GetEmployeeById(int employee_id)//e_id employee_id
         {

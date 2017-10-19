@@ -515,6 +515,8 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                DateTime Current_date = DateTime.Now.Date;
+
                 var query = from e in datacontext.Employees
                             join l in datacontext.Leaves
                             on e.id equals l.employee_id
@@ -523,7 +525,7 @@ namespace EMS.Repository
                             join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
-                            where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now && u.is_active ==1//&& l.leave_statusid == ls.id
+                            where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= Current_date && u.is_active ==1//&& l.leave_statusid == ls.id
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -556,6 +558,7 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                var currentdate = DateTime.Now.Date;
                 var query = from l in datacontext.Leaves
                             join e in datacontext.Employees
                             on l.employee_id equals e.id
@@ -564,7 +567,7 @@ namespace EMS.Repository
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
-                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date > DateTime.Now && u.is_active ==1
+                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= currentdate && u.is_active ==1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -642,6 +645,7 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                var currentdate = DateTime.Now.Date;
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
                 if (reportingto_id != 0)
                 {
@@ -656,7 +660,7 @@ namespace EMS.Repository
                             join emp in datacontext.Employees on e.reporting_to equals emp.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
-                            where l.from_date > DateTime.Now && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED) && u.is_active ==1
+                            where l.from_date >= currentdate && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED) && u.is_active ==1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -687,6 +691,7 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                var currentdate = DateTime.Now.Date;
                 var query = from l in datacontext.Leaves
                             join e in datacontext.Employees
                             on l.employee_id equals e.id
@@ -695,7 +700,7 @@ namespace EMS.Repository
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
-                            where l.from_date > DateTime.Now && u.is_active == 1
+                            where l.from_date >= currentdate && u.is_active == 1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -726,8 +731,9 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                var currentdate = DateTime.Now.Date;
                 var query = from l in datacontext.Leaves
-                            where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING) && l.from_date >= DateTime.Now
+                            where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING) && l.from_date >= currentdate
                             select l;
                 return query.ToList();
             }

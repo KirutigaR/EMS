@@ -390,7 +390,8 @@ namespace EMS.Controllers
         }
 
         //[HttpPost]
-        [Route("api/leavehistory/id/{employee_id?}")] // display Leavehistory in leavepage by id
+        //Get own leave history of an employee by id 
+        [Route("api/leavehistory/id/{employee_id?}")] // display Leavehistory in leavepage by employee id
         public HttpResponseMessage GetLeaveHistoryById(int employee_id)
         {
             HttpResponseMessage response = null;

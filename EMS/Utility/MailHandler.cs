@@ -61,21 +61,21 @@ namespace EMS.Utility
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi" + user_name + "<br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been approved by " + Reportingto_name + " <br>Remarks: <br>" + remarks + "<br> Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been approved by " + Reportingto_name + " <br><b>Notes from "+Reportingto_name+":</b>" + remarks + "<br><br>Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else if(status == Constants.LEAVE_STATUS_REJECTED)
                 {
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi" + user_name + "<br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been rejected by "+Reportingto_name+" due to the following reason <br>" + remarks+"<br> Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been rejected by "+Reportingto_name+ " due to the following reason <br>&nbsp;&nbsp;--" + remarks+ "<br><br>Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else 
                 {
                     mail.To.Add(reporting_to_mailid);
                     mail.CC.Add(user_mail);
                     mail.Subject = "Employee Leave Application";
-                    mail.Body = "Hi " + Reportingto_name  + "<br><br>Your team-mate "+user_name+" applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString()+ ". Kindly login <a href=http://192.168.1.21:8080/>here</a> to approve or reject. <br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + Reportingto_name  + "<br><br>Your team-mate "+user_name+" applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString()+ ". Kindly login <a href=http://192.168.1.21:8080/>here</a> to approve or reject.<br><br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                     
                 }
 

@@ -45,7 +45,7 @@ namespace EMS.Controllers
             {
                 Debug.WriteLine(DBexception.Message);
                 Debug.WriteLine(DBexception.GetBaseException());
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Check the fields : Some Mandatory fields are missing", DBexception.Message));
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Some Mandatory fields are missing", DBexception.Message));
             }
             catch (Exception exception)
             {
@@ -155,7 +155,7 @@ namespace EMS.Controllers
                     if (existingInstance != null)
                     {
                         ProjectRepo.EditProject(project);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Project details Updated successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Project details Updated successfully!", "Project details Updated successfully!"));
                     }
                     else
                     {
@@ -191,7 +191,7 @@ namespace EMS.Controllers
 
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)
@@ -254,7 +254,7 @@ namespace EMS.Controllers
 
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)
@@ -286,7 +286,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check input Json, Project details and employee status", "Please check input Json, Project details and employee status"));
                 }
             }
             catch (Exception exception)

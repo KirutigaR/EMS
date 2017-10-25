@@ -32,7 +32,7 @@ namespace EMS.Utility
                 mail.Subject = "Employee Login credentials";
 
                 //mail.Body = "\n HI "+emp_name+"\n\t Your Leave application has been approved and it is from "+from_date+"to "+to_date+"\n Thank You";
-                mail.Body = "Hi " + username + ".." + "<br><br> Welcome to <b>Jaishu Consulting Pvt. ltd.</b> Your Employee account has been created, please find the login credentials specified below <em><b> <br><br> Login&nbsp;:&nbsp;" + user_mail + "<br>Password&nbsp;:&nbsp;" + password + "</em></b><br><br>To Login Click <a href=http://192.168.1.21:8080/>here</a> Thank You";
+                mail.Body = "Hi " + username + "," + "<br><br> Welcome to <b>Jaishu Consulting Pvt. ltd.</b> Your Employee account has been created, please find the login credentials specified below <em><b> <br><br> Username&nbsp;:&nbsp;" + user_mail + "<br>Password&nbsp;:&nbsp;" + password + "</em></b><br><br>Click <a href=http://192.168.1.21:8080/>here</a> to Login<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
 
                 mail.IsBodyHtml = true;
                 //mail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
@@ -48,7 +48,7 @@ namespace EMS.Utility
             }
             //  }
         }
-        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string remarks)
+        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string remarks, string Reportingto_name)
         {
             try
             {
@@ -59,20 +59,23 @@ namespace EMS.Utility
                 if (status == Constants.LEAVE_STATUS_APPROVED)
                 {
                     mail.To.Add(user_mail);
+                    mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi" + user_name + "<br>Your leave application    " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been approved";
+                    mail.Body = "Hi" + user_name + "<br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been approved by " + Reportingto_name + " <br>Remarks: <br>" + remarks + "<br> Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else if(status == Constants.LEAVE_STATUS_REJECTED)
                 {
                     mail.To.Add(user_mail);
+                    mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi" + user_name + "<br>Your leave application   " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been Rejected" + "<br> Remarks:" + remarks;
+                    mail.Body = "Hi" + user_name + "<br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been rejected by "+Reportingto_name+" due to the following reason <br>" + remarks+"<br> Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else 
                 {
-                    mail.To.Add(user_mail);
+                    mail.To.Add(reporting_to_mailid);
+                    mail.CC.Add(user_mail);
                     mail.Subject = "Employee Leave Application";
-                    mail.Body = "hi,<br>" + user_name  + " applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString();
+                    mail.Body = "Hi " + Reportingto_name  + "<br><br>Your team-mate "+user_name+" applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString()+ ". Kindly login <a href=http://192.168.1.21:8080/>here</a> to approve or reject. <br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                     
                 }
 
@@ -140,7 +143,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + ".." + "<br><br>Your password has been changed...kindly login again to confirm...<br><br> Thank You";
+                mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been change recently, kindly contact your superior if it is not done by you.<br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }

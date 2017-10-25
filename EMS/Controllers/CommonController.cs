@@ -75,11 +75,11 @@ namespace EMS.Controllers
                         CommonRepo.EditUserDetails(user);
                         string user_name = employee.first_name +" "+ employee.last_name;
                         MailHandler.ChangePasswordIntimation(user_name, employee.email);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success : your password has been changed", "your password has been changed"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "your password has been changed successfully", "your password has been changed successfully"));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "Password mismatch : New Password and Confirm Password must be same", "Password mismatch : New Password and Confirm Password must be same"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password must be same", "New Password and Confirm Password must be same"));
                     }
                 }
                 else
@@ -166,7 +166,7 @@ namespace EMS.Controllers
                     bool flag = false;
                     if (sheets.Length == 0)
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, "No Sheets available in the excel file", "Please upload valid excel file");
+                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_304", "No Sheets available in the excel file", "No Sheets available in the excel file"));
                     }
                     else
                     {
@@ -201,22 +201,22 @@ namespace EMS.Controllers
                     {
                         if (!CommonRepo.LoadDataFromTable())
                         {
-                            return Request.CreateResponse(HttpStatusCode.OK, "Some problem in Stored Procedure");
+                            return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
                         }
                     }
-                    return Request.CreateResponse(HttpStatusCode.OK, "table created");
+                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Leave Balance updated successfully", "Leave Balance updated successfully"));
 
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, "Please upload valid excel file");
+                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_307", "Please upload valid excel file", "Please upload valid excel file"));
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Application Error",e.Message));
             }
         }
         [Route("api/changepassword")]
@@ -242,12 +242,12 @@ namespace EMS.Controllers
                         }
                         else
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "Wrong Password : Entered Old Password is WRONG", "Wrong Password : Entered Old Password is WRONG"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "Entered Old Password is WRONG", "Entered Old Password is WRONG"));
                         }
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "Password mismatch : New Password and Confirm Password must be same", "Password mismatch : New Password and Confirm Password must be same"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password must be same", "New Password and Confirm Password must be same"));
                     }
                 }
                 else

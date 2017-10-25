@@ -194,7 +194,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json", "Invalid Input : Please check input Json"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check input Json", "Please check input Json"));
                 }
             }
             catch (Exception exception)
@@ -226,7 +226,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input : Please check input Json", "Invalid Input : Please check input Json"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check input Json", "Please check input Json"));
                 }
             }
             catch (Exception exception)
@@ -363,7 +363,7 @@ namespace EMS.Controllers
 
                     if (existingInstance == null)
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Failure : Employee record doesnot exists!", "Employee record doesnot exists!"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee record doesnot exists!", "Employee record doesnot exists!"));
                     }
                     else//(if existingInstance != null)
                     {
@@ -391,7 +391,7 @@ namespace EMS.Controllers
 
                         }
                         EmployeeRepo.EditEmployee(employee);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "success : Employee record updated!", "Employee record updated!"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee record updated successfully!", "Employee record updated successfully!"));
                     }//(existingInstance != null) ELSE PART
                 }//employee_details != null IF PART 
                 else //IF employee_details == null
@@ -425,7 +425,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_102", "Failure : No id or name found to search", "No id or name found to search"));
+                    Response = Request.CreateResponse(new EMSResponseMessage("EMS_102", "No id or name found to search", "No id or name found to search"));
                 }
             }
             catch (Exception exception)

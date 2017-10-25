@@ -144,7 +144,7 @@ namespace EMS.Controllers
                     if(RoleRepo.GetRoleById(role.id)!=null)
                     {
                         RoleRepo.EditRole(role);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "ROle Updated successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "ROle Updated successfully!", "ROle Updated successfully!"));
                     }
                     else
                     {
@@ -177,7 +177,7 @@ namespace EMS.Controllers
                     if (RoleRepo.GetRoleById(role_id) != null)
                     {
                         RoleRepo.DeleteRoleById(role_id);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Role deleted!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Role deleted successfully!", "Role deleted successfully!"));
                     }
                     else
                     {

@@ -61,14 +61,14 @@ namespace EMS.Utility
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been approved by " + Reportingto_name + " <br><b>Notes from "+Reportingto_name+":</b>" + remarks + "<br><br>Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application form the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been approved by " + Reportingto_name + " <br><b>Notes from "+Reportingto_name+":</b>" + remarks + "<br><br>Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else if(status == Constants.LEAVE_STATUS_REJECTED)
                 {
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application " + from_date.ToShortDateString() + "-" + to_date.ToShortDateString() + "has been rejected by "+Reportingto_name+ " due to the following reason <br>&nbsp;&nbsp;--" + remarks+ "<br><br>Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application form the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by "+Reportingto_name+ " <br><b>Remarks by " + Reportingto_name + ":</b>" + remarks + "<br><br>Thank you,<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else 
                 {

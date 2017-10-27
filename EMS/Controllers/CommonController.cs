@@ -259,7 +259,7 @@ namespace EMS.Controllers
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Sequence Contains no Elements", exception.Message));
             }
             return response;
         }

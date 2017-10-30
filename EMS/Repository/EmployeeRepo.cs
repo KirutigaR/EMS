@@ -269,7 +269,7 @@ namespace EMS.Repository
                             join employee1 in datacontent.Employees
                             on employee.reporting_to equals employee1.id
                             join role in datacontent.Roles on userrole.role_id equals role.id
-                            where employee.id == employee_id
+                            where employee.id == employee_id && salary.is_active == 1
                             select new EmployeeModel
                             {
                                 id = employee.id,

@@ -452,7 +452,7 @@ namespace EMS.Controllers
         
 
         [HttpPost]
-        [Route("api/approval/reject")]
+        [Route("api/leave/status/update")] // leave approve and reject
         public HttpResponseMessage GetApproval(LeaveStatusModel leave_status)
         {
             HttpResponseMessage response = null;

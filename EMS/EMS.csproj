@@ -197,6 +197,7 @@
     <Compile Include="Models\IncometaxModel.cs" />
     <Compile Include="Models\LeaveBalanceModel.cs" />
     <Compile Include="Models\LeavehistoryModel.cs" />
+    <Compile Include="Models\LeaveStatusModel.cs" />
     <Compile Include="Models\LeaveTypeListModel.cs" />
     <Compile Include="Models\PayslipModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />

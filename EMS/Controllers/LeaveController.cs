@@ -451,22 +451,22 @@ namespace EMS.Controllers
 
         
 
-        //[HttpPost]
-        [Route("api/approval/{leave_id?}/{is_approved?}/{remarks?}")]
-        public HttpResponseMessage GetApproval(int leave_id, int is_approved, string remarks)
+        [HttpPost]
+        [Route("api/approval/reject")]
+        public HttpResponseMessage GetApproval(LeaveStatusModel leave_status)
         {
             HttpResponseMessage response = null;
-            Leave leave = LeaveRepo.GetLeaveById(leave_id);
+            Leave leave = LeaveRepo.GetLeaveById(leave_status.leave_id);
             try
             {
-                if (is_approved == Constants.LEAVE_STATUS_APPROVED)
+                if (leave_status.is_approved == Constants.LEAVE_STATUS_APPROVED)
                 {
                     leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                     LeaveRepo.EditLeave(leave);
 
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Approved!", "Leave Approved!"));
                 }
-                else if (is_approved == Constants.LEAVE_STATUS_REJECTED)
+                else if (leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED)
                 {
                     Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                     string leave_type_name = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
@@ -512,7 +512,7 @@ namespace EMS.Controllers
                 }
                 ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                 Employee employee = EmployeeRepo.GetEmployeeById(leave.employee_id);
-                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, remarks, reporting_to.emp_name);
+                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, leave_status.remarks, reporting_to.emp_name);
             }
             catch (Exception exception)
             {

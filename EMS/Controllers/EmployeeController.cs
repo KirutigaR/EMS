@@ -58,7 +58,7 @@ namespace EMS.Controllers
                     @"@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$"
                         , RegexOptions.IgnoreCase);
 
-                    if (existingInstance == null && employeeByMailid.Count == 0 && isEmail == true)
+                    if (existingInstance == null && employeeByMailid.Count == 0 && isEmail == true && (employee.date_of_birth.Year <= (DateTime.Now.Year - 21)))
                     {
                         User user = new User();
                         user.user_name = employee.email;
@@ -109,7 +109,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID or MailID already exists , or Enter valid E-Mail Id ", "Employee ID or MailID already exists , or Enter valid E-Mail Id "));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID or MailID already exists or Invalid E-MailId or DOB", "Employee ID or MailID already exists or Invalid E-MailId or DOB"));
                     }
                 }
                 else
@@ -391,7 +391,7 @@ namespace EMS.Controllers
 
                         }
                         EmployeeRepo.EditEmployee(employee);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee record updated successfully!", "Employee record updated successfully!"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee details updated successfully!", "Employee details updated successfully!"));
                     }//(existingInstance != null) ELSE PART
                 }//employee_details != null IF PART 
                 else //IF employee_details == null

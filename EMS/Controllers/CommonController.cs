@@ -232,7 +232,11 @@ namespace EMS.Controllers
                 {
                     if (changepassword.new_password == changepassword.confirm_password)
                     {
-                        if (EncryptPassword.CalculateHash(changepassword.oldpassword) == user_instance.password)
+                        if(changepassword.oldpassword == changepassword.new_password)
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Old Password and New password should not be same", "Old Password and New password should not be same"));
+                        }
+                        else if (EncryptPassword.CalculateHash(changepassword.oldpassword) == user_instance.password)
                         {
                             user_instance.password = EncryptPassword.CalculateHash(changepassword.new_password);
                             LeaveRepo.EditUserPassword(user_instance);

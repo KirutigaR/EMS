@@ -76,7 +76,7 @@ namespace EMS.Controllers
                         user_role.user_id = user.id;
                         user_role.role_id = employee_details.role_id;
                         EmployeeRepo.AssignEmployeeRole(user_role);
-                        if (employee.gender == "male")
+                        if (employee.gender.ToLower() == "male")
                         {
                             EmployeeRepo.InsertLeaveBalance(employee, Constants.MALE_LEAVE_TYPES);
                         }

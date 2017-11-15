@@ -212,6 +212,12 @@ namespace EMS.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_307", "Please upload valid excel file", "Please upload valid excel file"));
                 }
             }
+            catch (System.IO.IOException IOException)
+            {
+                Debug.WriteLine(IOException.Message);
+                Debug.WriteLine(IOException.GetBaseException());
+                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Please select a file to upload", IOException.Message));
+            }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);

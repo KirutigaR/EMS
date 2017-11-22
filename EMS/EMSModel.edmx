@@ -44,7 +44,7 @@
           <Property Name="contact_no" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
-          <Property Name="year_of_experience" Type="decimal" Precision="3" Scale="1" Nullable="false" />
+          <Property Name="year_of_experience" Type="decimal" Precision="4" Scale="2" />
           <Property Name="gender" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="pan_no" Type="varchar" MaxLength="50" />
           <Property Name="bank_account_no" Type="varchar" MaxLength="50" />
@@ -995,7 +995,7 @@
           <NavigationProperty Name="Incometaxes" Relationship="EMSModel.FK__Incometax__emp_i__29221CFB" FromRole="Employee" ToRole="Incometax" />
           <NavigationProperty Name="Salary_Structure" Relationship="EMSModel.FK__Salary_St__emp_i__2EDAF651" FromRole="Employee" ToRole="Salary_Structure" />
           <NavigationProperty Name="Payslips" Relationship="EMSModel.FK__Payslip__emp_id__2BFE89A6" FromRole="Employee" ToRole="Payslip" />
-          <Property Name="year_of_experience" Type="Decimal" Nullable="false" Precision="3" Scale="1" />
+          <Property Name="year_of_experience" Type="Decimal" Precision="4" Scale="2" />
           <Property Name="created_on" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Employee" ToRole="Leave" />
         </EntityType>

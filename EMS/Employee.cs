@@ -45,7 +45,7 @@ namespace EMS
         public string emergency_contact_person { get; set; }
         public int designation { get; set; }
         public string blood_group { get; set; }
-        public decimal year_of_experience { get; set; }
+        public Nullable<decimal> year_of_experience { get; set; }
         public Nullable<System.DateTime> created_on { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

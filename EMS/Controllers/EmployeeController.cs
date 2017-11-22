@@ -36,7 +36,7 @@ namespace EMS.Controllers
                     employee.date_of_joining = employee_details.date_of_joining;
                     employee.contact_no = employee_details.contact_no;
                     employee.reporting_to = employee_details.reporting_to;
-                    employee.year_of_experience = employee_details.Year_of_experience;
+                    employee.year_of_experience = (decimal)employee_details.Year_of_experience;
                     employee.gender = employee_details.gender;
                     employee.pan_no = employee_details.pan_no;
                     employee.bank_account_no = employee_details.bank_account_no;

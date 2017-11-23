@@ -277,7 +277,7 @@ namespace EMS.Controllers
                                     leave.no_of_days = (int)noofdays;
 
                                     Leavebalance_sheet EL_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
-                                    leave.EL_flag = (int)EL_balance_instance.no_of_days;
+                                    leave.EL_flag = (decimal)EL_balance_instance.no_of_days;
                                     EL_balance_instance.no_of_days = El_leave_balance;
                                     LeaveRepo.UpdateLeaveBalanceSheet(EL_balance_instance);
 

@@ -209,8 +209,20 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_307", "Please upload valid excel file", "Please upload valid excel file"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_307", "Invalid File", "Invalid File"));
                 }
+            }
+            catch (OleDbException e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Invalid Excel Sheet", "Invalid Excel Sheet"));
+            }
+            catch (InvalidOperationException e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Mandatory columns are missing", "Mandatory columns are missing"));
             }
             catch (System.IO.IOException IOException)
             {

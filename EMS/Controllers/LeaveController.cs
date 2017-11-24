@@ -238,7 +238,7 @@ namespace EMS.Controllers
                                 Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                                 if (noofdays > 3)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "CL can't be more than three days", "CL can't be more than three days"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "CL cannot be applied more than three days", "CL cannot be applied more than three days"));
                                 }
                                 else if (noofdays <= 3)
                                 {
@@ -368,7 +368,7 @@ namespace EMS.Controllers
                                 }
                                 else if (noofdays > 2)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "Work from home cant be applied more than two days", "Work from home cant be applied more than two dayss"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "Work from home cannot be applied more than two days", "Work from home cannot be applied more than two dayss"));
                                 }
                             }
                             #endregion

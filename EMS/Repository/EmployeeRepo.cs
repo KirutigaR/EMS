@@ -473,7 +473,7 @@ namespace EMS.Repository
                             where (user.is_active == 1) && (userrole.role_id == Constants.ROLE_HR || userrole.role_id == Constants.SYSTEMROLE_MANAGER || userrole.role_id == Constants.SYSTEMROLE_TEAMLEAD)
                             select new ReportingTo
                             {
-                                emp_name = employee.first_name,
+                                emp_name = employee.first_name + " " +employee.last_name ,
                                 emp_id = employee.id
                             };
                 return query.ToList();

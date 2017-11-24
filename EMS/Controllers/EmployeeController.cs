@@ -57,8 +57,23 @@ namespace EMS.Controllers
                     @")+" +
                     @"@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$"
                         , RegexOptions.IgnoreCase);
-
-                    if (existingInstance == null && employeeByMailid.Count == 0 && isEmail == true && (employee.date_of_birth.Year <= (DateTime.Now.Year - 21)))
+                    if (isEmail != true)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Invalid E-MailId", "Invalid E-MailId"));
+                    }
+                    else if ((employee.date_of_birth.Year > (DateTime.Now.Year - 21)))
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Invalid DOB", "Invalid DOB"));
+                    }
+                    else if (employeeByMailid.Count != 0)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Mail ID already exists", "Mail ID already exists"));
+                    }
+                    else if (existingInstance != null)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists", "Employee ID already exists"));
+                    }
+                    else
                     {
                         User user = new User();
                         user.user_name = employee.email;
@@ -106,10 +121,6 @@ namespace EMS.Controllers
                         {
                             Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "Error in salary structure generation or payslip generation", "Error in salary structure generation or payslip generation"));
                         }
-                    }
-                    else
-                    {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID or MailID already exists or Invalid E-MailId or DOB", "Employee ID or MailID already exists or Invalid E-MailId or DOB"));
                     }
                 }
                 else

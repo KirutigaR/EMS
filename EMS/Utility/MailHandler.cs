@@ -54,21 +54,21 @@ namespace EMS.Utility
             {
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com");
-                mail.CC.Add("praveenk@jaishu.com");
+                ///mail.CC.Add("praveenk@jaishu.com");
                 //Console.WriteLine("Your Message");
                 if (status == Constants.LEAVE_STATUS_APPROVED)
                 {
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application form the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else if(status == Constants.LEAVE_STATUS_REJECTED)
                 {
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application form the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by "+Reportingto_name+ " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by "+Reportingto_name+ " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
                 else 
                 {
@@ -143,7 +143,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been change recently, kindly contact your superior if it is not done by you.<br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been changed recently, kindly contact your superior if it is not done by you.<br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }

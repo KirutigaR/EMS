@@ -195,7 +195,7 @@ namespace EMS.Controllers
 
                         #region ML_Leave 
 
-                        if (gender == "female" && leave_type == "ML")
+                        if (gender.ToLower() == "female" && leave_type == "ML")
                         {
                             Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                             if (leave_balance_instance.no_of_days != 0 && leave_balance_instance.no_of_days == 182)
@@ -215,7 +215,7 @@ namespace EMS.Controllers
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "you dont have enough leave balance", "you dont have enough leave balance"));
                             }
                         }
-                        else if (gender == "male" && leave_type == "ML")
+                        else if (gender.ToLower() == "male" && leave_type == "ML")
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "invalid leave type", "Invalid leave type"));
                         }

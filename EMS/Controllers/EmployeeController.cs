@@ -25,7 +25,7 @@ namespace EMS.Controllers
 
             try
             {
-                if (employee_details != null && employee_details.role_id !=0 && employee_details.ctc != 0 && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0)
+                if (employee_details != null && employee_details.role_id !=0 /*&& employee_details.ctc != 0*/ && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0)
                 {
                     Employee employee = new Employee();
                     employee.id = employee_details.id;
@@ -113,14 +113,15 @@ namespace EMS.Controllers
                         if (payslip != null)
                         {
                             PayslipRepo.AddPayslip(payslip);
-                            string username = employee.first_name + " " + employee.last_name;
-                            MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
-                            Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee added Successfully", "Employee added Successfully"));
                         }
                         else
                         {
                             Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "Error in salary structure generation or payslip generation", "Error in salary structure generation or payslip generation"));
+                            return Response;
                         }
+                        string username = employee.first_name + " " + employee.last_name;
+                        MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee added Successfully", "Employee added Successfully"));
                     }
                 }
                 else
@@ -351,33 +352,33 @@ namespace EMS.Controllers
                 if (employee_details != null)
                 {
                     Employee existingInstance = EmployeeRepo.GetEmployeeById(employee_details.id);
-                    Employee employee = new Employee();
-                    employee.id = employee_details.id;
-                    employee.first_name = employee_details.first_name;
-                    employee.last_name = employee_details.last_name;
-                    employee.email = employee_details.email;
-                    employee.date_of_birth = employee_details.date_of_birth;
-                    employee.date_of_joining = employee_details.date_of_joining;
-                    employee.contact_no = employee_details.contact_no;
-                    employee.reporting_to = employee_details.reporting_to;
-                    employee.year_of_experience = employee_details.Year_of_experience;
-                    employee.gender = employee_details.gender;
-                    employee.pan_no = employee_details.pan_no;
-                    employee.bank_account_no = employee_details.bank_account_no;
-                    employee.emergency_contact_no = employee_details.emergency_contact_no;
-                    employee.emergency_contact_person = employee_details.emergency_contact_person;
-                    employee.PF_no = employee_details.PF_no;
-                    employee.medical_insurance_no = employee_details.medical_insurance_no;
-                    employee.blood_group = employee_details.blood_group;
-                    employee.designation = employee_details.designation_id;
-                    employee.created_on = existingInstance.created_on;
-
                     if (existingInstance == null)
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_403", "Employee record doesnot exists!", "Employee record doesnot exists!"));
                     }
                     else//(if existingInstance != null)
                     {
+                        Employee employee = new Employee();
+                        employee.id = employee_details.id;
+                        employee.first_name = employee_details.first_name;
+                        employee.last_name = employee_details.last_name;
+                        employee.email = employee_details.email;
+                        employee.date_of_birth = employee_details.date_of_birth;
+                        employee.date_of_joining = employee_details.date_of_joining;
+                        employee.contact_no = employee_details.contact_no;
+                        employee.reporting_to = employee_details.reporting_to;
+                        employee.year_of_experience = employee_details.Year_of_experience;
+                        employee.gender = employee_details.gender;
+                        employee.pan_no = employee_details.pan_no;
+                        employee.bank_account_no = employee_details.bank_account_no;
+                        employee.emergency_contact_no = employee_details.emergency_contact_no;
+                        employee.emergency_contact_person = employee_details.emergency_contact_person;
+                        employee.PF_no = employee_details.PF_no;
+                        employee.medical_insurance_no = employee_details.medical_insurance_no;
+                        employee.blood_group = employee_details.blood_group;
+                        employee.designation = employee_details.designation_id;
+                        employee.created_on = existingInstance.created_on;
+                        
                         employee.user_id = existingInstance.user_id;
 
                         User_role userrole_instance = EmployeeRepo.GetUserRoleByUserid(employee.user_id);
@@ -399,7 +400,6 @@ namespace EMS.Controllers
                                 new_sal_structure.from_date = DateTime.Now;
                                 new_sal_structure.to_date = null;
                                 SalaryRepo.CreateSalaryStructure(new_sal_structure);
-
                         }
                         EmployeeRepo.EditEmployee(employee);
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee details updated successfully!", "Employee details updated successfully!"));

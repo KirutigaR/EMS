@@ -212,12 +212,12 @@ namespace EMS.Controllers
                             }
                             else
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "you dont have enough leave balance", "you dont have enough leave balance"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "you do not have enough leave balance", "you do not have enough leave balance"));
                             }
                         }
                         else if (gender.ToLower() == "male" && leave_type == "ML")
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "invalid leave type", "Invalid leave type"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "Invalid leave type", "Invalid leave type"));
                         }
 
                         #endregion ML_Leave
@@ -244,7 +244,7 @@ namespace EMS.Controllers
                                 {
                                     if (leave_balance_instance.no_of_days < noofdays)
                                     {
-                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "you dont have enough CL leavebalance", "you dont have enough CL leavebalance"));
+                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "you do not have enough CL leavebalance", "you do not have enough CL leavebalance"));
                                     }
                                     else if (leave_balance_instance.no_of_days >= noofdays)
                                     {
@@ -381,7 +381,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_512", "Dont leave the fields", "Dont leave the fields"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_512", "Do not leave the fields", "Do not leave the fields"));
                 }
             }
             catch (Exception exception)

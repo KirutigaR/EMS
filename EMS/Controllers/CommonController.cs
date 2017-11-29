@@ -33,7 +33,7 @@ namespace EMS.Controllers
                 
                 if (!b)
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_301", "Username and password didn't match or Invalid user login", "login failed"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_301", "Invalid Username and Password", "Invalid Username and Password"));
                 }
                 else
                 {

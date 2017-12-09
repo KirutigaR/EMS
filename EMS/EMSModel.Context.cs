@@ -46,6 +46,7 @@ namespace EMS
         public virtual DbSet<Salary_Structure> Salary_Structure { get; set; }
         public virtual DbSet<Payslip> Payslips { get; set; }
         public virtual DbSet<Leave> Leaves { get; set; }
+        public virtual DbSet<EMS_Leave_Balance_Temp> EMS_Leave_Balance_Temp { get; set; }
     
         public virtual int UpdateLeaveBalance()
         {

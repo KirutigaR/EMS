@@ -171,6 +171,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EMSModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="EMS_Leave_Balance_Temp.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

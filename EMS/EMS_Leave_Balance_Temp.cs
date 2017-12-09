@@ -12,11 +12,14 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Holiday_List
+    public partial class EMS_Leave_Balance_Temp
     {
         public int id { get; set; }
-        public System.DateTime holiday_date { get; set; }
-        public string holiday_name { get; set; }
-        public string holiday_day { get; set; }
+        public int Employee_id { get; set; }
+        public Nullable<decimal> CL { get; set; }
+        public Nullable<decimal> EL { get; set; }
+        public Nullable<decimal> ML { get; set; }
+        public Nullable<decimal> LOP { get; set; }
+        public Nullable<decimal> WFH { get; set; }
     }
 }

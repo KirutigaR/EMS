@@ -56,6 +56,21 @@
           <Property Name="blood_group" Type="varchar" MaxLength="50" />
           <Property Name="created_on" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="EMS_Leave_Balance_Temp">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Employee_id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Employee_id" Type="int" Nullable="false" />
+          <Property Name="CL" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="EL" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="ML" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="LOP" Type="decimal" Precision="18" Scale="1" />
+          <Property Name="WFH" Type="decimal" Precision="18" Scale="1" />
+        </EntityType>
         <EntityType Name="Holiday_List">
           <Key>
             <PropertyRef Name="id" />
@@ -63,6 +78,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="holiday_date" Type="date" Nullable="false" />
           <Property Name="holiday_name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="holiday_day" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
         <EntityType Name="Incometax">
           <Key>
@@ -509,6 +525,17 @@
           <EntitySet Name="Timesheet" EntityType="Self.Timesheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_role" EntityType="Self.User_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EMS_Leave_Balance_Temp" EntityType="Self.EMS_Leave_Balance_Temp" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [EMS_Leave_Balance_Temp].[id] AS [id], 
+    [EMS_Leave_Balance_Temp].[Employee_id] AS [Employee_id], 
+    [EMS_Leave_Balance_Temp].[CL] AS [CL], 
+    [EMS_Leave_Balance_Temp].[EL] AS [EL], 
+    [EMS_Leave_Balance_Temp].[ML] AS [ML], 
+    [EMS_Leave_Balance_Temp].[LOP] AS [LOP], 
+    [EMS_Leave_Balance_Temp].[WFH] AS [WFH]
+    FROM [dbo].[EMS_Leave_Balance_Temp] AS [EMS_Leave_Balance_Temp]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__Client__type_id__619B8048" Association="Self.FK__Client__type_id__619B8048">
             <End Role="Client_type" EntitySet="Client_type" />
             <End Role="Client" EntitySet="Client" />
@@ -707,6 +734,7 @@
             <Parameter Name="projectid" Mode="In" Type="Int32" />
             <Parameter Name="useractive" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="EMS_Leave_Balance_Temp" EntityType="EMSModel.EMS_Leave_Balance_Temp" />
         </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
@@ -715,6 +743,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="holiday_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="holiday_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="holiday_day" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Leave_type">
           <Key>
@@ -1229,6 +1258,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EMS_Leave_Balance_Temp">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="Employee_id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Employee_id" Type="Int32" Nullable="false" />
+          <Property Name="CL" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="EL" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="ML" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="LOP" Type="Decimal" Precision="18" Scale="1" />
+          <Property Name="WFH" Type="Decimal" Precision="18" Scale="1" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1238,6 +1280,7 @@
           <EntitySetMapping Name="Holiday_List">
             <EntityTypeMapping TypeName="EMSModel.Holiday_List">
               <MappingFragment StoreEntitySet="Holiday_List">
+                <ScalarProperty Name="holiday_day" ColumnName="holiday_day" />
                 <ScalarProperty Name="holiday_name" ColumnName="holiday_name" />
                 <ScalarProperty Name="holiday_date" ColumnName="holiday_date" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -1483,6 +1526,19 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="UpdateLeaveBalance" FunctionName="EMSModel.Store.UpdateLeaveBalance" />
           <FunctionImportMapping FunctionImportName="availableemployee" FunctionName="EMSModel.Store.availableemployee" />
+          <EntitySetMapping Name="EMS_Leave_Balance_Temp">
+            <EntityTypeMapping TypeName="EMSModel.EMS_Leave_Balance_Temp">
+              <MappingFragment StoreEntitySet="EMS_Leave_Balance_Temp">
+                <ScalarProperty Name="WFH" ColumnName="WFH" />
+                <ScalarProperty Name="LOP" ColumnName="LOP" />
+                <ScalarProperty Name="ML" ColumnName="ML" />
+                <ScalarProperty Name="EL" ColumnName="EL" />
+                <ScalarProperty Name="CL" ColumnName="CL" />
+                <ScalarProperty Name="Employee_id" ColumnName="Employee_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

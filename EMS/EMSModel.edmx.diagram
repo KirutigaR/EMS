@@ -45,6 +45,7 @@
         <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0A9D95DB" />
         <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__0C85DE4D" />
         <AssociationConnector Association="EMSModel.FK__Leave__leavetype__0B91BA14" />
+        <EntityTypeShape EntityType="EMSModel.EMS_Leave_Balance_Temp" Width="1.5" PointX="8.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

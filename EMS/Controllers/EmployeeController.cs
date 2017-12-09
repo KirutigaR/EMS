@@ -18,7 +18,7 @@ namespace EMS.Controllers
     public class EmployeeController : ApiController
     {
         [HttpPost]
-        [Route("api/employee/create")]
+        [Route("api/v1/employee/create")]
         public HttpResponseMessage CreateNewEmployee(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
@@ -27,6 +27,19 @@ namespace EMS.Controllers
             {
                 if (employee_details != null && employee_details.role_id !=0 /*&& employee_details.ctc != 0*/ && employee_details.id != 0 && employee_details.reporting_to != 0 && employee_details.designation_id != 0)
                 {
+                    Employee existingInstance = EmployeeRepo.GetEmployeeById(employee_details.id);
+                    List<Employee> employeeByMailid = EmployeeRepo.GetEmployeeByMailId(employee_details.email);
+                    if (existingInstance != null)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists", "Employee ID already exists"));
+                        return Response;
+                    }
+                    if (employeeByMailid.Count != 0)
+                    {
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Mail ID already exists", "Mail ID already exists"));
+                        return Response;
+                    }
+
                     Employee employee = new Employee();
                     employee.id = employee_details.id;
                     employee.first_name = employee_details.first_name;
@@ -48,9 +61,6 @@ namespace EMS.Controllers
                     employee.designation = employee_details.designation_id;
                     employee.created_on = DateTime.Now;
 
-                    Employee existingInstance = EmployeeRepo.GetEmployeeById(employee.id);
-                    List<Employee> employeeByMailid = EmployeeRepo.GetEmployeeByMailId(employee_details.email);
-
                     bool isEmail = Regex.IsMatch(employee.email,
                     @"^([0-9a-zA-Z]" + //Start with a digit or alphabetical
                     @"([\+\-_\.][0-9a-zA-Z]+)*" + // No continuous or ending +-_. chars in email
@@ -65,24 +75,14 @@ namespace EMS.Controllers
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Invalid DOB", "Invalid DOB"));
                     }
-                    else if (employeeByMailid.Count != 0)
-                    {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Mail ID already exists", "Mail ID already exists"));
-                    }
-                    else if (existingInstance != null)
-                    {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee ID already exists", "Employee ID already exists"));
-                    }
                     else
                     {
                         User user = new User();
                         user.user_name = employee.email;
-                        //user.password = employee.first_name + "jaishu";
                         string Temp_password = PasswordGenerator.GeneratePassword();
-                        Debug.WriteLine(Temp_password);
+                        //Debug.WriteLine(Temp_password);
                         user.password = EncryptPassword.CalculateHash(Temp_password);
-                        //user.password = passwod;
-                        Debug.WriteLine(user.password);
+                        //Debug.WriteLine(user.password);
                         user.is_active = 1;
                         EmployeeRepo.CreateNewUser(user);
                         employee.user_id = user.id;
@@ -144,8 +144,8 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/list/{reportingto_id?}/{designation_id?}")]//active employee list 
-        public HttpResponseMessage GetEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id
+        [Route("api/v1/employee/list/{reportingto_id?}/{designation_id?}")]//active employee list 
+        public HttpResponseMessage GetEmployeeList(int reportingto_id = 0, int designation_id = 0)
         {
             HttpResponseMessage Response = null;
             try
@@ -162,7 +162,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
+        [Route("api/v1/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
         public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id 
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -186,7 +186,7 @@ namespace EMS.Controllers
         }
 
         
-        [Route("api/get/employee/{employee_id?}")]
+        [Route("api/v1/get/employee/{employee_id?}")]
         public HttpResponseMessage GetEmployeeById(int employee_id)//e_id employee_id
         {
             HttpResponseMessage Response = null;
@@ -218,7 +218,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/get/employee/byuserid/{user_id?}")]
+        [Route("api/v1/get/employee/byuserid/{user_id?}")]
         public HttpResponseMessage GetEmployeeByUserId(int user_id)//u_id user_id
         {
             HttpResponseMessage Response = null;
@@ -251,7 +251,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/employee/inactive/{employee_id?}")]
+        [Route("api/v1/employee/inactive/{employee_id?}")]
         public HttpResponseMessage InvalidEmployee(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
@@ -284,7 +284,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/employee/designation/list")]
+        [Route("api/v1/employee/designation/list")]
         public HttpResponseMessage GetEmpDesignationList()
         {
             HttpResponseMessage response = null;
@@ -302,7 +302,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/employee/reportingto/list")]
+        [Route("api/v1/employee/reportingto/list")]
         //Manager , TeamLeader and HR list 
         public HttpResponseMessage GetReportingtoList()
         {
@@ -324,7 +324,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/employee/reportingto/{employee_id}")]
+        [Route("api/v1/employee/reportingto/{employee_id}")]
         public HttpResponseMessage GetReportingtoByEmpId(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -343,7 +343,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/employee/update")]
+        [Route("api/v1/employee/update")]
         public HttpResponseMessage EmployeeUpdate(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
@@ -420,7 +420,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/employee/search/{employee_id?}/{employee_name?}")]
+        [Route("api/v1/employee/search/{employee_id?}/{employee_name?}")]
         public HttpResponseMessage EmployeeSearch(int employee_id = 0 , string employee_name = null)
         {
             HttpResponseMessage Response = null;
@@ -449,7 +449,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/get/last/employee/id")]
+        [Route("api/v1/get/last/employee/id")]
         public HttpResponseMessage GetLastEmployeeId(int employee_id = 0, string employee_name = null)
         {
             HttpResponseMessage Response = null;
@@ -457,6 +457,28 @@ namespace EMS.Controllers
             {
                 int recent_id = EmployeeRepo.GetLastAddedEmployee();
                 Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", recent_id));
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return Response;
+        }
+
+        [HttpGet]
+        [Route("api/v1/get/common/employee/details")]
+        public HttpResponseMessage GetCommonEmployeeDetails()
+        {
+            HttpResponseMessage Response = null;
+            try
+            {
+                List<EmployeeModel> Employee_details = EmployeeRepo.GetEmployeeList(0, 0);
+                if (Employee_details.Count != 0)
+                {
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Employee_details));
+                }
             }
             catch (Exception exception)
             {

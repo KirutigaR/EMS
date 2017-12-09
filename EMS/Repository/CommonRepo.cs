@@ -18,15 +18,10 @@ namespace EMS.Repository
                 var query = from u in datacontext.Users
                             where u.user_name == user.user_name && u.password == user.password && u.is_active == 1
                             select u;
-                List<User> userlist = query.ToList();
-                if (userlist.Count > 0)
-                {
+                if (query.ToList().Count > 0)
                     return true;
-                }
                 else
-                {
                     return false;
-                }
             }
             catch (Exception e)
             {

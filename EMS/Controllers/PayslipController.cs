@@ -13,7 +13,7 @@ namespace EMS.Controllers
 {
     public class PayslipController : ApiController
     {
-        [Route("api/payslip/generate/{employee_id?}")]
+        [Route("api/v1/payslip/generate/{employee_id?}")]
         public HttpResponseMessage GeneratePayslip(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
@@ -48,7 +48,7 @@ namespace EMS.Controllers
             return response;
         }
         [HttpPost]
-        [Route("api/update/payslip")]
+        [Route("api/v1/update/payslip")]
         public HttpResponseMessage UpdatePayslip(Payslip payslip)
         {
             HttpResponseMessage response = null;
@@ -77,7 +77,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/payslip/list/{employeeid?}/{year?}/{month?}")]
+        [Route("api/v1/payslip/list/{employeeid?}/{year?}/{month?}")]
         public HttpResponseMessage GetPayslipListByEmpId(int employeeid = 0, int year = 0, int month = 0)
         {
             HttpResponseMessage response = null;

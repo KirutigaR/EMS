@@ -14,7 +14,7 @@ namespace EMS.Controllers
 {
     public class IncometaxController : ApiController
     {
-        [Route("api/incometax/add")]
+        [Route("api/v1/incometax/add")]
         public HttpResponseMessage AddNewTaxDeclaration(Incometax incometax)
         {
             HttpResponseMessage response = null;
@@ -47,7 +47,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/incometax/{employee_id?}")]
+        [Route("api/v1/get/incometax/{employee_id?}")]
         public HttpResponseMessage GetTaxValueByEmpId(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
@@ -80,7 +80,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/incometax/update")]
+        [Route("api/v1/incometax/update")]
         public HttpResponseMessage UpdateTaxDeclaration(Incometax incometax)
         {
             HttpResponseMessage response = null;
@@ -105,7 +105,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/incometax/list/{employee_id?}")]
+        [Route("api/v1/incometax/list/{employee_id?}")]
         public HttpResponseMessage GetIncometaxListByEmpId(int employee_id)//e_id employww_id
         {
             HttpResponseMessage response = null;

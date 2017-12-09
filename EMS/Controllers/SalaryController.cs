@@ -14,7 +14,7 @@ namespace EMS.Controllers
     public class SalaryController : ApiController
     {
         [HttpGet]
-        [Route("api/salarystructure/update/{employee_id?}/{ctc?}")]
+        [Route("api/v1/salarystructure/update/{employee_id?}/{ctc?}")]
         public HttpResponseMessage UpdateSalaryStructure(int employee_id, decimal ctc)
         {
             HttpResponseMessage response = null;
@@ -56,7 +56,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/Get/salarystructure/list/{employee_id?}")]
+        [Route("api/v1/Get/salarystructure/list/{employee_id?}")]
         [HttpGet]
         public HttpResponseMessage GetSalaryStructure(int employee_id)
         {

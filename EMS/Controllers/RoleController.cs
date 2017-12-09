@@ -14,7 +14,7 @@ namespace EMS.Controllers
 
     public class RoleController : ApiController
     {
-        [Route("api/get/rolelist")]
+        [Route("api/v1/get/rolelist")]
         public HttpResponseMessage GetRoleList()
         {
             HttpResponseMessage response = null;
@@ -32,7 +32,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/rolelist/systemrole")]
+        [Route("api/v1/rolelist/systemrole")]
         public HttpResponseMessage GetSystemRoleList()
         {
             HttpResponseMessage response = null;
@@ -50,7 +50,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/rolelist/projectrole")]
+        [Route("api/v1/rolelist/projectrole")]
         public HttpResponseMessage GetProjectRoleList()
         {
             HttpResponseMessage response = null;
@@ -68,7 +68,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/role/add")]
+        [Route("api/v1/role/add")]
         public HttpResponseMessage AddRole(Role role)
         {
             HttpResponseMessage response = null;
@@ -101,7 +101,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/get/role/{role_id?}")]
+        [Route("api/v1/get/role/{role_id?}")]
         public HttpResponseMessage GetRoleById(int role_id)//r_id role_id
         {
             HttpResponseMessage response = null;
@@ -133,7 +133,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/role/edit")]
+        [Route("api/v1/role/edit")]
         public HttpResponseMessage EditRole(Role role)
         {
             HttpResponseMessage response = null;
@@ -166,7 +166,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/role/delete/{role_id?}")]
+        [Route("api/v1/role/delete/{role_id?}")]
         public HttpResponseMessage DeleteRoleById(int role_id)//r_id role_id
         {
             HttpResponseMessage response = null;

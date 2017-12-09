@@ -20,7 +20,7 @@ namespace EMS.Controllers
 {
     public class CommonController : ApiController
     {
-        [Route("api/login")]
+        [Route("api/v1/login")]
         [HttpPost]
         public HttpResponseMessage Login(User user)
         {
@@ -28,16 +28,13 @@ namespace EMS.Controllers
             try
             {
                 user.password = EncryptPassword.CalculateHash(user.password);
-                Dictionary<string, object> resultSet = new Dictionary<string, object>(); 
-                bool b = CommonRepo.Login(user);
-                
-                if (!b)
+                Dictionary<string, object> resultSet = new Dictionary<string, object>();
+                if (!CommonRepo.Login(user))
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_301", "Invalid Username and Password", "Invalid Username and Password"));
                 }
                 else
                 {
-
                     int user_id = CommonRepo.GetUserID(user);
                     Role role = CommonRepo.GetUserRole(user_id);
                     EmployeeModel employee = EmployeeRepo.GetEmployeeDetailsByUserId(user_id);
@@ -58,7 +55,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/forgotpassword")]
+        [Route("api/v1/forgotpassword")]
         [HttpPost]
         public HttpResponseMessage ForgotPassword(ChangePasswordModel forgotpassword)
         {
@@ -97,8 +94,8 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/bulkupload")]
-        public async Task<HttpResponseMessage> PostFormData()
+        [Route("api/v1/bulkupload")]
+        public async Task<HttpResponseMessage> UpdateEmployeeLeaveBalance()
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -224,7 +221,7 @@ namespace EMS.Controllers
                 Debug.WriteLine(e.GetBaseException());
                 return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Mandatory columns are missing", "Mandatory columns are missing"));
             }
-            catch (System.IO.IOException IOException)
+            catch (IOException IOException)
             {
                 Debug.WriteLine(IOException.Message);
                 Debug.WriteLine(IOException.GetBaseException());
@@ -237,7 +234,7 @@ namespace EMS.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Application Error",e.Message));
             }
         }
-        [Route("api/changepassword")]
+        [Route("api/v1/changepassword")]
         [HttpPost]
         public HttpResponseMessage ChangePassword(ChangePasswordModel changepassword)
         {

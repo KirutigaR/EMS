@@ -71,7 +71,7 @@ namespace EMS.Repository
             }
         }
 
-        public static List<EmployeeModel> GetEmployeeList(int reportingto_id, int designation_id) //r_id reportingto id, d_id designation id of the employee
+        public static List<EmployeeModel> GetEmployeeList(int reportingto_id, int designation_id) 
         {
             EMSEntities datacontent = new EMSEntities();
             try

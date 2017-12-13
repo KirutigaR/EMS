@@ -472,7 +472,7 @@ namespace EMS.Controllers
 
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Approved!", "Leave Approved!"));
                 }
-                else if (leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED)
+                else if (leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED || leave_status.is_approved == Constants.LEAVE_STATUS_CANCELLED)
                 {
                     Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                     string leave_type_name = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
@@ -676,6 +676,24 @@ namespace EMS.Controllers
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leavehistory));
                 }
                     
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("api/v1/get/employee/leave/count")]
+        public HttpResponseMessage GetLeaveCount(int employeeid)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+
             }
             catch (Exception exception)
             {

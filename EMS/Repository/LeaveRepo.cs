@@ -802,5 +802,27 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static int GetLeaveCount(int employeeid)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Leaves
+                            where x.leave_statusid == 1
+                            select x;
+                return query.ToList().Count;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

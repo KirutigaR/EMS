@@ -70,15 +70,20 @@ namespace EMS.Utility
                     mail.Subject = "Employee Leave Status";
                     mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by "+Reportingto_name+ " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
-                else 
+                else if(status == Constants.LEAVE_STATUS_PENDING)
                 {
                     mail.To.Add(reporting_to_mailid);
                     mail.CC.Add(user_mail);
                     mail.Subject = "Employee Leave Application";
-                    mail.Body = "Hi " + Reportingto_name  + "<br><br>Your team member "+user_name+" applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString()+ ". Kindly login <a href=http://192.168.1.21:8080/>here</a> to approve or reject.<br><br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
-                    
+                    mail.Body = "Hi " + Reportingto_name  + "<br><br>Your team member "+user_name+" applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString()+ ". Kindly login <a href=http://192.168.1.21:8080/>here</a> to approve or reject.<br><br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";                
                 }
-
+                else
+                {
+                    mail.To.Add(reporting_to_mailid);
+                    //mail.CC.Add(user_mail);
+                    mail.Subject = "Jaishu Leave Managmment";
+                    mail.Body = "Hi "+ user_name + " Your leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + "has been cancelled. Kindly login <a href=http://192.168.1.21:8080/>here</a> to check the status.<br><br>Thank you,<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                }
                 //System.Net.Mail.Attachment attachment;
                 //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
                 //mail.Attachments.Add(attachment);

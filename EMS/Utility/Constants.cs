@@ -14,6 +14,7 @@ namespace EMS.Utility
         public static int LEAVE_STATUS_APPROVED = 2;
         public static int LEAVE_STATUS_REJECTED = 3;
         public static int LEAVE_STATUS_PENDING = 1;
+        public static int LEAVE_STATUS_CANCELLED = 4;
         public static decimal MEDICAL_ALLOWANCE = 1250; //15000 per year
         public static decimal CONVEYANCE_ALLOWANCE = 1600; //19200 per year
         public static decimal FOOD_ALLOWANCE = 1500; //18000 per year

@@ -10,9 +10,9 @@ namespace EMS.Utility
     {
         public static decimal LeaveCalculationBasedDOJ(DateTime dateofjoining, int Leavetype_id)
         {
-            if(Leavetype_id == 1)
+            if(Leavetype_id == Constants.LEAVEID_TYPE_CL)
             {
-                decimal DBCL = LeaveRepo.GetYearleave("CL");
+                decimal DBCL = LeaveRepo.GetYearleave(Constants.LEAVE_TYPE_CL);
                 decimal Clleave = DBCL - dateofjoining.Month;
                 if (dateofjoining.Day <= 15)
                 {
@@ -21,9 +21,9 @@ namespace EMS.Utility
                 }
                 return Clleave;
             }
-            else if(Leavetype_id == 2)
+            else if(Leavetype_id == Constants.LEAVEID_TYPE_EL)
             {
-                decimal DBEL = LeaveRepo.GetYearleave("EL");
+                decimal DBEL = LeaveRepo.GetYearleave(Constants.LEAVE_TYPE_EL);
                 decimal Elleave = 12 - dateofjoining.Month;
                 DBEL = DBEL / 12;
                 decimal EL = Elleave * (decimal)DBEL;
@@ -35,15 +35,15 @@ namespace EMS.Utility
                 }
                 return EL;
             }
-            else if(Leavetype_id == 3)
+            else if(Leavetype_id == Constants.LEAVEID_TYPE_ML)
             {
                 return 182;
             }
-            else if (Leavetype_id == 4)
+            else if (Leavetype_id == Constants.LEAVEID_TYPE_LOP)
             {
                 return 0;
             }
-            else if (Leavetype_id == 5)
+            else if (Leavetype_id == Constants.LEAVEID_TYPE_WFH)
             {
                 return 0;
             }

@@ -344,7 +344,7 @@ namespace EMS.Repository
                     leave_balance.employee_id = employee.id;
                     leave_balance.leavetype_id = arr[i];
                     leave_balance.no_of_days = (decimal)Utils.LeaveCalculationBasedDOJ(employee.date_of_joining, arr[i]);
-                    leave_balance.actual_balance = (decimal)Utils.LeaveCalculationBasedDOJ(employee.date_of_joining, arr[i]);
+                    leave_balance.actual_balance = leave_balance.no_of_days;
                     datacontext.Leavebalance_sheet.Add(leave_balance);
                 }
                 datacontext.SaveChanges();
@@ -649,8 +649,7 @@ namespace EMS.Repository
                             join user in datacontext.Users on emp.user_id equals user.id 
                             where user.is_active == 1 orderby emp.created_on descending
                             select emp.id;
-                var id = query.FirstOrDefault();
-                return id;
+                return query.FirstOrDefault();
             }
             catch (Exception exception)
             {

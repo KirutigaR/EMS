@@ -21,8 +21,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                List<Holiday_List> holidayList = LeaveRepo.GetHoliday();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", holidayList));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", LeaveRepo.GetHoliday()));
             }
             catch (Exception exception)
             {
@@ -39,8 +38,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                List<Holiday_List> holidayList = LeaveRepo.GetsortedHoliday();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", holidayList));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", LeaveRepo.GetsortedHoliday()));
             }
             catch (Exception exception)
             {
@@ -147,26 +145,21 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(leave.leavetype_id != 0)
+                if(leave.leavetype_id != 0 && leave.from_date != DateTime.MinValue && leave.to_date != DateTime.MinValue)
                 {
-                    Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
-                    string gender = employee_instance.gender;
                     string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
 
                     leave.from_date = leave.from_date.Date;
                     leave.to_date = leave.to_date.Date;
                     DateTime timeNow = DateTime.Now.Date;
 
-                    int applied_from_year = leave.from_date.Year;
-                    int applied_to_year = leave.to_date.Year;
-
-                    if (applied_from_year > DateTime.Now.Year || applied_to_year > DateTime.Now.Year && leave_type != "ML")
+                    if (leave.from_date.Year > DateTime.Now.Year || leave.to_date.Year > DateTime.Now.Year && leave_type != Constants.LEAVE_TYPE_ML)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Leave cannot be applied for the future year", "Leave cannot be applied for the future year"));
                         return response;
                     }
 
-                    if (leave_type == "ML" && leave.from_date >= timeNow)
+                    if (leave_type == Constants.LEAVE_TYPE_ML && leave.from_date >= timeNow)
                     {
                         leave.to_date = leave.from_date.AddDays(182);
                     }
@@ -178,33 +171,35 @@ namespace EMS.Controllers
 
                     else
                     {
+                        Employee employee_instance = EmployeeRepo.GetEmployeeById(leave.employee_id);
+                        string gender = employee_instance.gender;
+
                         List<Leave> leavelist = LeaveRepo.GetActiveLeaveListByEmpId(leave.employee_id);// to get the pending and approved leave list 
                         foreach (Leave leaveinstance in leavelist)//to check if leave is already applied for the given days 
                         {
                             if (leave.from_date <= leaveinstance.from_date && leave.to_date >= leaveinstance.to_date)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "leave application is already registered inbetween these days", "Error in leave application, check the dates"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "Leave application is already registered inbetween these days", "Leave application is already registered inbetween these days"));
                                 return response;
                             }
                             else if ((leaveinstance.from_date <= leave.from_date && leave.from_date <= leaveinstance.to_date) || (leaveinstance.from_date <= leave.to_date && leave.to_date <= leaveinstance.to_date))
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_517", "Already a leave is applied in these days", "Error in leave application, check the dates"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "Leave application is already registered inbetween these days", "Leave application is already registered inbetween these days"));
                                 return response;
                             }
                         }
 
                         #region ML_Leave 
 
-                        if (gender.ToLower() == "female" && leave_type == "ML")
+                        if (gender.ToLower() == "female" && leave_type == Constants.LEAVE_TYPE_ML)
                         {
                             Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
-                            if (leave_balance_instance.no_of_days != 0 && leave_balance_instance.no_of_days == 182)
+                            if (leave_balance_instance.no_of_days != 0 && leave_balance_instance.no_of_days == Constants.ML_LEAVE_BALANCE)
                             {
-                                leave.no_of_days = 182;
+                                leave.no_of_days = Constants.ML_LEAVE_BALANCE;
 
                                 leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
                                 LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
-
                                 LeaveRepo.AddLeaveHistory(leave);
                                 ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                                 MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
@@ -215,24 +210,24 @@ namespace EMS.Controllers
                                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "you do not have enough leave balance", "you do not have enough leave balance"));
                             }
                         }
-                        else if (gender.ToLower() == "male" && leave_type == "ML")
+                        else if (gender.ToLower() == "male" && leave_type == Constants.LEAVE_TYPE_ML)
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_504", "Invalid leave type", "Invalid leave type"));
                         }
 
                         #endregion ML_Leave
 
-                        else if (leave.leavetype_id != 0 && leave.from_date != DateTime.MinValue && leave.to_date != DateTime.MinValue && (leave.to_date >= timeNow) && leave.to_date >= leave.from_date)
+                        else if (leave.leavetype_id != 0 && leave.from_date != DateTime.MinValue && leave.to_date != DateTime.MinValue && leave.to_date >= timeNow && leave.to_date >= leave.from_date)
                         {
                             List<DateTime> holiday = LeaveRepo.GetDateFromHoliday();
                             decimal noofdays = (decimal)Utils.DaysLeft(leave.from_date, leave.to_date, true, holiday);
                             if (noofdays == 0)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "selected date falls on holiday", "selected date falls on holiday"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_505", "Selected date falls on holiday", "Selected date falls on holiday"));
                             }
 
                             #region CL_Leave 
-                            else if (leave_type == "CL")
+                            else if (leave_type == Constants.LEAVE_TYPE_CL)
                             {
                                 //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
                                 Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
@@ -244,7 +239,7 @@ namespace EMS.Controllers
                                 {
                                     if (leave_balance_instance.no_of_days < noofdays)
                                     {
-                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "you do not have enough CL leavebalance", "you do not have enough CL leavebalance"));
+                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "You do not have enough CL leavebalance", "You do not have enough CL leavebalance"));
                                     }
                                     else if (leave_balance_instance.no_of_days >= noofdays)
                                     {
@@ -264,9 +259,9 @@ namespace EMS.Controllers
                             #endregion CL_Leave
 
                             #region EL_Leave 
-                            else if (leave_type == "EL")
+                            else if (leave_type == Constants.LEAVE_TYPE_EL)
                             {
-                                int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
+                                int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(Constants.LEAVE_TYPE_LOP);
                                 decimal Lop_leave_balance = LeaveRepo.GetNoofDaysById(LOP_leave_type_id, leave.employee_id);
                                 decimal El_leave_balance = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
                                 if (El_leave_balance < noofdays)
@@ -311,14 +306,14 @@ namespace EMS.Controllers
                             #endregion EL_Leave
 
                             #region LOP
-                            else if (leave_type == "LOP")
+                            else if (leave_type == Constants.LEAVE_TYPE_LOP)
                             {
                                 decimal Lop_leave_balance = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
-                                int Cl_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype("CL");
-                                int El_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype("EL");
-                                decimal Cl_leave_type = LeaveRepo.GetNoofDaysById(Cl_leave_id, leave.employee_id);
-                                decimal El_leave_type = LeaveRepo.GetNoofDaysById(El_leave_id, leave.employee_id);
-                                if (Cl_leave_type == 0 && El_leave_type == 0)
+                                int Cl_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype(Constants.LEAVE_TYPE_CL);
+                                int El_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype(Constants.LEAVE_TYPE_EL);
+                                decimal Cl_leave_balance = LeaveRepo.GetNoofDaysById(Cl_leave_id, leave.employee_id);
+                                decimal El_leave_balance = LeaveRepo.GetNoofDaysById(El_leave_id, leave.employee_id);
+                                if (Cl_leave_balance == 0 && El_leave_balance == 0)
                                 {
                                     Lop_leave_balance = Lop_leave_balance + noofdays;
                                     leave.no_of_days = (int)noofdays;
@@ -333,15 +328,15 @@ namespace EMS.Controllers
                                     MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Applied successfully", "Leave Applied successfully"));
                                 }
-                                else if (Cl_leave_type == 0 && El_leave_type > 0)
+                                else if (Cl_leave_balance == 0 && El_leave_balance > 0)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "you can apply the Leave in 'EL'", "you can apply the Leave in 'EL'"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You can apply the Leave in 'EL'", "You can apply the Leave in 'EL'"));
                                 }
-                                else if (El_leave_type == 0 && Cl_leave_type > 0)
+                                else if (El_leave_balance == 0 && Cl_leave_balance > 0)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "you can apply the Leave in 'CL'", "you can apply the Leave in 'CL'"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "You can apply the Leave in 'CL'", "You can apply the Leave in 'CL'"));
                                 }
-                                else if (Cl_leave_type > 0 && El_leave_type > 0)
+                                else if (Cl_leave_balance > 0 && El_leave_balance > 0)
                                 {
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_510", "You have CL, EL leave balance", "You have CL, EL leave balance"));
                                 }
@@ -349,7 +344,7 @@ namespace EMS.Controllers
                             #endregion LOP
 
                             #region Wrok_From _Home
-                            else if (leave_type == "WFH")
+                            else if (leave_type == Constants.LEAVE_TYPE_WFH)
                             {
                                 decimal? WFH_leave_balance = LeaveRepo.GetNoofDaysById(leave.leavetype_id, leave.employee_id);
                                 if (noofdays <= 2)
@@ -478,18 +473,18 @@ namespace EMS.Controllers
                     string leave_type_name = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
 
                     #region CL and ML
-                    if(leave_type_name == "CL" || leave_type_name =="ML")
+                    if(leave_type_name == Constants.LEAVE_TYPE_CL || leave_type_name == Constants.LEAVE_TYPE_ML)
                     {
                         leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
                     }
                     #endregion
 
                     #region EL
-                    else if(leave_type_name == "EL")
+                    else if(leave_type_name == Constants.LEAVE_TYPE_EL)
                     {
                         if (leave.EL_flag > 0)
                         {
-                            int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype("LOP");
+                            int LOP_leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(Constants.LEAVE_TYPE_LOP);
                             Leavebalance_sheet lop_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, LOP_leave_type_id);
                             leave_balance_instance.no_of_days = (decimal)leave.EL_flag;
                             lop_balance_instance.no_of_days =(decimal)(lop_balance_instance.no_of_days - (decimal)(leave.no_of_days - leave.EL_flag));
@@ -503,7 +498,7 @@ namespace EMS.Controllers
                     #endregion
 
                     #region LOP and WFH
-                    else if(leave_type_name =="LOP" || leave_type_name =="WFH")
+                    else if(leave_type_name == Constants.LEAVE_TYPE_LOP || leave_type_name == Constants.LEAVE_TYPE_WFH)
                     {
                         leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
                     }

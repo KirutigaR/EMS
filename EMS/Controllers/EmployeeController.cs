@@ -150,8 +150,7 @@ namespace EMS.Controllers
             HttpResponseMessage Response = null;
             try
             {
-                List<EmployeeModel> Emp_List = EmployeeRepo.GetEmployeeList(reportingto_id, designation_id);
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Emp_List));
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", EmployeeRepo.GetEmployeeList(reportingto_id, designation_id)));
             }
             catch (Exception exception)
             {
@@ -165,14 +164,10 @@ namespace EMS.Controllers
         [Route("api/v1/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
         public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id 
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             HttpResponseMessage Response = null;
             try
             {
-                List<EmployeeModel> Emp_List = EmployeeRepo.GetAvailableEmployeeList(reportingto_id, designation_id);
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Emp_List));
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", EmployeeRepo.GetAvailableEmployeeList(reportingto_id, designation_id)));
             }
             catch (Exception exception)
             {
@@ -180,8 +175,6 @@ namespace EMS.Controllers
                 Debug.WriteLine(exception.GetBaseException());
                 Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
-            stopwatch.Stop();
-            Debug.WriteLine("\n\n\n"+stopwatch.Elapsed+"\n\n\n");
             return Response;
         }
 
@@ -219,7 +212,7 @@ namespace EMS.Controllers
         }
 
         [Route("api/v1/get/employee/byuserid/{user_id?}")]
-        public HttpResponseMessage GetEmployeeByUserId(int user_id)//u_id user_id
+        public HttpResponseMessage GetEmployeeByUserId(int user_id)
         {
             HttpResponseMessage Response = null;
             try
@@ -252,7 +245,7 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/v1/employee/inactive/{employee_id?}")]
-        public HttpResponseMessage InvalidEmployee(int employee_id)//e_id employee_id
+        public HttpResponseMessage InvalidEmployee(int employee_id)
         {
             HttpResponseMessage response = null;
             try
@@ -290,8 +283,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                List<DesignationModel> d_list = EmployeeRepo.GetDesignationList();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", d_list));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", EmployeeRepo.GetDesignationList()));
             }
             catch (Exception exception)
             {
@@ -302,8 +294,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/employee/reportingto/list")]
-        //Manager , TeamLeader and HR list 
+        [Route("api/v1/employee/reportingto/list")]//Manager , TeamLeader and HR list 
         public HttpResponseMessage GetReportingtoList()
         {
             HttpResponseMessage response = null;
@@ -330,8 +321,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                ReportingTo reportingto = EmployeeRepo.GetReportingtoByEmpId(employee_id);
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", reportingto));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", EmployeeRepo.GetReportingtoByEmpId(employee_id)));
             }
             catch (Exception exception)
             {
@@ -421,12 +411,12 @@ namespace EMS.Controllers
 
         [HttpGet]
         [Route("api/v1/employee/search/{employee_id?}/{employee_name?}")]
-        public HttpResponseMessage EmployeeSearch(int employee_id = 0 , string employee_name = null)
+        public HttpResponseMessage EmployeeSearch(int employee_id = 0 , string employee_name = null)//not used 
         {
             HttpResponseMessage Response = null;
             try
             {
-                if (employee_id != 0 || employee_name!=null)
+                if (employee_id != 0 || employee_name != null)
                 {
                     List<EmployeeModel> employee_list = EmployeeRepo.SearchEmployee(employee_id, employee_name);
                     if(employee_list.Count!=0)
@@ -455,8 +445,7 @@ namespace EMS.Controllers
             HttpResponseMessage Response = null;
             try
             {
-                int recent_id = EmployeeRepo.GetLastAddedEmployee();
-                Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", recent_id));
+                Response = Request.CreateResponse(new EMSResponseMessage("EMS_001", "Success", EmployeeRepo.GetLastAddedEmployee()));
             }
             catch (Exception exception)
             {

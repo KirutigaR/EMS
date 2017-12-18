@@ -26,5 +26,19 @@ namespace EMS.Utility
         public static int PROJECTROLE_TEAMLEAD = 6;
         public static int PROJECTROLE_TEAMMEMBER = 7;
         public static int SYSTEMROLE_TEAMLEAD = 9;
+
+        public static int ML_LEAVE_BALANCE = 182;
+
+        public static string LEAVE_TYPE_ML = "ML";
+        public static string LEAVE_TYPE_CL = "CL";
+        public static string LEAVE_TYPE_EL = "EL";
+        public static string LEAVE_TYPE_LOP = "LOP";
+        public static string LEAVE_TYPE_WFH = "WFH";
+
+        public static int LEAVEID_TYPE_CL = 1;
+        public static int LEAVEID_TYPE_EL = 2;
+        public static int LEAVEID_TYPE_ML = 3;
+        public static int LEAVEID_TYPE_LOP = 4;
+        public static int LEAVEID_TYPE_WFH = 5;
     }
 }

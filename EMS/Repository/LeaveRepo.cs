@@ -298,7 +298,8 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                leave_status = ls.leave_status
+                                leave_status = ls.leave_status,
+                                leave_id = l.id
                             };
                 return query.ToList();
 
@@ -726,7 +727,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<Leave> GetActiveLeaveListByEmpId(int employee_id)
+        public static List<Leave> GetActiveLeaveListByEmployeeId(int employee_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try

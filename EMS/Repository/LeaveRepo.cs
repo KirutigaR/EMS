@@ -847,28 +847,28 @@ namespace EMS.Repository
             }
         }
 
-        public static decimal GetLeaveTakenDashboard(int employee_id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from x in datacontext.Leaves
-                            join l in datacontext.Status_leave on x.leave_statusid equals l.id
-                            where x.employee_id == employee_id && l.id == Constants.LEAVE_STATUS_APPROVED && x.from_date <= DateTime.Now
-                            select x.no_of_days;
-                return query.ToList().Sum();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
+        //public static decimal GetLeaveTakenDashboard(int employee_id)
+        //{
+        //    EMSEntities datacontext = new EMSEntities();
+        //    try
+        //    {
+        //        var query = from x in datacontext.Leaves
+        //                    join l in datacontext.Status_leave on x.leave_statusid equals l.id
+        //                    where x.employee_id == employee_id && l.id == Constants.LEAVE_STATUS_APPROVED && x.from_date < DateTime.Now
+        //                    select x.no_of_days;
+        //        return query.ToList().Sum();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e.Message);
+        //        Debug.WriteLine(e.GetBaseException());
+        //        throw e;
+        //    }
+        //    finally
+        //    {
+        //        datacontext.Dispose();
+        //    }
+        //}
 
         public static decimal GetApprovedLeaveDashboard(int employee_id)
         {
@@ -892,5 +892,29 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static decimal GetPendingLeaves(int employee_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Leaves
+                            join l in datacontext.Status_leave on x.leave_statusid equals l.id
+                            where x.employee_id == employee_id && l.id == Constants.LEAVE_STATUS_PENDING && x.from_date >= DateTime.Now
+                            select x.no_of_days;
+                return query.ToList().Sum();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
     }
 }

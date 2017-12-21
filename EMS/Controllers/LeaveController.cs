@@ -656,14 +656,10 @@ namespace EMS.Controllers
                 if(employee_id != 0)
                 {
                     Dictionary<string, object> result_set = new Dictionary<string, object>();
-                    decimal leave_available = LeaveRepo.GetLeaveAvailableDashboard(employee_id);
-                    decimal reporties_leave = LeaveRepo.GetRequestByRoleId(employee_id).Count;
-                    decimal approved_leave =  LeaveRepo.GetApprovedLeaveDashboard(employee_id);
-                    decimal pending_leave = LeaveRepo.GetPendingLeaves(employee_id);
-                    result_set.Add("Leave_Available", leave_available);
-                    result_set.Add("Reporties_Leave", reporties_leave);
-                    result_set.Add("Approved_Leave", approved_leave);
-                    result_set.Add("Pending_Leave", pending_leave);
+                    result_set.Add("Available_CL_EL", LeaveRepo.GetLeaveAvailableDashboard(employee_id));
+                    result_set.Add("Reporties_Pending_Leave", LeaveRepo.GetRequestByRoleId(employee_id).Count);
+                    result_set.Add("Approved_Leave_Application", LeaveRepo.GetApprovedLeaveDashboard(employee_id));
+                    result_set.Add("Pending_Leave_Application", LeaveRepo.GetPendingLeaves(employee_id));
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", result_set));
                 }
                 else

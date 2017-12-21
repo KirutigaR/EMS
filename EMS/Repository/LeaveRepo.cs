@@ -877,10 +877,9 @@ namespace EMS.Repository
             try
             {
                 var query = from x in datacontext.Leaves
-                            join l in datacontext.Status_leave on x.leave_statusid equals l.id
-                            where x.employee_id == employee_id && l.id == Constants.LEAVE_STATUS_APPROVED && x.from_date >= DateTime.Now
-                            select x.no_of_days;
-                return query.ToList().Sum();
+                            where x.employee_id == employee_id && x.leave_statusid == Constants.LEAVE_STATUS_APPROVED && x.from_date >= DateTime.Now
+                            select x;
+                return query.ToList().Count;
             }
             catch (Exception e)
             {
@@ -899,11 +898,11 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                DateTime current_date = DateTime.Now.Date;
                 var query = from x in datacontext.Leaves
-                            join l in datacontext.Status_leave on x.leave_statusid equals l.id
-                            where x.employee_id == employee_id && l.id == Constants.LEAVE_STATUS_PENDING && x.from_date >= DateTime.Now
-                            select x.no_of_days;
-                return query.ToList().Sum();
+                            where x.employee_id == employee_id && x.leave_statusid == Constants.LEAVE_STATUS_PENDING && x.from_date >= current_date
+                            select x;
+                return query.ToList().Count;
             }
             catch (Exception e)
             {

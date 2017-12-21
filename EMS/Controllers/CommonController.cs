@@ -31,7 +31,7 @@ namespace EMS.Controllers
                 Dictionary<string, object> resultSet = new Dictionary<string, object>();
                 if (!CommonRepo.Login(user))
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_301", "Invalid Username and Password", "Invalid Username and Password"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_301", "Invalid Username or Password", "Invalid Username or Password"));
                 }
                 else
                 {
@@ -76,12 +76,12 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password must be same", "New Password and Confirm Password must be same"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password should be same", "New Password and Confirm Password should be same"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid user login", "Invalid user login"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Access Denied", "Access Denied"));
                 }
             }
             catch (Exception exception)
@@ -249,7 +249,7 @@ namespace EMS.Controllers
                     {
                         if(changepassword.oldpassword == changepassword.new_password)
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Old Password and New password should not be same", "Old Password and New password should not be same"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Current Password and New password should be different", "Current Password and New password should be different"));
                         }
                         else if (EncryptPassword.CalculateHash(changepassword.oldpassword) == user_instance.password)
                         {
@@ -261,24 +261,24 @@ namespace EMS.Controllers
                         }
                         else
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "Entered Old Password is WRONG", "Entered Old Password is WRONG"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_514", "Invalid Current Password", "Invalid Current Password"));
                         }
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password must be same", "New Password and Confirm Password must be same"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password should be same", "New Password and Confirm Password should be same"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid user login", "Invalid user login"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Access Denied", "Access Denied"));
                 }
             }
             catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
                 Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Sequence Contains no Elements", exception.Message));
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
             }
             return response;
         }

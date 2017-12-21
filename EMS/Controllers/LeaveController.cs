@@ -155,7 +155,7 @@ namespace EMS.Controllers
 
                     if (leave.from_date.Year > DateTime.Now.Year || leave.to_date.Year > DateTime.Now.Year && leave_type != Constants.LEAVE_TYPE_ML)
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Leave cannot be applied for the future year", "Leave cannot be applied for the future year"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Leave should be applied in CURRENT YEAR", "Leave should be applied in CURRENT YEAR"));
                         return response;
                     }
 
@@ -166,7 +166,7 @@ namespace EMS.Controllers
 
                     if (leave.from_date < timeNow || leave.to_date < timeNow || leave.from_date > leave.to_date)
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Please select valid date ", "Please select valid date"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Select valid date ", "Select valid date"));
                         return response;
                     }
 
@@ -176,12 +176,12 @@ namespace EMS.Controllers
                         {
                             if (leave.from_date <= leaveinstance.from_date && leave.to_date >= leaveinstance.to_date)
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "Leave application is already registered inbetween these days", "Leave application is already registered inbetween these days"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "Already leaves has been applied inbetween selected days", "Already leaves has been applied inbetween selected days"));
                                 return response;
                             }
                             else if ((leaveinstance.from_date <= leave.from_date && leave.from_date <= leaveinstance.to_date) || (leaveinstance.from_date <= leave.to_date && leave.to_date <= leaveinstance.to_date))
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "Leave application is already registered inbetween these days", "Leave application is already registered inbetween these days"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_516", "Already leaves has been applied inbetween selected days", "Already leaves has been applied inbetween selected days"));
                                 return response;
                             }
                         }
@@ -206,7 +206,7 @@ namespace EMS.Controllers
                             }
                             else
                             {
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "you do not have enough leave balance", "you do not have enough leave balance"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_503", "Insufficient 'ML' leave balance", "Insufficient 'ML' leave balance"));
                                 return response;
                             }
                         }
@@ -236,14 +236,14 @@ namespace EMS.Controllers
                                 //int leave_type_id = LeaveRepo.GetLeavetypeIdByLeavetype(leave_type1);
                                 if (noofdays > 3)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "CL cannot be applied more than three days", "CL cannot be applied more than three days"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_506", "CL should be with in three days", "CL should be with in three days"));
                                     return response;
                                 }
                                 else if (noofdays <= 3)
                                 {
                                     if (leave_balance_instance.no_of_days < noofdays)
                                     {
-                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "You do not have enough CL leavebalance", "You do not have enough CL leavebalance"));
+                                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_507", "Insufficient 'CL' balance, Please select different leave type", "Insufficient 'CL' balance, Please select different leave type"));
                                         return response;
                                     }
                                     else if (leave_balance_instance.no_of_days >= noofdays)
@@ -285,7 +285,7 @@ namespace EMS.Controllers
                                 //ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                                 //MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
                                 //response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Applied successfully", "Leave Applied successfully"));
-                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Your EL balance is low", "Your EL balance is low"));
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Insufficient 'EL' blanace, Please select different leave type", "Insufficient 'EL' blanace, Please select different leave type"));
                                 return response;
                                 }
                                 else if (leave_balance_instance.no_of_days >= noofdays)
@@ -316,12 +316,12 @@ namespace EMS.Controllers
                                 }
                                 else if (Cl_leave_balance == 0 && El_leave_balance > 0)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You can apply the Leave in 'EL'", "You can apply the Leave in 'EL'"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You have 'EL' leave balance. So you can apply from that", "You have 'EL' leave balance. So you can apply from that"));
                                     return response;
                                 }
                                 else if (El_leave_balance == 0 && Cl_leave_balance > 0)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "You can apply the Leave in 'CL'", "You can apply the Leave in 'CL'"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "You have 'CL' leave balance. So you can apply from that", "You have 'CL' leave balance. So you can apply from that"));
                                     return response;
                             }
                             else if (Cl_leave_balance > 0 && El_leave_balance > 0)
@@ -345,7 +345,7 @@ namespace EMS.Controllers
                                 }
                                 else if (noofdays > 2)
                                 {
-                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "Work from home cannot be applied more than two days", "Work from home cannot be applied more than two dayss"));
+                                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_511", "Work from home should be with in two days", "Work from home should be with in two days"));
                                     return response;
                                 }
                             }
@@ -360,7 +360,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_512", "Do not leave the fields", "Do not leave the fields"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_512", "Mandatory fields are missing", "Mandatory fields are missing"));
                 }
             }
             catch (Exception exception)
@@ -427,7 +427,7 @@ namespace EMS.Controllers
                     leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                     LeaveRepo.EditLeave(leave);
 
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Approved!", "Leave Approved!"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Approved", "Leave Approved"));
                 }
                 else if (leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED || leave_status.is_approved == Constants.LEAVE_STATUS_CANCELLED)
                 {
@@ -472,13 +472,13 @@ namespace EMS.Controllers
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_CANCELLED;
                         LeaveRepo.EditLeave(leave);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Cancelled!", "Leave Cancelled!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Cancelled", "Leave Cancelled"));
                     }
                     if(leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED)
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
                         LeaveRepo.EditLeave(leave);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Rejected!", "Leave Rejected!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Rejected", "Leave Rejected"));
                     }
                 }
                 ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);

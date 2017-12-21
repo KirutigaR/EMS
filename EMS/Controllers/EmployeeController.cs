@@ -69,11 +69,11 @@ namespace EMS.Controllers
                         , RegexOptions.IgnoreCase);
                     if (isEmail != true)
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Invalid E-MailId", "Invalid E-MailId"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Enter valid MailId", "Enter valid MailId"));
                     }
                     else if ((employee.date_of_birth.Year > (DateTime.Now.Year - 21)))
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Invalid DOB", "Invalid DOB"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee age is with in 21 years", "Employee age is with in 21 years"));
                     }
                     else
                     {
@@ -199,7 +199,7 @@ namespace EMS.Controllers
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Please check input Json", "Please check input Json"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid ID", "Please check input Json"));
                 }
             }
             catch (Exception exception)
@@ -302,9 +302,13 @@ namespace EMS.Controllers
             {
                 List<ReportingTo> reporting_to_list = EmployeeRepo.GetReportingtoList();
                 if(reporting_to_list != null)
+                {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", reporting_to_list));
+                }   
                 else
+                {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_405", "No active reporters found", "No active reporters found"));
+                }                    
             }
             catch (Exception exception)
             {

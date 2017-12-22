@@ -17,7 +17,7 @@ namespace EMS.Models
         public int user_id { get; set; }
         public int reporting_to { get; set; }
         public string reportingto_name { get; set; }
-        public decimal Year_of_experience { get; set; }
+        public string Year_of_experience { get; set; }
         public string gender { get; set; }
         public int role_id { get; set; }
         public string pan_no { get; set; }

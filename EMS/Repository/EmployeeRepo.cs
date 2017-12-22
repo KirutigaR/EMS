@@ -87,12 +87,11 @@ namespace EMS.Repository
                 }
               
                     var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
-                                join user in datacontent.Users
-                                on employee.user_id equals user.id
-                                join designation in datacontent.Designations
-                                on employee.designation equals designation.id
-                                join employee1 in datacontent.Employees
-                                on employee.reporting_to equals employee1.id
+                                join user in datacontent.Users on employee.user_id equals user.id
+                                join designation in datacontent.Designations on employee.designation equals designation.id
+                                join employee1 in datacontent.Employees on employee.reporting_to equals employee1.id
+                                join User_role in datacontent.User_role on user.id equals User_role.user_id
+                                join Role in datacontent.Roles on User_role.role_id equals Role.id
                                 orderby employee.created_on descending
                                 where (user.is_active == 1)
                                 select new EmployeeModel
@@ -119,6 +118,7 @@ namespace EMS.Repository
                                     medical_insurance_no = employee.medical_insurance_no,
                                     //PF_no = employee.PF_no,
                                     //created_on = (DateTime)employee.created_on
+                                    role_name = Role.role_name
                                 };
                 return query.ToList();
        

@@ -36,7 +36,7 @@ namespace EMS.Utility
 
                 mail.IsBodyHtml = true;
                 //mail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-                //mail.ReplyTo = new MailAddress("praveen@jaishu.com");
+                //mail.ReplyTo = new MailAddress("praveenk@jaishu.com");
                 //mail.ReplyToList.Add(toemail);
                 SmtpServer.Send(mail);
             }

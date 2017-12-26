@@ -73,7 +73,7 @@ namespace EMS.Controllers
                     }
                     else if ((employee.date_of_birth.Year > (DateTime.Now.Year - 21)))
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee age is with in 21 years", "Employee age is with in 21 years"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee age is below 21 years", "Employee age is below 21 years"));
                     }
                     else
                     {

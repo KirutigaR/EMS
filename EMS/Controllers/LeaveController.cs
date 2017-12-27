@@ -565,7 +565,7 @@ namespace EMS.Controllers
                 //string role_name = ProjectRepo.GetRoleNameById(project_role.role_id);
                 //if (role_name == "HR")
                 //{
-                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingApprovedLeave(reportingto_id);
+                List<LeavehistoryModel> leave_history = LeaveRepo.GetApprovedRejectedCancelledLeave(reportingto_id);
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
                 //}
 

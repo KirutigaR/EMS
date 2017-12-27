@@ -279,6 +279,8 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
+                //list the leave from last year december to current year 
+                DateTime leave_list_from_date = Convert.ToDateTime((DateTime.Now.Year - 1)+ "/12/01").Date;
                 var query = from e in datacontext.Employees
                             join l in datacontext.Leaves
                             on e.id equals l.employee_id
@@ -287,8 +289,9 @@ namespace EMS.Repository
                             join ls in datacontext.Status_leave
                             on l.leave_statusid equals ls.id
                             join u in datacontext.Users on e.user_id equals u.id
+                            where l.employee_id == id && u.is_active == 1 && l.from_date >= leave_list_from_date
                             orderby l.from_date descending
-                            where l.employee_id == id && u.is_active == 1//&& l.leavetype_id == 2
+                            //&& l.leavetype_id == 2
                             select new LeavehistoryModel
                             {
                                 //id = e.id,
@@ -641,12 +644,12 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<LeavehistoryModel> GetPendingApprovedLeave(int reportingto_id)
+        public static List<LeavehistoryModel> GetApprovedRejectedCancelledLeave(int reportingto_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var currentdate = DateTime.Now.Date;
+                DateTime leave_list_from_date = Convert.ToDateTime((DateTime.Now.Year - 1) + "/12/01").Date;
                 var predicate = LinqKit.PredicateBuilder.True<Employee>();
                 if (reportingto_id != 0)
                 {
@@ -660,8 +663,8 @@ namespace EMS.Repository
                             join st in datacontext.Status_leave on l.leave_statusid equals st.id
                             join emp in datacontext.Employees on e.reporting_to equals emp.id
                             join u in datacontext.Users on e.user_id equals u.id
+                            where l.from_date >= leave_list_from_date && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED || l.leave_statusid == Constants.LEAVE_STATUS_CANCELLED) && u.is_active ==1
                             orderby l.from_date descending
-                            where l.from_date >= currentdate && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED) && u.is_active ==1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,

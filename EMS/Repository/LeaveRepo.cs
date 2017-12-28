@@ -18,6 +18,7 @@ namespace EMS.Repository
             try
             {
                 var query = from h in datacontext.Holiday_List
+                            where h.holiday_date.Year == DateTime.Now.Year
                             select h;
                 return query.ToList();
             }
@@ -791,7 +792,7 @@ namespace EMS.Repository
             try
             {
                 var query = from h in datacontext.Holiday_List
-                            where h.holiday_date >= DateTime.Now
+                            where h.holiday_date >= DateTime.Now && h.holiday_date.Year == DateTime.Now.Year
                             select h;
                 return query.ToList();
             }

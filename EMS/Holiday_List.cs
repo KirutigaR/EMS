@@ -17,6 +17,5 @@ namespace EMS
         public int id { get; set; }
         public System.DateTime holiday_date { get; set; }
         public string holiday_name { get; set; }
-        public string holiday_day { get; set; }
     }
 }

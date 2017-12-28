@@ -54,7 +54,7 @@ namespace EMS.Utility
             {
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com");
-                ///mail.CC.Add("praveenk@jaishu.com");
+                mail.CC.Add("praveenk@jaishu.com");
                 //Console.WriteLine("Your Message");
                 if (status == Constants.LEAVE_STATUS_APPROVED)
                 {

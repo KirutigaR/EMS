@@ -81,7 +81,7 @@ namespace EMS.Utility
                 {
                     mail.To.Add(reporting_to_mailid);
                     mail.CC.Add(user_mail);
-                    mail.Subject = "Jaishu Leave Managmment";
+                    mail.Subject = "Jaishu Leave Managment";
                     mail.Body = "Hi "+ Reportingto_name + "<br><br>Your team member " + user_name+ " cancelled a leave from "+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". Kindly login <a href=http://192.168.1.28:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 }
                 //System.Net.Mail.Attachment attachment;

@@ -19,5 +19,6 @@ namespace EMS.Models
         public string leave_status { get; set; }
         public int leave_id { get; set; }
         public string remark { get; set; }
+        //public int cancel_flag { get; set; }
     }
 }

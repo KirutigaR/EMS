@@ -381,6 +381,13 @@ namespace EMS.Controllers
             try
             {
                 List<LeavehistoryModel> leave_history_model = LeaveRepo.GetLeaveHistoryById(employee_id);
+                //foreach (LeavehistoryModel leave in leave_history_model)
+                //{
+                //    if (leave.leave_status == "Pending" || (leave.leave_status == "Approved" && leave.from_date > DateTime.Now))
+                //    {
+                //        leave.cancel_flag = 1;
+                //    }
+                //}
                 response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_513", "approved", leave_history_model));
             }
             catch (Exception exception)
@@ -470,15 +477,23 @@ namespace EMS.Controllers
 
                     if(leave_status.is_approved == Constants.LEAVE_STATUS_CANCELLED)
                     {
-                        leave.leave_statusid = Constants.LEAVE_STATUS_CANCELLED;
-                        LeaveRepo.EditLeave(leave);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Cancelled", "Leave Cancelled"));
+                        if((leave.from_date <= DateTime.Now.Date)||(DateTime.Now.Date >= leave.to_date))
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Future leaves can only be cancelled", "Future leaves can only be cancelled"));
+                            return response;
+                        }
+                        else
+                        {
+                            leave.leave_statusid = Constants.LEAVE_STATUS_CANCELLED;
+                            LeaveRepo.EditLeave(leave);
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Cancelled", "Leave Cancelled"));
+                        }
                     }
                     if(leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED)
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
                         LeaveRepo.EditLeave(leave);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Leave Rejected", "Leave Rejected"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Rejected", "Leave Rejected"));
                     }
                 }
                 ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);

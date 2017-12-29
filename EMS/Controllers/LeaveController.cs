@@ -479,7 +479,7 @@ namespace EMS.Controllers
                     {
                         if((leave.from_date <= DateTime.Now.Date)||(DateTime.Now.Date >= leave.to_date))
                         {
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_515", "Future leaves can only be cancelled", "Future leaves can only be cancelled"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_517", "Future leaves can only be cancelled", "Future leaves can only be cancelled"));
                             return response;
                         }
                         else

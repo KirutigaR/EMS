@@ -470,7 +470,9 @@ namespace EMS.Controllers
                 List<EmployeeModel> Employee_details = EmployeeRepo.GetEmployeeList(0, 0);
                 if (Employee_details.Count != 0)
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Employee_details));
+                    //var itemToRemove = Employee_details.Single(r => r.id == /*employee id*/);
+                    //Employee_details.Remove(itemToRemove);
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Employee_details.OrderBy(x => x.first_name)));
                 }
             }
             catch (Exception exception)

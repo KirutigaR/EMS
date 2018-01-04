@@ -213,13 +213,13 @@ namespace EMS.Controllers
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Invalid Excel Sheet", "Invalid Excel Sheet"));
+                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Invalid Excel Sheet", e.Message));
             }
             catch (InvalidOperationException e)
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Mandatory columns are missing", "Mandatory columns are missing"));
+                return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Mandatory columns are missing", e.Message));
             }
             catch (IOException IOException)
             {

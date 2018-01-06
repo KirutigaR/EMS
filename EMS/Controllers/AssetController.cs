@@ -15,6 +15,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Configuration;
+using Newtonsoft.Json;
 
 namespace EMS.Controllers
 {
@@ -362,5 +363,28 @@ namespace EMS.Controllers
             return response;
         }
 
+        [Route("api/v1/get/asset/details/{asset_id?}")]
+        [HttpGet]
+        public HttpResponseMessage GetAssetDetailsByID(int asset_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(asset_id != 0)
+                {
+                    Dictionary<string, object> result_set = new Dictionary<string, object>();
+                    result_set.Add("asset_details",AssetRepo.GetAssetDetailsByID(asset_id));
+                    result_set.Add("asset_log", (AssetRepo.GetAssetLogDetails(asset_id)));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", result_set));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

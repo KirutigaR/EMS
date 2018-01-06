@@ -186,5 +186,27 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static Asset GetAssetInstance(int asset_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from asset in datacontext.Assets
+                            where asset.id == asset_id
+                            select asset;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

@@ -113,7 +113,7 @@ namespace EMS.Controllers
                 Asset existing_instance = AssetRepo.GetAssetInstance(asset.id);
                 if (asset != null)
                 {
-                    AssetRepo.UpdateAsset(existing_instance);
+                    AssetRepo.UpdateAsset(asset);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset Updated successfully", "Asset Updated successfully"));
                 }
                 else

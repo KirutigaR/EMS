@@ -50,6 +50,7 @@ namespace EMS
         public virtual DbSet<Employee_Asset> Employee_Asset { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Leave> Leaves { get; set; }
+        public virtual DbSet<Asset_Temp_Table> Asset_Temp_Table { get; set; }
     
         public virtual int UpdateLeaveBalance()
         {
@@ -67,6 +68,11 @@ namespace EMS
                 new ObjectParameter("useractive", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("availableemployee", projectidParameter, useractiveParameter);
+        }
+    
+        public virtual int MoveToAssetTable()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MoveToAssetTable");
         }
     }
 }

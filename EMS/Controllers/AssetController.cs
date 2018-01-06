@@ -42,12 +42,13 @@ namespace EMS.Controllers
             return response;
         }
 
+
         /// <summary>
         /// To Get AssetStatus List
         /// </summary>
-        /// <returns>ToList<string> </returns>
-        [HttpGet]
+        /// <returns></returns>
         [Route("api/v1/asset/status/list")]
+        [HttpGet]
         public HttpResponseMessage GetAssetStatusList()
         {
             HttpResponseMessage response = null;
@@ -67,7 +68,8 @@ namespace EMS.Controllers
         /// <summary>
         /// To Create a Asset
         /// </summary>
-        /// <returns>ToList<string> </returns>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         [Route("api/v1/create/asset")]
         [HttpPost]
         public HttpResponseMessage CreateAsset(Asset asset)
@@ -98,7 +100,8 @@ namespace EMS.Controllers
         /// <summary>
         /// To Update Asset
         /// </summary>
-        /// <returns>ToList<string> </returns>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         [Route("api/v1/update/asset")]
         [HttpPost]
         public HttpResponseMessage UpdateAsset(Asset asset)
@@ -126,6 +129,7 @@ namespace EMS.Controllers
             return response;
         }
 
+
         [Route("api/v1/asset/list/available")]
         [HttpGet]
         public HttpResponseMessage GetAvailableAssetList(Asset asset)
@@ -144,8 +148,12 @@ namespace EMS.Controllers
             return response;
         }
 
+        /// <summary>
+        /// To Upload Assets
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/v1/asset/bulkupload")]
         [HttpPost]
-        [Route("api/v1/bulkupload")]
         public async Task<HttpResponseMessage> UploadAssetDetails()
         {
             // Check if the request contains multipart/form-data.
@@ -235,14 +243,14 @@ namespace EMS.Controllers
                         objbulk.ColumnMappings.Add("Model", "Model");
                         objbulk.ColumnMappings.Add("Make", "Make");
                         objbulk.ColumnMappings.Add("Purchase_date", "Purchase_date");
-                        objbulk.ColumnMappings.Add("Invoice_no", "Invoice-no");
-                        objbulk.ColumnMappings.Add("Vendor_name", "vendor_name");
+                        objbulk.ColumnMappings.Add("Invoice_no", "Invoice_no");
+                        objbulk.ColumnMappings.Add("Vendor_name", "Vendor_name");
                         objbulk.ColumnMappings.Add("Asset_serial_no", "Asset_serial_no");
                         objbulk.ColumnMappings.Add("Warranty_period", "Warranty_period");
                         objbulk.ColumnMappings.Add("Notes", "Notes");
                         objbulk.ColumnMappings.Add("Scrap_date", "Scrap_date");
                         objbulk.ColumnMappings.Add("Price", "Price");
-                        objbulk.ColumnMappings.Add("Warranty_expiry_on", "Warranty_expiry_on");
+                        objbulk.ColumnMappings.Add("Warranty_expiry_date", "Warranty_expiry_date");
 
                         //inserting Datatable Records to DataBase    
                         con.Open();
@@ -253,7 +261,7 @@ namespace EMS.Controllers
 
                     if (flag)
                     {
-                        if (!CommonRepo.LoadDataFromTable())
+                        if (!AssetRepo.LoadAssetDataFromTable())
                         {
                             return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
                         }
@@ -291,6 +299,7 @@ namespace EMS.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Application Error", e.Message));
             }
         }
+
 
         [Route("api/v1/assign/asset")]
         [HttpPost]

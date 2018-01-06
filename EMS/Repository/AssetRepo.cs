@@ -208,5 +208,25 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static bool LoadAssetDataFromTable()
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = datacontext.MoveToAssetTable();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

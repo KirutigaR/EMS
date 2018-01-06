@@ -18,7 +18,7 @@ namespace EMS
         public int employee_id { get; set; }
         public int asset_id { get; set; }
         public System.DateTime assigned_on { get; set; }
-        public System.DateTime released_on { get; set; }
+        public Nullable<System.DateTime> released_on { get; set; }
     
         public virtual Asset Asset { get; set; }
         public virtual Employee Employee { get; set; }

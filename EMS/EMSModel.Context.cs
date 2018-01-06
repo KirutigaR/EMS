@@ -41,12 +41,15 @@ namespace EMS
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Client_type> Client_type { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<Status_leave> Status_leave { get; set; }
         public virtual DbSet<Incometax> Incometaxes { get; set; }
         public virtual DbSet<Salary_Structure> Salary_Structure { get; set; }
         public virtual DbSet<Payslip> Payslips { get; set; }
-        public virtual DbSet<Leave> Leaves { get; set; }
         public virtual DbSet<EMS_Leave_Balance_Temp> EMS_Leave_Balance_Temp { get; set; }
+        public virtual DbSet<Asset> Assets { get; set; }
+        public virtual DbSet<Asset_type> Asset_type { get; set; }
+        public virtual DbSet<Employee_Asset> Employee_Asset { get; set; }
+        public virtual DbSet<Status> Status { get; set; }
+        public virtual DbSet<Leave> Leaves { get; set; }
     
         public virtual int UpdateLeaveBalance()
         {

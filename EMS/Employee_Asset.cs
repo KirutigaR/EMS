@@ -12,19 +12,15 @@ namespace EMS
     using System;
     using System.Collections.Generic;
     
-    public partial class Leave
+    public partial class Employee_Asset
     {
         public int id { get; set; }
         public int employee_id { get; set; }
-        public int leavetype_id { get; set; }
-        public System.DateTime from_date { get; set; }
-        public System.DateTime to_date { get; set; }
-        public int no_of_days { get; set; }
-        public int leave_statusid { get; set; }
-        public Nullable<decimal> EL_flag { get; set; }
+        public int asset_id { get; set; }
+        public System.DateTime assigned_on { get; set; }
+        public System.DateTime released_on { get; set; }
     
+        public virtual Asset Asset { get; set; }
         public virtual Employee Employee { get; set; }
-        public virtual Status Status { get; set; }
-        public virtual Leave_type Leave_type { get; set; }
     }
 }

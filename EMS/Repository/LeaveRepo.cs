@@ -287,7 +287,7 @@ namespace EMS.Repository
                             on e.id equals l.employee_id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
-                            join ls in datacontext.Status_leave
+                            join ls in datacontext.Status
                             on l.leave_statusid equals ls.id
                             join u in datacontext.Users on e.user_id equals u.id
                             where l.employee_id == id && u.is_active == 1 && l.from_date >= leave_list_from_date
@@ -302,7 +302,7 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                leave_status = ls.leave_status,
+                                leave_status = ls.status,
                                 leave_id = l.id
                             };
                 return query.ToList();
@@ -527,7 +527,7 @@ namespace EMS.Repository
                             on e.id equals l.employee_id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
-                            join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
+                            join ls in datacontext.Status on l.leave_statusid equals ls.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
                             where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= Current_date && u.is_active ==1//&& l.leave_statusid == ls.id
@@ -542,7 +542,7 @@ namespace EMS.Repository
                                 no_of_days = l.no_of_days,
                                 //is_approved = l.is_approved,
                                 leave_id = l.id,
-                                leave_status = ls.leave_status,
+                                leave_status = ls.status,
                                 reportingto = e.reporting_to
                             };
                 return query.ToList();
@@ -569,7 +569,7 @@ namespace EMS.Repository
                             on l.employee_id equals e.id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
-                            join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            join st in datacontext.Status on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
                             where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= currentdate && u.is_active ==1
@@ -583,7 +583,7 @@ namespace EMS.Repository
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
                                 reportingto = e.reporting_to,
-                                leave_status = st.leave_status,
+                                leave_status = st.status,
                                 leave_id = l.id
                             };
                 return query.ToList();
@@ -661,7 +661,7 @@ namespace EMS.Repository
                             on l.employee_id equals e.id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
-                            join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            join st in datacontext.Status on l.leave_statusid equals st.id
                             join emp in datacontext.Employees on e.reporting_to equals emp.id
                             join u in datacontext.Users on e.user_id equals u.id
                             where l.from_date >= leave_list_from_date && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid== Constants.LEAVE_STATUS_REJECTED || l.leave_statusid == Constants.LEAVE_STATUS_CANCELLED) && u.is_active ==1
@@ -676,7 +676,7 @@ namespace EMS.Repository
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
                                 reporting_to = emp.first_name + " " +emp.last_name,
-                                leave_status = st.leave_status
+                                leave_status = st.status
                             };
                 return query.ToList();
             }
@@ -702,7 +702,7 @@ namespace EMS.Repository
                             on l.employee_id equals e.id
                             join lt in datacontext.Leave_type
                             on l.leavetype_id equals lt.id
-                            join st in datacontext.Status_leave on l.leave_statusid equals st.id
+                            join st in datacontext.Status on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
                             where l.from_date >= currentdate && u.is_active == 1
@@ -716,7 +716,7 @@ namespace EMS.Repository
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
                                 reportingto = e.reporting_to,
-                                leave_status = st.leave_status
+                                leave_status = st.status
                             };
                 return query.ToList();
             }
@@ -759,7 +759,7 @@ namespace EMS.Repository
             try
             {
                 var query = from l in datacontext.Leaves
-                            join ls in datacontext.Status_leave on l.leave_statusid equals ls.id
+                            join ls in datacontext.Status on l.leave_statusid equals ls.id
                             join e in datacontext.Employees on l.employee_id equals e.id
                             where l.id == leave_id
                             select new LeavehistoryModel
@@ -768,7 +768,7 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                leave_status = ls.leave_status,
+                                leave_status = ls.status,
                                 first_name = e.first_name,
                                 employee_id = e.id
                             };

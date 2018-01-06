@@ -24,6 +24,7 @@ namespace EMS
             this.Incometaxes = new HashSet<Incometax>();
             this.Salary_Structure = new HashSet<Salary_Structure>();
             this.Payslips = new HashSet<Payslip>();
+            this.Employee_Asset = new HashSet<Employee_Asset>();
             this.Leaves = new HashSet<Leave>();
         }
     
@@ -64,6 +65,8 @@ namespace EMS
         public virtual ICollection<Salary_Structure> Salary_Structure { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payslip> Payslips { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Employee_Asset> Employee_Asset { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leave> Leaves { get; set; }
     }

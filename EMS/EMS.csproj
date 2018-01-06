@@ -133,12 +133,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Asset.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Asset_type.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Client.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Client_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AssetController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -154,6 +161,9 @@
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Employee_Asset.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EMSModel.Context.cs">
@@ -221,6 +231,7 @@
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AssetRepo.cs" />
     <Compile Include="Repository\ClientRepo.cs" />
     <Compile Include="Repository\CommonRepo.cs" />
     <Compile Include="Repository\EmployeeRepo.cs" />
@@ -238,7 +249,7 @@
     <Compile Include="Salary_Structure.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Status_leave.cs">
+    <Compile Include="Status.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Task.cs">

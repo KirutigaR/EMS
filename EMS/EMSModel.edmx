@@ -5,6 +5,32 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="EMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asset">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type_id" Type="int" Nullable="false" />
+          <Property Name="model" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="make" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="purchase_date" Type="date" Nullable="false" />
+          <Property Name="invoice_no" Type="int" Nullable="false" />
+          <Property Name="vendor_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="asset_serial_no" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="warranty_period" Type="int" Nullable="false" />
+          <Property Name="status_id" Type="int" Nullable="false" />
+          <Property Name="notes" Type="varchar" MaxLength="500" />
+          <Property Name="scrap_date" Type="date" />
+          <Property Name="price" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="warranty_expiry_date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Asset_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="asset_type" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="id" />
@@ -56,8 +82,18 @@
           <Property Name="blood_group" Type="varchar" MaxLength="50" />
           <Property Name="created_on" Type="datetime" />
         </EntityType>
+        <EntityType Name="Employee_Asset">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="employee_id" Type="int" Nullable="false" />
+          <Property Name="asset_id" Type="int" Nullable="false" />
+          <Property Name="assigned_on" Type="date" Nullable="false" />
+          <Property Name="released_on" Type="date" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="EMS_Leave_Balance_Temp">
           <Key>
             <PropertyRef Name="id" />
@@ -202,13 +238,13 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
           <Property Name="from_date" Type="date" Nullable="false" />
           <Property Name="to_date" Type="date" />
         </EntityType>
-        <EntityType Name="Status_leave">
+        <EntityType Name="Status">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="leave_status" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="leave_description" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="status" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -247,7 +283,31 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
           <Property Name="password" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Client__type_id__619B8048">
+        <Association Name="FK__Asset__status_id__05D8E0BE">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="status_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Asset__type_id__04E4BC85">
+          <End Role="Asset_type" Type="Self.Asset_type" Multiplicity="1" />
+          <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Client__type_id__47DBAE45">
           <End Role="Client_type" Type="Self.Client_type" Multiplicity="1" />
           <End Role="Client" Type="Self.Client" Multiplicity="*" />
           <ReferentialConstraint>
@@ -256,6 +316,30 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Principal>
             <Dependent Role="Client">
               <PropertyRef Name="type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee___asset__73BA3083">
+          <End Role="Asset" Type="Self.Asset" Multiplicity="1" />
+          <End Role="Employee_Asset" Type="Self.Employee_Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee_Asset">
+              <PropertyRef Name="asset_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee___emplo__72C60C4A">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Employee_Asset" Type="Self.Employee_Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee_Asset">
+              <PropertyRef Name="employee_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -307,11 +391,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__0A9D95DB">
-          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__4CA06362">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Status_leave">
+            <Principal Role="Status">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -319,11 +403,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__0C85DE4D">
-          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__4D94879B">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Status_leave">
+            <Principal Role="Status">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -331,11 +415,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__1E6F845E">
-          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__4E88ABD4">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Status_leave">
+            <Principal Role="Status">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -343,11 +427,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__1F63A897">
-          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__4F7CD00D">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Status_leave">
+            <Principal Role="Status">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -355,11 +439,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__22401542">
-          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__5070F446">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Status_leave">
+            <Principal Role="Status">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -367,11 +451,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leave_sta__24285DB4">
-          <End Role="Status_leave" Type="Self.Status_leave" Multiplicity="1" />
+        <Association Name="FK__Leave__leave_sta__5165187F">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Status_leave">
+            <Principal Role="Status">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Leave">
@@ -379,7 +463,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leavetype__0B91BA14">
+        <Association Name="FK__Leave__leavetype__52593CB8">
           <End Role="Leave_type" Type="Self.Leave_type" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
@@ -391,7 +475,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leavetype__2057CCD0">
+        <Association Name="FK__Leave__leavetype__534D60F1">
           <End Role="Leave_type" Type="Self.Leave_type" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
@@ -403,7 +487,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leavetype__2334397B">
+        <Association Name="FK__Leave__leavetype__5441852A">
           <End Role="Leave_type" Type="Self.Leave_type" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
@@ -415,7 +499,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leave__leavetype__251C81ED">
+        <Association Name="FK__Leave__leavetype__5535A963">
           <End Role="Leave_type" Type="Self.Leave_type" Multiplicity="1" />
           <End Role="Leave" Type="Self.Leave" Multiplicity="*" />
           <ReferentialConstraint>
@@ -439,7 +523,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Leavebala__leave__47DBAE45">
+        <Association Name="FK__Leavebala__leave__571DF1D5">
           <End Role="Leave_type" Type="Self.Leave_type" Multiplicity="1" />
           <End Role="Leavebalance_sheet" Type="Self.Leavebalance_sheet" Multiplicity="*" />
           <ReferentialConstraint>
@@ -463,7 +547,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Project__client___34C8D9D1">
+        <Association Name="FK__Project__client___59063A47">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="Project" Type="Self.Project" Multiplicity="*" />
           <ReferentialConstraint>
@@ -487,7 +571,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Project_r__proje__38996AB5">
+        <Association Name="FK__Project_r__proje__5AEE82B9">
           <End Role="Project" Type="Self.Project" Multiplicity="1" />
           <End Role="Project_role" Type="Self.Project_role" Multiplicity="*" />
           <ReferentialConstraint>
@@ -499,7 +583,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Project_r__role___398D8EEE">
+        <Association Name="FK__Project_r__role___5BE2A6F2">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="Project_role" Type="Self.Project_role" Multiplicity="*" />
           <ReferentialConstraint>
@@ -523,7 +607,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Task__project_id__3C69FB99">
+        <Association Name="FK__Task__project_id__5DCAEF64">
           <End Role="Project" Type="Self.Project" Multiplicity="1" />
           <End Role="Task" Type="Self.Task" Multiplicity="*" />
           <ReferentialConstraint>
@@ -547,7 +631,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Timesheet__task___403A8C7D">
+        <Association Name="FK__Timesheet__task___5FB337D6">
           <End Role="Task" Type="Self.Task" Multiplicity="1" />
           <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
           <ReferentialConstraint>
@@ -559,7 +643,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__User_role__role___2E1BDC42">
+        <Association Name="FK__User_role__role___60A75C0F">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="User_role" Type="Self.User_role" Multiplicity="*" />
           <ReferentialConstraint>
@@ -571,7 +655,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__User_role__user___2D27B809">
+        <Association Name="FK__User_role__user___619B8048">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="User_role" Type="Self.User_role" Multiplicity="*" />
           <ReferentialConstraint>
@@ -589,10 +673,13 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
         </Function>
         <Function Name="UpdateLeaveBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="EMSModelStoreContainer">
+          <EntitySet Name="Asset" EntityType="Self.Asset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Asset_type" EntityType="Self.Asset_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client_type" EntityType="Self.Client_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Designation" EntityType="Self.Designation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee_Asset" EntityType="Self.Employee_Asset" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Holiday_List" EntityType="Self.Holiday_List" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Incometax" EntityType="Self.Incometax" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
@@ -603,7 +690,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
           <EntitySet Name="Project_role" EntityType="Self.Project_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Salary_Structure" EntityType="Self.Salary_Structure" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Status_leave" EntityType="Self.Status_leave" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Timesheet" EntityType="Self.Timesheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_role" EntityType="Self.User_role" Schema="dbo" store:Type="Tables" />
@@ -619,9 +706,25 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
     [EMS_Leave_Balance_Temp].[WFH] AS [WFH]
     FROM [dbo].[EMS_Leave_Balance_Temp] AS [EMS_Leave_Balance_Temp]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK__Client__type_id__619B8048" Association="Self.FK__Client__type_id__619B8048">
+          <AssociationSet Name="FK__Asset__status_id__05D8E0BE" Association="Self.FK__Asset__status_id__05D8E0BE">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Asset" EntitySet="Asset" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Asset__type_id__04E4BC85" Association="Self.FK__Asset__type_id__04E4BC85">
+            <End Role="Asset_type" EntitySet="Asset_type" />
+            <End Role="Asset" EntitySet="Asset" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Client__type_id__47DBAE45" Association="Self.FK__Client__type_id__47DBAE45">
             <End Role="Client_type" EntitySet="Client_type" />
             <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee___asset__73BA3083" Association="Self.FK__Employee___asset__73BA3083">
+            <End Role="Asset" EntitySet="Asset" />
+            <End Role="Employee_Asset" EntitySet="Employee_Asset" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee___emplo__72C60C4A" Association="Self.FK__Employee___emplo__72C60C4A">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Employee_Asset" EntitySet="Employee_Asset" />
           </AssociationSet>
           <AssociationSet Name="FK__Employee__report__4E53A1AA" Association="Self.FK__Employee__report__4E53A1AA">
             <End Role="Employee" EntitySet="Employee" />
@@ -639,43 +742,43 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="Self.FK__Leave__leave_sta__0A9D95DB">
-            <End Role="Status_leave" EntitySet="Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__4CA06362" Association="Self.FK__Leave__leave_sta__4CA06362">
+            <End Role="Status" EntitySet="Status" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__0C85DE4D" Association="Self.FK__Leave__leave_sta__0C85DE4D">
-            <End Role="Status_leave" EntitySet="Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__4D94879B" Association="Self.FK__Leave__leave_sta__4D94879B">
+            <End Role="Status" EntitySet="Status" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__1E6F845E" Association="Self.FK__Leave__leave_sta__1E6F845E">
-            <End Role="Status_leave" EntitySet="Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__4E88ABD4" Association="Self.FK__Leave__leave_sta__4E88ABD4">
+            <End Role="Status" EntitySet="Status" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__1F63A897" Association="Self.FK__Leave__leave_sta__1F63A897">
-            <End Role="Status_leave" EntitySet="Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__4F7CD00D" Association="Self.FK__Leave__leave_sta__4F7CD00D">
+            <End Role="Status" EntitySet="Status" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__22401542" Association="Self.FK__Leave__leave_sta__22401542">
-            <End Role="Status_leave" EntitySet="Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__5070F446" Association="Self.FK__Leave__leave_sta__5070F446">
+            <End Role="Status" EntitySet="Status" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__24285DB4" Association="Self.FK__Leave__leave_sta__24285DB4">
-            <End Role="Status_leave" EntitySet="Status_leave" />
+          <AssociationSet Name="FK__Leave__leave_sta__5165187F" Association="Self.FK__Leave__leave_sta__5165187F">
+            <End Role="Status" EntitySet="Status" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leavetype__0B91BA14" Association="Self.FK__Leave__leavetype__0B91BA14">
+          <AssociationSet Name="FK__Leave__leavetype__52593CB8" Association="Self.FK__Leave__leavetype__52593CB8">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leavetype__2057CCD0" Association="Self.FK__Leave__leavetype__2057CCD0">
+          <AssociationSet Name="FK__Leave__leavetype__534D60F1" Association="Self.FK__Leave__leavetype__534D60F1">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leavetype__2334397B" Association="Self.FK__Leave__leavetype__2334397B">
+          <AssociationSet Name="FK__Leave__leavetype__5441852A" Association="Self.FK__Leave__leavetype__5441852A">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leave__leavetype__251C81ED" Association="Self.FK__Leave__leavetype__251C81ED">
+          <AssociationSet Name="FK__Leave__leavetype__5535A963" Association="Self.FK__Leave__leavetype__5535A963">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leave" />
           </AssociationSet>
@@ -683,7 +786,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
           </AssociationSet>
-          <AssociationSet Name="FK__Leavebala__leave__47DBAE45" Association="Self.FK__Leavebala__leave__47DBAE45">
+          <AssociationSet Name="FK__Leavebala__leave__571DF1D5" Association="Self.FK__Leavebala__leave__571DF1D5">
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
           </AssociationSet>
@@ -691,7 +794,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Payslip" EntitySet="Payslip" />
           </AssociationSet>
-          <AssociationSet Name="FK__Project__client___34C8D9D1" Association="Self.FK__Project__client___34C8D9D1">
+          <AssociationSet Name="FK__Project__client___59063A47" Association="Self.FK__Project__client___59063A47">
             <End Role="Client" EntitySet="Client" />
             <End Role="Project" EntitySet="Project" />
           </AssociationSet>
@@ -699,11 +802,11 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Project_role" EntitySet="Project_role" />
           </AssociationSet>
-          <AssociationSet Name="FK__Project_r__proje__38996AB5" Association="Self.FK__Project_r__proje__38996AB5">
+          <AssociationSet Name="FK__Project_r__proje__5AEE82B9" Association="Self.FK__Project_r__proje__5AEE82B9">
             <End Role="Project" EntitySet="Project" />
             <End Role="Project_role" EntitySet="Project_role" />
           </AssociationSet>
-          <AssociationSet Name="FK__Project_r__role___398D8EEE" Association="Self.FK__Project_r__role___398D8EEE">
+          <AssociationSet Name="FK__Project_r__role___5BE2A6F2" Association="Self.FK__Project_r__role___5BE2A6F2">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Project_role" EntitySet="Project_role" />
           </AssociationSet>
@@ -711,7 +814,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Salary_Structure" EntitySet="Salary_Structure" />
           </AssociationSet>
-          <AssociationSet Name="FK__Task__project_id__3C69FB99" Association="Self.FK__Task__project_id__3C69FB99">
+          <AssociationSet Name="FK__Task__project_id__5DCAEF64" Association="Self.FK__Task__project_id__5DCAEF64">
             <End Role="Project" EntitySet="Project" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
@@ -719,15 +822,15 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Timesheet" EntitySet="Timesheet" />
           </AssociationSet>
-          <AssociationSet Name="FK__Timesheet__task___403A8C7D" Association="Self.FK__Timesheet__task___403A8C7D">
+          <AssociationSet Name="FK__Timesheet__task___5FB337D6" Association="Self.FK__Timesheet__task___5FB337D6">
             <End Role="Task" EntitySet="Task" />
             <End Role="Timesheet" EntitySet="Timesheet" />
           </AssociationSet>
-          <AssociationSet Name="FK__User_role__role___2E1BDC42" Association="Self.FK__User_role__role___2E1BDC42">
+          <AssociationSet Name="FK__User_role__role___60A75C0F" Association="Self.FK__User_role__role___60A75C0F">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="User_role" EntitySet="User_role" />
           </AssociationSet>
-          <AssociationSet Name="FK__User_role__user___2D27B809" Association="Self.FK__User_role__user___2D27B809">
+          <AssociationSet Name="FK__User_role__user___619B8048" Association="Self.FK__User_role__user___619B8048">
             <End Role="Users" EntitySet="Users" />
             <End Role="User_role" EntitySet="User_role" />
           </AssociationSet>
@@ -807,7 +910,6 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Timesheet" EntitySet="Timesheets" />
           </AssociationSet>
-          <EntitySet Name="Status_leave" EntityType="EMSModel.Status_leave" />
           <EntitySet Name="Incometaxes" EntityType="EMSModel.Incometax" />
           <EntitySet Name="Salary_Structure" EntityType="EMSModel.Salary_Structure" />
           <AssociationSet Name="FK__Incometax__emp_i__29221CFB" Association="EMSModel.FK__Incometax__emp_i__29221CFB">
@@ -823,29 +925,45 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Payslip" EntitySet="Payslips" />
           </AssociationSet>
-          <EntitySet Name="Leaves" EntityType="EMSModel.Leave" />
-          <AssociationSet Name="FK__Leave__employee___09A971A2" Association="EMSModel.FK__Leave__employee___09A971A2">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__0A9D95DB" Association="EMSModel.FK__Leave__leave_sta__0A9D95DB">
-            <End Role="Status_leave" EntitySet="Status_leave" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Leave__leave_sta__0C85DE4D" Association="EMSModel.FK__Leave__leave_sta__0C85DE4D">
-            <End Role="Status_leave" EntitySet="Status_leave" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Leave__leavetype__0B91BA14" Association="EMSModel.FK__Leave__leavetype__0B91BA14">
-            <End Role="Leave_type" EntitySet="Leave_type" />
-            <End Role="Leave" EntitySet="Leaves" />
-          </AssociationSet>
           <FunctionImport Name="UpdateLeaveBalance" />
           <FunctionImport Name="availableemployee" ReturnType="Collection(String)">
             <Parameter Name="projectid" Mode="In" Type="Int32" />
             <Parameter Name="useractive" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="EMS_Leave_Balance_Temp" EntityType="EMSModel.EMS_Leave_Balance_Temp" />
+          <EntitySet Name="Assets" EntityType="EMSModel.Asset" />
+          <EntitySet Name="Asset_type" EntityType="EMSModel.Asset_type" />
+          <EntitySet Name="Employee_Asset" EntityType="EMSModel.Employee_Asset" />
+          <EntitySet Name="Status" EntityType="EMSModel.Status" />
+          <AssociationSet Name="FK__Asset__status_id__05D8E0BE" Association="EMSModel.FK__Asset__status_id__05D8E0BE">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Asset" EntitySet="Assets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Asset__type_id__04E4BC85" Association="EMSModel.FK__Asset__type_id__04E4BC85">
+            <End Role="Asset_type" EntitySet="Asset_type" />
+            <End Role="Asset" EntitySet="Assets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee___asset__73BA3083" Association="EMSModel.FK__Employee___asset__73BA3083">
+            <End Role="Asset" EntitySet="Assets" />
+            <End Role="Employee_Asset" EntitySet="Employee_Asset" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee___emplo__72C60C4A" Association="EMSModel.FK__Employee___emplo__72C60C4A">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Employee_Asset" EntitySet="Employee_Asset" />
+          </AssociationSet>
+          <EntitySet Name="Leaves" EntityType="EMSModel.Leave" />
+          <AssociationSet Name="FK__Leave__employee___09A971A2" Association="EMSModel.FK__Leave__employee___09A971A2">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__leave_sta__4CA06362" Association="EMSModel.FK__Leave__leave_sta__4CA06362">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leave__leavetype__52593CB8" Association="EMSModel.FK__Leave__leavetype__52593CB8">
+            <End Role="Leave_type" EntitySet="Leave_type" />
+            <End Role="Leave" EntitySet="Leaves" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
@@ -864,7 +982,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
           <Property Name="description" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="days_per_year" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Leavebalance_sheet" Relationship="EMSModel.FK__Leavebala__leave__47DBAE45" FromRole="Leave_type" ToRole="Leavebalance_sheet" />
-          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leavetype__0B91BA14" FromRole="Leave_type" ToRole="Leave" />
+          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leavetype__52593CB8" FromRole="Leave_type" ToRole="Leave" />
         </EntityType>
         <EntityType Name="Leavebalance_sheet">
           <Key>
@@ -1136,6 +1254,7 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
           <NavigationProperty Name="Payslips" Relationship="EMSModel.FK__Payslip__emp_id__2BFE89A6" FromRole="Employee" ToRole="Payslip" />
           <Property Name="year_of_experience" Type="Decimal" Precision="4" Scale="2" />
           <Property Name="created_on" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Employee_Asset" Relationship="EMSModel.FK__Employee___emplo__72C60C4A" FromRole="Employee" ToRole="Employee_Asset" />
           <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Employee" ToRole="Leave" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
@@ -1198,16 +1317,6 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Status_leave">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="leave_status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="leave_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Status_leave" ToRole="Leave" />
-          <NavigationProperty Name="Leaves1" Relationship="EMSModel.FK__Leave__leave_sta__0C85DE4D" FromRole="Status_leave" ToRole="Leave" />
-        </EntityType>
         <EntityType Name="Incometax">
           <Key>
             <PropertyRef Name="id" />
@@ -1303,71 +1412,6 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Leave">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="employee_id" Type="Int32" Nullable="false" />
-          <Property Name="leavetype_id" Type="Int32" Nullable="false" />
-          <Property Name="from_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="no_of_days" Type="Int32" Nullable="false" />
-          <Property Name="leave_statusid" Type="Int32" Nullable="false" />
-          <Property Name="EL_flag" Type="Decimal" Precision="3" Scale="1" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Leave" ToRole="Employee" />
-          <NavigationProperty Name="Status_leave" Relationship="EMSModel.FK__Leave__leave_sta__0A9D95DB" FromRole="Leave" ToRole="Status_leave" />
-          <NavigationProperty Name="Status_leave1" Relationship="EMSModel.FK__Leave__leave_sta__0C85DE4D" FromRole="Leave" ToRole="Status_leave" />
-          <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leave__leavetype__0B91BA14" FromRole="Leave" ToRole="Leave_type" />
-        </EntityType>
-        <Association Name="FK__Leave__employee___09A971A2">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="employee_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Leave__leave_sta__0A9D95DB">
-          <End Type="EMSModel.Status_leave" Role="Status_leave" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status_leave">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="leave_statusid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Leave__leave_sta__0C85DE4D">
-          <End Type="EMSModel.Status_leave" Role="Status_leave" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status_leave">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="leave_statusid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Leave__leavetype__0B91BA14">
-          <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
-          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Leave_type">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Leave">
-              <PropertyRef Name="leavetype_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="EMS_Leave_Balance_Temp">
           <Key>
             <PropertyRef Name="id" />
@@ -1381,6 +1425,158 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
           <Property Name="LOP" Type="Decimal" Precision="18" Scale="1" />
           <Property Name="WFH" Type="Decimal" Precision="18" Scale="1" />
         </EntityType>
+        <EntityType Name="Asset">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_id" Type="Int32" Nullable="false" />
+          <Property Name="model" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="make" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="purchase_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="invoice_no" Type="Int32" Nullable="false" />
+          <Property Name="vendor_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="asset_serial_no" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="warranty_period" Type="Int32" Nullable="false" />
+          <Property Name="status_id" Type="Int32" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="scrap_date" Type="DateTime" Precision="0" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="warranty_expiry_date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Status" Relationship="EMSModel.FK__Asset__status_id__05D8E0BE" FromRole="Asset" ToRole="Status" />
+          <NavigationProperty Name="Asset_type" Relationship="EMSModel.FK__Asset__type_id__04E4BC85" FromRole="Asset" ToRole="Asset_type" />
+          <NavigationProperty Name="Employee_Asset" Relationship="EMSModel.FK__Employee___asset__73BA3083" FromRole="Asset" ToRole="Employee_Asset" />
+        </EntityType>
+        <EntityType Name="Asset_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="asset_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Assets" Relationship="EMSModel.FK__Asset__type_id__04E4BC85" FromRole="Asset_type" ToRole="Asset" />
+        </EntityType>
+        <EntityType Name="Employee_Asset">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employee_id" Type="Int32" Nullable="false" />
+          <Property Name="asset_id" Type="Int32" Nullable="false" />
+          <Property Name="assigned_on" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="released_on" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Asset" Relationship="EMSModel.FK__Employee___asset__73BA3083" FromRole="Employee_Asset" ToRole="Asset" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Employee___emplo__72C60C4A" FromRole="Employee_Asset" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Assets" Relationship="EMSModel.FK__Asset__status_id__05D8E0BE" FromRole="Status" ToRole="Asset" />
+          <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leave_sta__4CA06362" FromRole="Status" ToRole="Leave" />
+        </EntityType>
+        <Association Name="FK__Asset__status_id__05D8E0BE">
+          <End Type="EMSModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="status_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Asset__type_id__04E4BC85">
+          <End Type="EMSModel.Asset_type" Role="Asset_type" Multiplicity="1" />
+          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee___asset__73BA3083">
+          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="1" />
+          <End Type="EMSModel.Employee_Asset" Role="Employee_Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee_Asset">
+              <PropertyRef Name="asset_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee___emplo__72C60C4A">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Employee_Asset" Role="Employee_Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee_Asset">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Leave">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="employee_id" Type="Int32" Nullable="false" />
+          <Property Name="leavetype_id" Type="Int32" Nullable="false" />
+          <Property Name="from_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="to_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="no_of_days" Type="Int32" Nullable="false" />
+          <Property Name="leave_statusid" Type="Int32" Nullable="false" />
+          <Property Name="EL_flag" Type="Decimal" Precision="3" Scale="1" />
+          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Leave" ToRole="Employee" />
+          <NavigationProperty Name="Status" Relationship="EMSModel.FK__Leave__leave_sta__4CA06362" FromRole="Leave" ToRole="Status" />
+          <NavigationProperty Name="Leave_type" Relationship="EMSModel.FK__Leave__leavetype__52593CB8" FromRole="Leave" ToRole="Leave_type" />
+        </EntityType>
+        <Association Name="FK__Leave__employee___09A971A2">
+          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__leave_sta__4CA06362">
+          <End Type="EMSModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="leave_statusid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leave__leavetype__52593CB8">
+          <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
+          <End Type="EMSModel.Leave" Role="Leave" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leave_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Leave">
+              <PropertyRef Name="leavetype_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1551,15 +1747,6 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Status_leave">
-            <EntityTypeMapping TypeName="EMSModel.Status_leave">
-              <MappingFragment StoreEntitySet="Status_leave">
-                <ScalarProperty Name="leave_description" ColumnName="leave_description" />
-                <ScalarProperty Name="leave_status" ColumnName="leave_status" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Incometaxes">
             <EntityTypeMapping TypeName="EMSModel.Incometax">
               <MappingFragment StoreEntitySet="Incometax">
@@ -1619,20 +1806,6 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Leaves">
-            <EntityTypeMapping TypeName="EMSModel.Leave">
-              <MappingFragment StoreEntitySet="Leave">
-                <ScalarProperty Name="EL_flag" ColumnName="EL_flag" />
-                <ScalarProperty Name="leave_statusid" ColumnName="leave_statusid" />
-                <ScalarProperty Name="no_of_days" ColumnName="no_of_days" />
-                <ScalarProperty Name="to_date" ColumnName="to_date" />
-                <ScalarProperty Name="from_date" ColumnName="from_date" />
-                <ScalarProperty Name="leavetype_id" ColumnName="leavetype_id" />
-                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="UpdateLeaveBalance" FunctionName="EMSModel.Store.UpdateLeaveBalance" />
           <FunctionImportMapping FunctionImportName="availableemployee" FunctionName="EMSModel.Store.availableemployee" />
           <EntitySetMapping Name="EMS_Leave_Balance_Temp">
@@ -1644,6 +1817,68 @@ warning 6002: The table/view 'EMS.dbo.EMS_Leave_Balance_Temp' does not have a pr
                 <ScalarProperty Name="EL" ColumnName="EL" />
                 <ScalarProperty Name="CL" ColumnName="CL" />
                 <ScalarProperty Name="Employee_id" ColumnName="Employee_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Assets">
+            <EntityTypeMapping TypeName="EMSModel.Asset">
+              <MappingFragment StoreEntitySet="Asset">
+                <ScalarProperty Name="warranty_expiry_date" ColumnName="warranty_expiry_date" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="scrap_date" ColumnName="scrap_date" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+                <ScalarProperty Name="warranty_period" ColumnName="warranty_period" />
+                <ScalarProperty Name="asset_serial_no" ColumnName="asset_serial_no" />
+                <ScalarProperty Name="vendor_name" ColumnName="vendor_name" />
+                <ScalarProperty Name="invoice_no" ColumnName="invoice_no" />
+                <ScalarProperty Name="purchase_date" ColumnName="purchase_date" />
+                <ScalarProperty Name="make" ColumnName="make" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="type_id" ColumnName="type_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Asset_type">
+            <EntityTypeMapping TypeName="EMSModel.Asset_type">
+              <MappingFragment StoreEntitySet="Asset_type">
+                <ScalarProperty Name="asset_type" ColumnName="asset_type" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee_Asset">
+            <EntityTypeMapping TypeName="EMSModel.Employee_Asset">
+              <MappingFragment StoreEntitySet="Employee_Asset">
+                <ScalarProperty Name="released_on" ColumnName="released_on" />
+                <ScalarProperty Name="assigned_on" ColumnName="assigned_on" />
+                <ScalarProperty Name="asset_id" ColumnName="asset_id" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="EMSModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="EMSModel.Leave">
+              <MappingFragment StoreEntitySet="Leave">
+                <ScalarProperty Name="EL_flag" ColumnName="EL_flag" />
+                <ScalarProperty Name="leave_statusid" ColumnName="leave_statusid" />
+                <ScalarProperty Name="no_of_days" ColumnName="no_of_days" />
+                <ScalarProperty Name="to_date" ColumnName="to_date" />
+                <ScalarProperty Name="from_date" ColumnName="from_date" />
+                <ScalarProperty Name="leavetype_id" ColumnName="leavetype_id" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -14,8 +14,8 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from asset in datacontext.Asset_type
-                            select asset;
+                var query = from asset_type in datacontext.Asset_type
+                            select asset_type;
                 return query.ToList();
             }
             catch (Exception e)

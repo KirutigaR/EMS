@@ -101,14 +101,14 @@ namespace EMS.Repository
             }
         }
 
-        public static List<AssetModel> GetAvailableAssetList()
+        public static List<AssetModel> GetAssetList(int status_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from asset in datacontext.Assets
                             join asset_type in datacontext.Asset_type on asset.type_id equals asset_type.id
-                            where asset.status_id == 6
+                            where asset.status_id == status_id
                             select new AssetModel
                             {
                                 id = asset.id,
@@ -116,7 +116,12 @@ namespace EMS.Repository
                                 model = asset.model,
                                 make = asset.make,
                                 asset_serial_no = asset.asset_serial_no,
-                                warranty_expiry_date = asset.warranty_expiry_date
+                                warranty_expiry_date = asset.warranty_expiry_date,
+                                employee_name = (from employee in datacontext.Employees
+                                                 where employee.id == (from employee_assert in datacontext.Employee_Asset
+                                                                       where employee_assert.asset_id == asset.id && employee_assert.released_on == null
+                                                                       select employee_assert.employee_id).FirstOrDefault()
+                                                 select employee.first_name + " " + employee.last_name).FirstOrDefault(),
                             };
                 return query.ToList();
             }

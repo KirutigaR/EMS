@@ -127,14 +127,15 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/asset/list/available")]
+        [Route("api/v1/asset/list/{status?}")]
         [HttpGet]
-        public HttpResponseMessage GetAvailableAssetList(Asset asset)
+        public HttpResponseMessage GetAssetList(string status)
         {
             HttpResponseMessage response = null;
             try
             {
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", AssetRepo.GetAvailableAssetList()));
+                int status_id = (status == "AVAILABLE")? 6 : (status == "ASSIGNED") ? 5 : (status == "SCRAP")? 7 : 0;
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", AssetRepo.GetAssetList(status_id)));
             }
             catch (Exception exception)
             {

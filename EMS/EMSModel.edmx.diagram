@@ -52,6 +52,7 @@
         <AssociationConnector Association="EMSModel.FK__Leave__employee___09A971A2" />
         <AssociationConnector Association="EMSModel.FK__Leave__leave_sta__4CA06362" />
         <AssociationConnector Association="EMSModel.FK__Leave__leavetype__52593CB8" />
+        <EntityTypeShape EntityType="EMSModel.Asset_Temp_Table" Width="1.5" PointX="10.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

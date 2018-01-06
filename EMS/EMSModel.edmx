@@ -24,6 +24,24 @@
           <Property Name="price" Type="decimal" Precision="12" Scale="2" Nullable="false" />
           <Property Name="warranty_expiry_date" Type="date" Nullable="false" />
         </EntityType>
+        <EntityType Name="Asset_Temp_Table">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Type_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Model" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Purchase_date" Type="date" Nullable="false" />
+          <Property Name="Invoice_no" Type="int" Nullable="false" />
+          <Property Name="Vendor_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Asset_serial_no" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Warranty_period" Type="int" Nullable="false" />
+          <Property Name="Notes" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Scrap_date" Type="date" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="Warranty_expiry_date" Type="date" Nullable="false" />
+          <Property Name="Make" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Asset_type">
           <Key>
             <PropertyRef Name="id" />
@@ -671,9 +689,11 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Parameter Name="projectid" Type="int" Mode="In" />
           <Parameter Name="useractive" Type="int" Mode="In" />
         </Function>
+        <Function Name="MoveToAssetTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="UpdateLeaveBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="EMSModelStoreContainer">
           <EntitySet Name="Asset" EntityType="Self.Asset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Asset_Temp_Table" EntityType="Self.Asset_Temp_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Asset_type" EntityType="Self.Asset_type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client_type" EntityType="Self.Client_type" Schema="dbo" store:Type="Tables" />
@@ -964,6 +984,8 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leave" EntitySet="Leaves" />
           </AssociationSet>
+          <EntitySet Name="Asset_Temp_Table" EntityType="EMSModel.Asset_Temp_Table" />
+          <FunctionImport Name="MoveToAssetTable" />
         </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
@@ -1577,6 +1599,24 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Asset_Temp_Table">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Type_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Purchase_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Invoice_no" Type="Int32" Nullable="false" />
+          <Property Name="Vendor_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Asset_serial_no" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Warranty_period" Type="Int32" Nullable="false" />
+          <Property Name="Notes" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Scrap_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="Warranty_expiry_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Make" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1883,6 +1923,26 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Asset_Temp_Table">
+            <EntityTypeMapping TypeName="EMSModel.Asset_Temp_Table">
+              <MappingFragment StoreEntitySet="Asset_Temp_Table">
+                <ScalarProperty Name="Make" ColumnName="Make" />
+                <ScalarProperty Name="Warranty_expiry_date" ColumnName="Warranty_expiry_date" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Scrap_date" ColumnName="Scrap_date" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Warranty_period" ColumnName="Warranty_period" />
+                <ScalarProperty Name="Asset_serial_no" ColumnName="Asset_serial_no" />
+                <ScalarProperty Name="Vendor_name" ColumnName="Vendor_name" />
+                <ScalarProperty Name="Invoice_no" ColumnName="Invoice_no" />
+                <ScalarProperty Name="Purchase_date" ColumnName="Purchase_date" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Type_name" ColumnName="Type_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MoveToAssetTable" FunctionName="EMSModel.Store.MoveToAssetTable" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -136,6 +136,9 @@
     <Compile Include="Asset.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Asset_Temp_Table.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Asset_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
@@ -215,13 +218,13 @@
     <Compile Include="Models\LeavehistoryModel.cs" />
     <Compile Include="Models\LeaveStatusModel.cs" />
     <Compile Include="Models\LeaveTypeListModel.cs" />
+    <Compile Include="Models\ListModel.cs" />
     <Compile Include="Models\PayslipModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\Project_role_model.cs" />
     <Compile Include="Models\ReportingTo.cs" />
     <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SalaryStructureModel.cs" />
-    <Compile Include="Models\ListModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\TimeSheetModel.cs" />
     <Compile Include="Payslip.cs">

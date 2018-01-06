@@ -229,14 +229,20 @@ namespace EMS.Controllers
                         objbulk = new SqlBulkCopy(con);
                         //assigning Destination table name    
 
-                        objbulk.DestinationTableName = "Asset Temp Table";
+                        objbulk.DestinationTableName = "Asset_Temp_Table";
                         //Mapping Table column    
-                        objbulk.ColumnMappings.Add("Employee Id", "Employee_id");
-                        objbulk.ColumnMappings.Add("CL", "CL");
-                        objbulk.ColumnMappings.Add("EL", "EL");
-                        objbulk.ColumnMappings.Add("ML", "ML");
-                        objbulk.ColumnMappings.Add("LOP", "LOP");
-                        objbulk.ColumnMappings.Add("WFH", "WFH");
+                        objbulk.ColumnMappings.Add("Type_name", "Type_name");
+                        objbulk.ColumnMappings.Add("Model", "Model");
+                        objbulk.ColumnMappings.Add("Make", "Make");
+                        objbulk.ColumnMappings.Add("Purchase_date", "Purchase_date");
+                        objbulk.ColumnMappings.Add("Invoice_no", "Invoice-no");
+                        objbulk.ColumnMappings.Add("Vendor_name", "vendor_name");
+                        objbulk.ColumnMappings.Add("Asset_serial_no", "Asset_serial_no");
+                        objbulk.ColumnMappings.Add("Warranty_period", "Warranty_period");
+                        objbulk.ColumnMappings.Add("Notes", "Notes");
+                        objbulk.ColumnMappings.Add("Scrap_date", "Scrap_date");
+                        objbulk.ColumnMappings.Add("Price", "Price");
+                        objbulk.ColumnMappings.Add("Warranty_expiry_on", "Warranty_expiry_on");
 
                         //inserting Datatable Records to DataBase    
                         con.Open();

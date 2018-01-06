@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 using System.Data.OleDb;
@@ -78,7 +79,7 @@ namespace EMS.Controllers
                 {
                     asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
                     AssetRepo.CreateAsset(asset);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Asset created successfully"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset created successfully", "Asset created successfully"));
                 }
                 else
                 {
@@ -115,6 +116,24 @@ namespace EMS.Controllers
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Invalid Input"));
                 }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
+
+        [Route("api/v1/asset/list/available")]
+        [HttpGet]
+        public HttpResponseMessage GetAvailableAssetList(Asset asset)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", AssetRepo.GetAvailableAssetList()));
             }
             catch (Exception exception)
             {

@@ -202,6 +202,7 @@
     <Compile Include="Leave_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssetModel.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\ClientModel.cs" />
     <Compile Include="Models\DashboardDetails.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Models\ReportingTo.cs" />
     <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SalaryStructureModel.cs" />
+    <Compile Include="Models\ListModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\TimeSheetModel.cs" />
     <Compile Include="Payslip.cs">

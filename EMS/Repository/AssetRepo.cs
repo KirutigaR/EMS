@@ -222,6 +222,7 @@ namespace EMS.Repository
                             {
                                 id = asset.id,
                                 type_name = asset_type.asset_type,
+                                type_id = asset.type_id,
                                 model = asset.model,
                                 make = asset.make,
                                 purchase_date = asset.purchase_date,
@@ -229,6 +230,7 @@ namespace EMS.Repository
                                 vendor_name = asset.vendor_name,
                                 asset_serial_no = asset.asset_serial_no,
                                 status_name = asset_status.status,
+                                status_id = asset.status_id,
                                 notes = asset.notes,
                                 scrap_date = asset.scrap_date,
                                 price = asset.price,
@@ -236,7 +238,10 @@ namespace EMS.Repository
                                 employee_name = (from employee in datacontext.Employees where employee.id == ( from employee_assert in datacontext.Employee_Asset
                                                where employee_assert.asset_id == asset_id && employee_assert.released_on == null
                                                select employee_assert.employee_id).FirstOrDefault()
-                                               select employee.first_name +" "+ employee.last_name).FirstOrDefault()
+                                               select employee.first_name +" "+ employee.last_name).FirstOrDefault(),
+                                employee_id = (from employee_assert in datacontext.Employee_Asset
+                                               where employee_assert.asset_id == asset_id && employee_assert.released_on == null
+                                               select employee_assert.employee_id).FirstOrDefault()
                             };
                 return query.FirstOrDefault();
             }

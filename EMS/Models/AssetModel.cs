@@ -24,6 +24,7 @@ namespace EMS.Models
 
         public List<int> asset_id_list { get; set; }
         public int employee_id { get; set; }
+        public string employee_name { get; set; }
         public DateTime assigned_on { get; set; }
         public int status_id { get; set; }
     }

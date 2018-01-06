@@ -202,6 +202,7 @@
     <Compile Include="Leave_type.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AssetLogModel.cs" />
     <Compile Include="Models\AssetModel.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\ClientModel.cs" />

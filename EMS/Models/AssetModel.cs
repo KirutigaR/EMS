@@ -21,5 +21,10 @@ namespace EMS.Models
         public Nullable<System.DateTime> scrap_date { get; set; }
         public decimal price { get; set; }
         public System.DateTime warranty_expiry_date { get; set; }
+
+        public List<int> asset_id_list { get; set; }
+        public int employee_id { get; set; }
+        public DateTime assigned_on { get; set; }
+        public int status_id { get; set; }
     }
 }

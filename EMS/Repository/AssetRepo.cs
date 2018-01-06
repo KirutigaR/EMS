@@ -131,5 +131,60 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static bool AssignAsset(AssetModel Asset_Assign_Details)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                Employee_Asset Assign_obj = new Employee_Asset();
+                foreach(int asset_id in Asset_Assign_Details.asset_id_list)
+                {
+                    Assign_obj.asset_id = asset_id;
+                    Assign_obj.employee_id = Asset_Assign_Details.employee_id;
+                    Assign_obj.assigned_on = Asset_Assign_Details.assigned_on;
+                    datacontext.Employee_Asset.Add(Assign_obj);
+                    datacontext.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static bool UpdateAssetStatus(AssetModel Asset_details)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                foreach(int assert_id in Asset_details.asset_id_list)
+                {
+                    //assert_obj.id = assert_id;
+                    var asset_obj = from asset in datacontext.Assets where asset.id == assert_id select asset;
+                    asset_obj.FirstOrDefault().status_id = Asset_details.status_id;
+                    datacontext.Entry(asset_obj.FirstOrDefault()).State = EntityState.Modified;
+                }
+                datacontext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

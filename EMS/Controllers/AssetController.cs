@@ -73,7 +73,7 @@ namespace EMS.Controllers
                 {
                     asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
                     AssetRepo.CreateAsset(asset);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Asset created successfully"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset created successfully", "Asset created successfully"));
                 }
                 else
                 {

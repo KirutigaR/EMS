@@ -74,5 +74,40 @@ namespace EMS
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MoveToAssetTable");
         }
+    
+        [DbFunction("EMSEntities", "SplitString")]
+        public virtual IQueryable<string> SplitString(string input, string character)
+        {
+            var inputParameter = input != null ?
+                new ObjectParameter("Input", input) :
+                new ObjectParameter("Input", typeof(string));
+    
+            var characterParameter = character != null ?
+                new ObjectParameter("Character", character) :
+                new ObjectParameter("Character", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[EMSEntities].[SplitString](@Input, @Character)", inputParameter, characterParameter);
+        }
+    
+        public virtual int UpdateAssetStatus(string assetIds, string status, Nullable<System.DateTime> assignedDate, Nullable<int> employee_id)
+        {
+            var assetIdsParameter = assetIds != null ?
+                new ObjectParameter("AssetIds", assetIds) :
+                new ObjectParameter("AssetIds", typeof(string));
+    
+            var statusParameter = status != null ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(string));
+    
+            var assignedDateParameter = assignedDate.HasValue ?
+                new ObjectParameter("AssignedDate", assignedDate) :
+                new ObjectParameter("AssignedDate", typeof(System.DateTime));
+    
+            var employee_idParameter = employee_id.HasValue ?
+                new ObjectParameter("Employee_id", employee_id) :
+                new ObjectParameter("Employee_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateAssetStatus", assetIdsParameter, statusParameter, assignedDateParameter, employee_idParameter);
+        }
     }
 }

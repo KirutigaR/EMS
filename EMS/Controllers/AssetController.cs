@@ -302,7 +302,7 @@ namespace EMS.Controllers
         }
 
 
-        [Route("api/v1/assign/asset")]
+        [Route("api/v1/update/asset/status")]
         [HttpPost]
         public HttpResponseMessage AssignAsset(AssetModel Asset_Assign_Details)
         {
@@ -311,12 +311,15 @@ namespace EMS.Controllers
             {
                 if (Asset_Assign_Details.employee_id != 0 && Asset_Assign_Details.asset_id_list.Count != 0 && Asset_Assign_Details.assigned_on != null )
                 {
-                    if(AssetRepo.AssignAsset(Asset_Assign_Details))
+                    if(AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
                     {
-                        Asset_Assign_Details.status_id = 5;
-                        if(AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
+                        if (Asset_Assign_Details.status_name == "ASSIGNED")
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) Assigned to the employee", "Asset(S) Assigned to the employee"));
+                        }
+                        else
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) status updated successfully", "Asset(S) status updated successfully"));
                         }
                     }
                     else
@@ -327,31 +330,6 @@ namespace EMS.Controllers
                 else
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Invalid Input"));
-                }
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
-            }
-            return response;
-        }
-
-        [Route("api/v1/update/asset/status")]
-        [HttpPost]
-        public HttpResponseMessage UpdateAssetStatus(AssetModel Asset_Assign_Details)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                if(AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) status updated successfully", "Asset(S) status updated successfully"));
-                }
-                else
-                {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Error While updating status", "Error While updating status"));
                 }
             }
             catch (Exception exception)

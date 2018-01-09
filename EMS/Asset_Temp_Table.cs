@@ -23,7 +23,7 @@ namespace EMS
         public string Asset_serial_no { get; set; }
         public int Warranty_period { get; set; }
         public string Notes { get; set; }
-        public System.DateTime Scrap_date { get; set; }
+        public Nullable<System.DateTime> Scrap_date { get; set; }
         public decimal Price { get; set; }
         public System.DateTime Warranty_expiry_date { get; set; }
         public string Make { get; set; }

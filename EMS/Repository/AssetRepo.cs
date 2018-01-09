@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using EMS.Models;
 
 namespace EMS.Repository
@@ -137,61 +136,6 @@ namespace EMS.Repository
             }
         }
 
-        public static bool AssignAsset(AssetModel Asset_Assign_Details)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                Employee_Asset Assign_obj = new Employee_Asset();
-                foreach(int asset_id in Asset_Assign_Details.asset_id_list)
-                {
-                    Assign_obj.asset_id = asset_id;
-                    Assign_obj.employee_id = Asset_Assign_Details.employee_id;
-                    Assign_obj.assigned_on = Asset_Assign_Details.assigned_on;
-                    datacontext.Employee_Asset.Add(Assign_obj);
-                    datacontext.SaveChanges();
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
-        public static bool UpdateAssetStatus(AssetModel Asset_details)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                foreach(int assert_id in Asset_details.asset_id_list)
-                {
-                    //assert_obj.id = assert_id;
-                    var asset_obj = (from asset in datacontext.Assets where asset.id == assert_id select asset).FirstOrDefault();
-                    asset_obj.status_id = Asset_details.status_id;
-                    datacontext.Entry(asset_obj).State = EntityState.Modified;
-                }
-                datacontext.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
         public static Asset GetAssetInstance(int asset_id)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -268,12 +212,14 @@ namespace EMS.Repository
             try
             {
                 var query = from x in datacontext.Employee_Asset
+                            join employee in datacontext.Employees on x.employee_id equals employee.id
+                            join asset in datacontext.Assets on x.asset_id equals asset.id
                             where x.asset_id == asset_id
                             select new AssetLogModel
                             {
                                 id = x.id,
-                                employee_id = x.employee_id,
-                                asset_id = x.asset_id,
+                                employee_name = employee.first_name +" "+employee.last_name,
+                                asset_serial_no = asset.asset_serial_no,
                                 assigned_on = x.assigned_on,
                                 released_on = x.released_on
                             };
@@ -297,6 +243,26 @@ namespace EMS.Repository
             try
             {
                 var query = datacontext.MoveToAssetTable();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static bool UpdateAssetStatus(AssetModel update_details)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = datacontext.UpdateAssetStatus(String.Join(",", update_details.asset_id_list), update_details.status_name, update_details.assigned_on, update_details.employee_id);
                 return true;
             }
             catch (Exception e)

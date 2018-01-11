@@ -28,5 +28,6 @@ namespace EMS.Models
         public DateTime assigned_on { get; set; }
         public int status_id { get; set; }
         public int type_id { get; set; }
+        public Nullable<DateTime> released_on { get; set; }
     }
 }

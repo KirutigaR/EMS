@@ -206,7 +206,7 @@ namespace EMS.Repository
             }
         }
 
-        public static List<AssetLogModel> GetAssetLogDetails(int asset_id)
+        public static List<AssetModel> GetAssetLogDetails(int asset_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -214,12 +214,16 @@ namespace EMS.Repository
                 var query = from x in datacontext.Employee_Asset
                             join employee in datacontext.Employees on x.employee_id equals employee.id
                             join asset in datacontext.Assets on x.asset_id equals asset.id
+                            join type in datacontext.Asset_type on asset.type_id equals type.id
                             where x.asset_id == asset_id
-                            select new AssetLogModel
+                            select new AssetModel
                             {
                                 id = x.id,
                                 employee_name = employee.first_name +" "+employee.last_name,
                                 asset_serial_no = asset.asset_serial_no,
+                                type_name = type.asset_type,
+                                model = asset.model,
+                                make = asset.make,
                                 assigned_on = x.assigned_on,
                                 released_on = x.released_on
                             };

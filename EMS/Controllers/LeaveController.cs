@@ -151,8 +151,7 @@ namespace EMS.Controllers
 
                     leave.from_date = leave.from_date.Date;
                     leave.to_date = leave.to_date.Date;
-                    DateTime timeNow = DateTime.Now.Date;
-
+                    DateTime timeNow = DateTime.Now.Date.AddDays(-30);//phase 2.0 Requirement chanhes - Employee can able to apply leave in past dates (ie for past one month)
                     if (leave.from_date.Year > DateTime.Now.Year || leave.to_date.Year > DateTime.Now.Year && leave_type != Constants.LEAVE_TYPE_ML)
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_502", "Leave should be applied in CURRENT YEAR", "Leave should be applied in CURRENT YEAR"));

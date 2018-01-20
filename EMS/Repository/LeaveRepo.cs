@@ -275,7 +275,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<LeavehistoryModel> GetLeaveHistoryById(int id)
+        public static List<LeavehistoryModel> GetLeaveHistoryByEmployeeId(int id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -292,7 +292,6 @@ namespace EMS.Repository
                             join u in datacontext.Users on e.user_id equals u.id
                             where l.employee_id == id && u.is_active == 1 && l.from_date >= leave_list_from_date
                             orderby l.from_date descending
-                            //&& l.leavetype_id == 2
                             select new LeavehistoryModel
                             {
                                 //id = e.id,
@@ -319,27 +318,8 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        //public static List<Holiday_List> GetHolidayList()
-        //{
-        //    EMSEntities datacontext = new EMSEntities();
-        //    try
-        //    {
-        //        var query = from hl in datacontext.Holiday_List
-        //                    select hl;
-        //        return query.ToList();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine(e.Message);
-        //        Debug.WriteLine(e.GetBaseException());
-        //        throw e;
-        //    }
-        //    finally
-        //    {
-        //        datacontext.Dispose();
-        //    }
-        //}
-        public static List<LeaveBalanceModel> GetLeaveBalanceById(int employee_id)
+
+        public static List<LeaveBalanceModel> GetLeaveBalanceByEmployeeId(int employee_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -503,19 +483,7 @@ namespace EMS.Repository
             }
         }
 
-        //public static List<EmployeeListByRoleModel> emp_proj_details_byrole(EmployeeListByRoleModel details)
-        //{
-        //    EMSEntities datacontext = new EMSEntities();
-        //    try
-        //    {
-        //        foreach(EmployeeListByRoleModel items in details)
-        //        {
-        //            var query = from 
-        //        }
-        //    }
-        //}
-
-        public static List<LeavehistoryModel> GetRequestByRoleId(int id)
+        public static List<LeavehistoryModel> GetPendingLeaveListByReporterID(int reportingto_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -530,7 +498,7 @@ namespace EMS.Repository
                             join ls in datacontext.Status on l.leave_statusid equals ls.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
-                            where e.reporting_to == id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= Current_date && u.is_active ==1//&& l.leave_statusid == ls.id
+                            where e.reporting_to == reportingto_id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= Current_date && u.is_active ==1//&& l.leave_statusid == ls.id
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -626,7 +594,6 @@ namespace EMS.Repository
             try
             {
                 var query = from lt in datacontext.Leave_type
-                                //join lt in datacontext.Leave_type on l.leavetype_id equals lt.id
                             select new LeaveTypeListModel
                             {
                                 leavetype_id = lt.id,
@@ -691,17 +658,15 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<LeavehistoryModel> GetLeaveHistory()
+        public static List<LeavehistoryModel> GetEntireLeaveHistory()
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var currentdate = DateTime.Now.Date;
                 var query = from l in datacontext.Leaves
-                            join e in datacontext.Employees
-                            on l.employee_id equals e.id
-                            join lt in datacontext.Leave_type
-                            on l.leavetype_id equals lt.id
+                            join e in datacontext.Employees on l.employee_id equals e.id
+                            join lt in datacontext.Leave_type on l.leavetype_id equals lt.id
                             join st in datacontext.Status on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending

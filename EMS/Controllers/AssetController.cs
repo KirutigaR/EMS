@@ -309,7 +309,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if (Asset_Assign_Details.employee_id != 0 && Asset_Assign_Details.asset_id_list.Count != 0 && Asset_Assign_Details.assigned_on != null )
+                if (Asset_Assign_Details.asset_id_list.Count != 0)
                 {
                     if(AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
                     {

@@ -280,5 +280,75 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
+
+        public static List<AssetModel> GetCurrentAssetByEmployeeId(int employee_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from employeeasset in datacontext.Employee_Asset
+                            join employee in datacontext.Employees on employeeasset.employee_id equals employee.id
+                            join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
+                            join type in datacontext.Asset_type on asset.type_id equals type.id
+                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null && asset.status_id == 5
+                            select new AssetModel
+                            {
+                                id = employeeasset.id,
+                                employee_name = employee.first_name + " " + employee.last_name,
+                                asset_serial_no = asset.asset_serial_no,
+                                type_name = type.asset_type,
+                                model = asset.model,
+                                make = asset.make,
+                                assigned_on = employeeasset.assigned_on,
+                                released_on = employeeasset.released_on
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<AssetModel> GetPreviousAssetByEmployeeId(int employee_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from employeeasset in datacontext.Employee_Asset
+                            join employee in datacontext.Employees on employeeasset.employee_id equals employee.id
+                            join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
+                            join type in datacontext.Asset_type on asset.type_id equals type.id
+                            where employeeasset.employee_id == employee_id && employeeasset.released_on != null
+                            select new AssetModel
+                            {
+                                id = employeeasset.id,
+                                employee_name = employee.first_name + " " + employee.last_name,
+                                asset_serial_no = asset.asset_serial_no,
+                                type_name = type.asset_type,
+                                model = asset.model,
+                                make = asset.make,
+                                assigned_on = employeeasset.assigned_on,
+                                released_on = employeeasset.released_on
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
     }
 }

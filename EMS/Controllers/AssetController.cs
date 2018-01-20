@@ -364,5 +364,39 @@ namespace EMS.Controllers
             }
             return response;
         }
+
+        /// <summary>
+        /// To get assets assigned to an employee
+        /// </summary>
+        /// <param name="employee_id"> unique id </param>
+        /// <returns></returns>
+        [Route("api/v1/get/asset/{employee_id?}")]
+        public HttpResponseMessage GetAssetByemployee_Id(int employee_id)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if(employee_id != 0)
+                {
+                    Dictionary<string, object> result_set = new Dictionary<string, object>();
+                    List<AssetModel> current_asset = AssetRepo.GetCurrentAssetByEmployeeId(employee_id);
+                    List<AssetModel> previous_asset = AssetRepo.GetPreviousAssetByEmployeeId(employee_id);
+                    result_set.Add("CurrentAssignedAsset", current_asset);
+                    result_set.Add("PreviousAssignedAsset", previous_asset);
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", result_set));
+                }
+                else
+                {
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Employee ID", "Please check input Json"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception.Message);
+                Debug.WriteLine(exception.GetBaseException());
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+            }
+            return response;
+        }
     }
 }

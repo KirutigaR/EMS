@@ -20,7 +20,7 @@ namespace EMS
         public System.DateTime assigned_on { get; set; }
         public Nullable<System.DateTime> released_on { get; set; }
     
-        public virtual Asset Asset { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual Asset Asset { get; set; }
     }
 }

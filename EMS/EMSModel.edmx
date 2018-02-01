@@ -14,7 +14,7 @@
           <Property Name="model" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="make" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="purchase_date" Type="date" Nullable="false" />
-          <Property Name="invoice_no" Type="int" Nullable="false" />
+          <Property Name="invoice_no" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="vendor_name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="asset_serial_no" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="warranty_period" Type="int" Nullable="false" />
@@ -968,22 +968,9 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <Parameter Name="useractive" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="EMS_Leave_Balance_Temp" EntityType="EMSModel.EMS_Leave_Balance_Temp" />
-          <EntitySet Name="Assets" EntityType="EMSModel.Asset" />
           <EntitySet Name="Asset_type" EntityType="EMSModel.Asset_type" />
           <EntitySet Name="Employee_Asset" EntityType="EMSModel.Employee_Asset" />
           <EntitySet Name="Status" EntityType="EMSModel.Status" />
-          <AssociationSet Name="FK__Asset__status_id__05D8E0BE" Association="EMSModel.FK__Asset__status_id__05D8E0BE">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Asset" EntitySet="Assets" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Asset__type_id__04E4BC85" Association="EMSModel.FK__Asset__type_id__04E4BC85">
-            <End Role="Asset_type" EntitySet="Asset_type" />
-            <End Role="Asset" EntitySet="Assets" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Employee___asset__73BA3083" Association="EMSModel.FK__Employee___asset__73BA3083">
-            <End Role="Asset" EntitySet="Assets" />
-            <End Role="Employee_Asset" EntitySet="Employee_Asset" />
-          </AssociationSet>
           <AssociationSet Name="FK__Employee___emplo__72C60C4A" Association="EMSModel.FK__Employee___emplo__72C60C4A">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Employee_Asset" EntitySet="Employee_Asset" />
@@ -1013,6 +1000,19 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <Parameter Name="AssignedDate" Mode="In" Type="DateTime" />
             <Parameter Name="Employee_id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Assets" EntityType="EMSModel.Asset" />
+          <AssociationSet Name="FK__Asset__status_id__05D8E0BE" Association="EMSModel.FK__Asset__status_id__05D8E0BE">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Asset" EntitySet="Assets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Asset__type_id__04E4BC85" Association="EMSModel.FK__Asset__type_id__04E4BC85">
+            <End Role="Asset_type" EntitySet="Asset_type" />
+            <End Role="Asset" EntitySet="Assets" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee___asset__73BA3083" Association="EMSModel.FK__Employee___asset__73BA3083">
+            <End Role="Asset" EntitySet="Assets" />
+            <End Role="Employee_Asset" EntitySet="Employee_Asset" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
@@ -1474,28 +1474,6 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="LOP" Type="Decimal" Precision="18" Scale="1" />
           <Property Name="WFH" Type="Decimal" Precision="18" Scale="1" />
         </EntityType>
-        <EntityType Name="Asset">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="type_id" Type="Int32" Nullable="false" />
-          <Property Name="model" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="make" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="purchase_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="invoice_no" Type="Int32" Nullable="false" />
-          <Property Name="vendor_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="asset_serial_no" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="warranty_period" Type="Int32" Nullable="false" />
-          <Property Name="status_id" Type="Int32" Nullable="false" />
-          <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="scrap_date" Type="DateTime" Precision="0" />
-          <Property Name="price" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
-          <Property Name="warranty_expiry_date" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Status" Relationship="EMSModel.FK__Asset__status_id__05D8E0BE" FromRole="Asset" ToRole="Status" />
-          <NavigationProperty Name="Asset_type" Relationship="EMSModel.FK__Asset__type_id__04E4BC85" FromRole="Asset" ToRole="Asset_type" />
-          <NavigationProperty Name="Employee_Asset" Relationship="EMSModel.FK__Employee___asset__73BA3083" FromRole="Asset" ToRole="Employee_Asset" />
-        </EntityType>
         <EntityType Name="Asset_type">
           <Key>
             <PropertyRef Name="id" />
@@ -1513,8 +1491,8 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="asset_id" Type="Int32" Nullable="false" />
           <Property Name="assigned_on" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="released_on" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Asset" Relationship="EMSModel.FK__Employee___asset__73BA3083" FromRole="Employee_Asset" ToRole="Asset" />
           <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Employee___emplo__72C60C4A" FromRole="Employee_Asset" ToRole="Employee" />
+          <NavigationProperty Name="Asset" Relationship="EMSModel.FK__Employee___asset__73BA3083" FromRole="Employee_Asset" ToRole="Asset" />
         </EntityType>
         <EntityType Name="Status">
           <Key>
@@ -1523,45 +1501,9 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Assets" Relationship="EMSModel.FK__Asset__status_id__05D8E0BE" FromRole="Status" ToRole="Asset" />
           <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__leave_sta__4CA06362" FromRole="Status" ToRole="Leave" />
+          <NavigationProperty Name="Assets" Relationship="EMSModel.FK__Asset__status_id__05D8E0BE" FromRole="Status" ToRole="Asset" />
         </EntityType>
-        <Association Name="FK__Asset__status_id__05D8E0BE">
-          <End Type="EMSModel.Status" Role="Status" Multiplicity="1" />
-          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Asset">
-              <PropertyRef Name="status_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Asset__type_id__04E4BC85">
-          <End Type="EMSModel.Asset_type" Role="Asset_type" Multiplicity="1" />
-          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Asset_type">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Asset">
-              <PropertyRef Name="type_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Employee___asset__73BA3083">
-          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="1" />
-          <End Type="EMSModel.Employee_Asset" Role="Employee_Asset" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Asset">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Employee_Asset">
-              <PropertyRef Name="asset_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Employee___emplo__72C60C4A">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
           <End Type="EMSModel.Employee_Asset" Role="Employee_Asset" Multiplicity="*" />
@@ -1644,6 +1586,64 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="Warranty_expiry_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Make" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Asset">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type_id" Type="Int32" Nullable="false" />
+          <Property Name="model" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="make" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="purchase_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="invoice_no" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="vendor_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="asset_serial_no" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="warranty_period" Type="Int32" Nullable="false" />
+          <Property Name="status_id" Type="Int32" Nullable="false" />
+          <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="scrap_date" Type="DateTime" Precision="0" />
+          <Property Name="price" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="warranty_expiry_date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Status" Relationship="EMSModel.FK__Asset__status_id__05D8E0BE" FromRole="Asset" ToRole="Status" />
+          <NavigationProperty Name="Asset_type" Relationship="EMSModel.FK__Asset__type_id__04E4BC85" FromRole="Asset" ToRole="Asset_type" />
+          <NavigationProperty Name="Employee_Asset" Relationship="EMSModel.FK__Employee___asset__73BA3083" FromRole="Asset" ToRole="Employee_Asset" />
+        </EntityType>
+        <Association Name="FK__Asset__status_id__05D8E0BE">
+          <End Type="EMSModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="status_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Asset__type_id__04E4BC85">
+          <End Type="EMSModel.Asset_type" Role="Asset_type" Multiplicity="1" />
+          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee___asset__73BA3083">
+          <End Type="EMSModel.Asset" Role="Asset" Multiplicity="1" />
+          <End Type="EMSModel.Employee_Asset" Role="Employee_Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employee_Asset">
+              <PropertyRef Name="asset_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1888,26 +1888,6 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Assets">
-            <EntityTypeMapping TypeName="EMSModel.Asset">
-              <MappingFragment StoreEntitySet="Asset">
-                <ScalarProperty Name="warranty_expiry_date" ColumnName="warranty_expiry_date" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="scrap_date" ColumnName="scrap_date" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
-                <ScalarProperty Name="status_id" ColumnName="status_id" />
-                <ScalarProperty Name="warranty_period" ColumnName="warranty_period" />
-                <ScalarProperty Name="asset_serial_no" ColumnName="asset_serial_no" />
-                <ScalarProperty Name="vendor_name" ColumnName="vendor_name" />
-                <ScalarProperty Name="invoice_no" ColumnName="invoice_no" />
-                <ScalarProperty Name="purchase_date" ColumnName="purchase_date" />
-                <ScalarProperty Name="make" ColumnName="make" />
-                <ScalarProperty Name="model" ColumnName="model" />
-                <ScalarProperty Name="type_id" ColumnName="type_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Asset_type">
             <EntityTypeMapping TypeName="EMSModel.Asset_type">
               <MappingFragment StoreEntitySet="Asset_type">
@@ -1972,6 +1952,26 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <FunctionImportMapping FunctionImportName="MoveToAssetTable" FunctionName="EMSModel.Store.MoveToAssetTable" />
           <FunctionImportMapping FunctionImportName="SplitString" FunctionName="EMSModel.Store.SplitString" />
           <FunctionImportMapping FunctionImportName="UpdateAssetStatus" FunctionName="EMSModel.Store.UpdateAssetStatus" />
+          <EntitySetMapping Name="Assets">
+            <EntityTypeMapping TypeName="EMSModel.Asset">
+              <MappingFragment StoreEntitySet="Asset">
+                <ScalarProperty Name="warranty_expiry_date" ColumnName="warranty_expiry_date" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="scrap_date" ColumnName="scrap_date" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+                <ScalarProperty Name="warranty_period" ColumnName="warranty_period" />
+                <ScalarProperty Name="asset_serial_no" ColumnName="asset_serial_no" />
+                <ScalarProperty Name="vendor_name" ColumnName="vendor_name" />
+                <ScalarProperty Name="invoice_no" ColumnName="invoice_no" />
+                <ScalarProperty Name="purchase_date" ColumnName="purchase_date" />
+                <ScalarProperty Name="make" ColumnName="make" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="type_id" ColumnName="type_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

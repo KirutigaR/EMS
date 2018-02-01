@@ -25,7 +25,7 @@ namespace EMS
         public string model { get; set; }
         public string make { get; set; }
         public System.DateTime purchase_date { get; set; }
-        public int invoice_no { get; set; }
+        public string invoice_no { get; set; }
         public string vendor_name { get; set; }
         public string asset_serial_no { get; set; }
         public int warranty_period { get; set; }

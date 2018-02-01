@@ -194,12 +194,7 @@ namespace EMS.Controllers
                         if (leave_balance_instance.no_of_days != 0 && leave_balance_instance.no_of_days == Constants.ML_LEAVE_BALANCE)
                         {
                             leave.no_of_days = Constants.ML_LEAVE_BALANCE;
-
                             leave_balance_instance.no_of_days = leave_balance_instance.no_of_days - leave.no_of_days;
-                            LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
-                            LeaveRepo.AddLeaveHistory(leave);
-                            ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                            MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Applied successfully", "Leave Applied successfully"));
                         }
                         else
@@ -332,15 +327,14 @@ namespace EMS.Controllers
                                     return response;
                                 }
                                 break;
-                            default:
-                                LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
-                                LeaveRepo.AddLeaveHistory(leave);
-                                ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
-                                break;
                         }
                     }
                     #endregion CL, EL, WFH, LOP 
+
+                    LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
+                    LeaveRepo.AddLeaveHistory(leave);
+                    ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
+                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
                 }
                 else
                 {

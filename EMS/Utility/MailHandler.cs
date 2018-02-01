@@ -32,7 +32,7 @@ namespace EMS.Utility
                 mail.Subject = "Employee Login credentials";
 
                 //mail.Body = "\n HI "+emp_name+"\n\t Your Leave application has been approved and it is from "+from_date+"to "+to_date+"\n Thank You";
-                mail.Body = "Hi " + username + "," + "<br><br> Welcome to <b>Jaishu Consulting Private Limited.</b><br><br> Your Employee account has been created, please find the login credentials specified below <em><b> <br><br> Username&nbsp;:&nbsp;" + user_mail + "<br>Password&nbsp;:&nbsp;" + password + "</em></b><br><br>Click <a href=http://192.168.1.28:8080/>here</a> to Login.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                mail.Body = "Hi " + username + "," + "<br><br> Welcome to <b>Jaishu Consulting Private Limited.</b><br><br> Your Employee account has been created, please find the login credentials specified below <em><b> <br><br> Username&nbsp;:&nbsp;" + user_mail + "<br>Password&nbsp;:&nbsp;" + password + "</em></b><br><br>Click <a href=http://192.168.1.19:8080/>here</a> to Login.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
 
                 mail.IsBodyHtml = true;
                 //mail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
@@ -63,26 +63,26 @@ namespace EMS.Utility
                     mail.Subject = "Employee Leave Status";
                     mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
-                else if(status == Constants.LEAVE_STATUS_REJECTED)
+                else if (status == Constants.LEAVE_STATUS_REJECTED)
                 {
                     mail.To.Add(user_mail);
                     mail.CC.Add(reporting_to_mailid);
                     mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by "+Reportingto_name+ " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                 }
-                else if(status == Constants.LEAVE_STATUS_PENDING)
+                else if (status == Constants.LEAVE_STATUS_PENDING)
                 {
                     mail.To.Add(reporting_to_mailid);
                     mail.CC.Add(user_mail);
                     mail.Subject = "Employee Leave Application";
-                    mail.Body = "Hi " + Reportingto_name  + "<br><br>Your team member "+user_name+" applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString()+ ". <br><br>Kindly login <a href=http://192.168.1.28:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";                
+                    mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 }
                 else
                 {
                     mail.To.Add(reporting_to_mailid);
                     mail.CC.Add(user_mail);
                     mail.Subject = "Jaishu Leave Management";
-                    mail.Body = "Hi "+ Reportingto_name + "<br><br>Your team member " + user_name+ " cancelled a leave application from "+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.28:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " cancelled a leave application from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 }
                 //System.Net.Mail.Attachment attachment;
                 //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
@@ -108,7 +108,7 @@ namespace EMS.Utility
                 throw ex;
             }
         }
-        
+
         public static void ForgotPassword(string username, string user_mail)
         {
             try
@@ -123,7 +123,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=http://192.168.1.28:8080/>here</a> to change your password...<br><br> Thank You";
+                mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=http://192.168.1.19:8080/>here</a> to change your password...<br><br> Thank You";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }

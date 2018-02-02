@@ -355,7 +355,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="employee_id">i/p: employee id (integer value)</param>
         /// <returns></returns>
-        [Route("api/v1/leavehistory/id/{employee_id?}")] // display Leavehistory in leavepage by employee id
+        [Route("api/v1/leavehistory/id/{employee_id?}")]
         public HttpResponseMessage GetLeaveHistoryByEmployeeId(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -525,28 +525,6 @@ namespace EMS.Controllers
             return response;
         }
 
-        /// <summary>
-        /// to get pending leave applications of all employee
-        /// </summary>
-        /// <returns></returns>
-        [Route("api/v1/all/pending/leaves")] // pending approval in hr manager
-        public HttpResponseMessage GetPendingLeaves()
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                List<LeavehistoryModel> leave_history = LeaveRepo.GetPendingLeave();
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", leave_history));
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
-            }
-            return response;
-        }
-
         [Route("api/v1/typesofleaves/list")] //for leave type list dropdown
         public HttpResponseMessage GetLeaveTypesList()
         {
@@ -653,7 +631,6 @@ namespace EMS.Controllers
                     Dictionary<string, object> result_set = new Dictionary<string, object>();
                     result_set.Add("Available_CL_EL", LeaveRepo.GetLeaveAvailableDashboard(employee_id));
                     result_set.Add("Reporties_Pending_Leave", LeaveRepo.GetPendingLeaveListByReporterID(employee_id).Count);
-                    result_set.Add("Approved_Leave_Application", LeaveRepo.GetApprovedLeaveDashboard(employee_id));
                     result_set.Add("Pending_Leave_Application", LeaveRepo.GetPendingLeaves(employee_id));
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", result_set));
                 }

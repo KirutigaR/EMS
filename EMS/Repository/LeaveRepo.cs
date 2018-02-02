@@ -498,7 +498,8 @@ namespace EMS.Repository
                             join ls in datacontext.Status on l.leave_statusid equals ls.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date ascending
-                            where e.reporting_to == reportingto_id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= Current_date && u.is_active ==1//&& l.leave_statusid == ls.id
+                            where e.reporting_to == reportingto_id && l.leave_statusid == Constants.LEAVE_STATUS_PENDING 
+                            && l.from_date >= Current_date.AddDays(-30) && u.is_active ==1//&& l.leave_statusid == ls.id
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -526,47 +527,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static List<LeavehistoryModel> GetPendingLeave()
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var currentdate = DateTime.Now.Date;
-                var query = from l in datacontext.Leaves
-                            join e in datacontext.Employees
-                            on l.employee_id equals e.id
-                            join lt in datacontext.Leave_type
-                            on l.leavetype_id equals lt.id
-                            join st in datacontext.Status on l.leave_statusid equals st.id
-                            join u in datacontext.Users on e.user_id equals u.id
-                            orderby l.from_date ascending
-                            where l.leave_statusid == Constants.LEAVE_STATUS_PENDING && l.from_date >= currentdate && u.is_active ==1
-                            select new LeavehistoryModel
-                            {
-                                employee_id = e.id,
-                                first_name = e.first_name,
-                                last_name = e.last_name,
-                                type_name = lt.type_name,
-                                from_date = l.from_date,
-                                to_date = l.to_date,
-                                no_of_days = l.no_of_days,
-                                reportingto = e.reporting_to,
-                                leave_status = st.status,
-                                leave_id = l.id
-                            };
-                return query.ToList();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
+
         public static Leave GetLeaveInstanceById(int id)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -670,7 +631,7 @@ namespace EMS.Repository
                             join st in datacontext.Status on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
                             orderby l.from_date descending
-                            where l.from_date >= currentdate && u.is_active == 1
+                            where l.from_date >= currentdate.AddDays(-30) && u.is_active == 1
                             select new LeavehistoryModel
                             {
                                 employee_id = e.id,
@@ -817,51 +778,6 @@ namespace EMS.Repository
             }
         }
 
-        //public static decimal GetLeaveTakenDashboard(int employee_id)
-        //{
-        //    EMSEntities datacontext = new EMSEntities();
-        //    try
-        //    {
-        //        var query = from x in datacontext.Leaves
-        //                    join l in datacontext.Status_leave on x.leave_statusid equals l.id
-        //                    where x.employee_id == employee_id && l.id == Constants.LEAVE_STATUS_APPROVED && x.from_date < DateTime.Now
-        //                    select x.no_of_days;
-        //        return query.ToList().Sum();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine(e.Message);
-        //        Debug.WriteLine(e.GetBaseException());
-        //        throw e;
-        //    }
-        //    finally
-        //    {
-        //        datacontext.Dispose();
-        //    }
-        //}
-
-        public static decimal GetApprovedLeaveDashboard(int employee_id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from x in datacontext.Leaves
-                            where x.employee_id == employee_id && x.leave_statusid == Constants.LEAVE_STATUS_APPROVED && x.from_date >= DateTime.Now
-                            select x;
-                return query.ToList().Count;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
         public static decimal GetPendingLeaves(int employee_id)
         {
             EMSEntities datacontext = new EMSEntities();
@@ -869,7 +785,7 @@ namespace EMS.Repository
             {
                 DateTime current_date = DateTime.Now.Date;
                 var query = from x in datacontext.Leaves
-                            where x.employee_id == employee_id && x.leave_statusid == Constants.LEAVE_STATUS_PENDING && x.from_date >= current_date
+                            where x.employee_id == employee_id && x.leave_statusid == Constants.LEAVE_STATUS_PENDING && x.from_date >= current_date.AddDays(-30)
                             select x;
                 return query.ToList().Count;
             }

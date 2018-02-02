@@ -184,6 +184,7 @@ namespace EMS.Repository
                                 scrap_date = asset.scrap_date,
                                 price = asset.price,
                                 warranty_expiry_date = asset.warranty_expiry_date,
+                                warranty_period = asset.warranty_period,
                                 employee_name = (from employee in datacontext.Employees where employee.id == ( from employee_assert in datacontext.Employee_Asset
                                                where employee_assert.asset_id == asset_id && employee_assert.released_on == null
                                                select employee_assert.employee_id).FirstOrDefault()

@@ -114,6 +114,10 @@ namespace EMS.Controllers
                 Asset existing_instance = AssetRepo.GetAssetInstance(asset.id);
                 if (asset != null)
                 {
+                    if(existing_instance.warranty_period != asset.warranty_period)
+                    {
+                        asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
+                    }
                     AssetRepo.UpdateAsset(asset);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset Updated successfully", "Asset Updated successfully"));
                 }

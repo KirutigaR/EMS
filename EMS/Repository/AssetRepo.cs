@@ -116,6 +116,7 @@ namespace EMS.Repository
                                 make = asset.make,
                                 asset_serial_no = asset.asset_serial_no,
                                 warranty_expiry_date = asset.warranty_expiry_date,
+                                scrap_date = asset.scrap_date,
                                 employee_name = (from employee in datacontext.Employees
                                                  where employee.id == (from employee_assert in datacontext.Employee_Asset
                                                                        where employee_assert.asset_id == asset.id && employee_assert.released_on == null

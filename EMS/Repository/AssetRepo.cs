@@ -107,7 +107,7 @@ namespace EMS.Repository
             {
                 var query = from asset in datacontext.Assets
                             join asset_type in datacontext.Asset_type on asset.type_id equals asset_type.id
-                            where asset.status_id == status_id
+                            where asset.status_id == status_id orderby asset.purchase_date descending
                             select new AssetModel
                             {
                                 id = asset.id,
@@ -216,7 +216,7 @@ namespace EMS.Repository
                             join employee in datacontext.Employees on x.employee_id equals employee.id
                             join asset in datacontext.Assets on x.asset_id equals asset.id
                             join type in datacontext.Asset_type on asset.type_id equals type.id
-                            where x.asset_id == asset_id
+                            where x.asset_id == asset_id orderby x.released_on 
                             select new AssetModel
                             {
                                 id = x.id,
@@ -291,7 +291,7 @@ namespace EMS.Repository
                             join employee in datacontext.Employees on employeeasset.employee_id equals employee.id
                             join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
                             join type in datacontext.Asset_type on asset.type_id equals type.id
-                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null && asset.status_id == 5
+                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null && asset.status_id == 5 orderby employeeasset.assigned_on
                             select new AssetModel
                             {
                                 id = employeeasset.id,

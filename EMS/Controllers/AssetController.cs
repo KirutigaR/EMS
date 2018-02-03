@@ -83,6 +83,7 @@ namespace EMS.Controllers
                 if (asset != null)
                 {
                     asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
+                    asset.status_id = Constants.ASSET_STATUS_AVAILABLE;
                     AssetRepo.CreateAsset(asset);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset created successfully", "Asset created successfully"));
                 }
@@ -118,6 +119,7 @@ namespace EMS.Controllers
                     {
                         asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
                     }
+                    asset.status_id = existing_instance.status_id;
                     AssetRepo.UpdateAsset(asset);
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset Updated successfully", "Asset Updated successfully"));
                 }
@@ -397,10 +399,8 @@ namespace EMS.Controllers
                 if(employee_id != 0)
                 {
                     Dictionary<string, object> result_set = new Dictionary<string, object>();
-                    List<AssetModel> current_asset = AssetRepo.GetCurrentAssetByEmployeeId(employee_id);
-                    List<AssetModel> previous_asset = AssetRepo.GetPreviousAssetByEmployeeId(employee_id);
-                    result_set.Add("CurrentAssignedAsset", current_asset);
-                    result_set.Add("PreviousAssignedAsset", previous_asset);
+                    result_set.Add("CurrentAssignedAsset", AssetRepo.GetCurrentAssetByEmployeeId(employee_id));
+                    result_set.Add("PreviousAssignedAsset", AssetRepo.GetPreviousAssetByEmployeeId(employee_id));
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", result_set));
                 }
                 else

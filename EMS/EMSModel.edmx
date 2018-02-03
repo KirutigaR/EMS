@@ -79,13 +79,13 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="first_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="last_name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="email" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="date_of_birth" Type="date" Nullable="false" />
           <Property Name="date_of_joining" Type="date" Nullable="false" />
-          <Property Name="contact_no" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="contact_no" Type="varchar" MaxLength="20" />
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="reporting_to" Type="int" Nullable="false" />
           <Property Name="year_of_experience" Type="decimal" Precision="4" Scale="2" />
@@ -1278,9 +1278,9 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="first_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="last_name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="date_of_birth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="date_of_birth" Type="DateTime" Precision="0" Nullable="false" />
           <Property Name="date_of_joining" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="contact_no" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="contact_no" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="reporting_to" Type="Int32" Nullable="false" />
           <Property Name="gender" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />

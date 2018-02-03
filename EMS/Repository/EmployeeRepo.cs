@@ -361,25 +361,18 @@ namespace EMS.Repository
             }
         }
         
-        public static void InactiveEmployee(Employee existinginstance)
+        public static void InactiveEmployee(int user_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                //var query = from employee in datacontext.Employees
-                //            join user in datacontext.Users
-                //            on employee.user_id equals user.id
-                //            where employee.id == e_id && user.is_active ==1
-                //            select user;
                 var query = from user in datacontext.Users
-                            where existinginstance.user_id == user.id && user.is_active==1
+                            where user_id == user.id && user.is_active == 1
                             select user;
                 User user_details = query.FirstOrDefault();
                 user_details.is_active = 0;
                 datacontext.Entry(user_details).State = EntityState.Modified;
                 datacontext.SaveChanges();
-                //datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;
-                //datacontext.SaveChanges();
             }
             catch(Exception exception)
             {
@@ -591,7 +584,7 @@ namespace EMS.Repository
                 var query = from emp in datacontext.Employees 
                             join user in datacontext.Users on emp.user_id equals user.id 
                             where user.is_active == 1 orderby emp.created_on descending
-                            select emp.id;
+                            select (emp.id + 1);
                 return query.FirstOrDefault();
             }
             catch (Exception exception)

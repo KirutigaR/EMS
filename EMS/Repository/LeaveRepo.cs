@@ -631,6 +631,7 @@ namespace EMS.Repository
                             join lt in datacontext.Leave_type on l.leavetype_id equals lt.id
                             join st in datacontext.Status on l.leave_statusid equals st.id
                             join u in datacontext.Users on e.user_id equals u.id
+                            join e1 in datacontext.Employees on e.reporting_to equals e1.id
                             orderby l.from_date descending
                             where l.from_date >= leave_list_from_date && u.is_active == 1
                             select new LeavehistoryModel
@@ -642,7 +643,7 @@ namespace EMS.Repository
                                 from_date = l.from_date,
                                 to_date = l.to_date,
                                 no_of_days = l.no_of_days,
-                                reportingto = e.reporting_to,
+                                reporting_to = e1.first_name +" "+ e1.last_name,
                                 leave_status = st.status
                             };
                 return query.ToList();

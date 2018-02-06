@@ -15,7 +15,7 @@ namespace EMS.Controllers
 {
     public class LeaveController : ApiController
     {
-        [Route("api/v1/holiday/list")]
+        [Route("api/v2/holiday/list")]
         public HttpResponseMessage GetHolidayList()
         {
             HttpResponseMessage response = null;
@@ -32,7 +32,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/sorted/holiday/list")]
+        [Route("api/v2/sorted/holiday/list")]
         public HttpResponseMessage GetsortedHolidayList()
         {
             HttpResponseMessage response = null;
@@ -49,7 +49,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/editholidaylist")]
+        [Route("api/v2/editholidaylist")]
         [HttpPost]
         public HttpResponseMessage EditHolidayList(Holiday_List holiday)
         {
@@ -78,7 +78,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/holiday/delete/{holiday_id?}")]
+        [Route("api/v2/holiday/delete/{holiday_id?}")]
         [HttpGet]
         public HttpResponseMessage DeleteHolidayList(int holiday_id)
         {
@@ -107,7 +107,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/holiday/create")]
+        [Route("api/v2/holiday/create")]
         public HttpResponseMessage CreateHoliday(Holiday_List holiday_list)
         {
             HttpResponseMessage response = null;
@@ -139,7 +139,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/applyleave")]
+        [Route("api/v2/applyleave")]
         public HttpResponseMessage ApplyLeave(Leave leave)
         {
             HttpResponseMessage response = null;
@@ -355,7 +355,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="employee_id">i/p: employee id (integer value)</param>
         /// <returns></returns>
-        [Route("api/v1/leavehistory/id/{employee_id?}")]
+        [Route("api/v2/leavehistory/id/{employee_id?}")]
         public HttpResponseMessage GetLeaveHistoryByEmployeeId(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -378,7 +378,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="employee_id"></param>
         /// <returns></returns>
-        [Route("api/v1/balanceleave/{employee_id?}")]
+        [Route("api/v2/balanceleave/{employee_id?}")]
         public HttpResponseMessage GetLeaveBalanceByEmployeeId(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -403,7 +403,7 @@ namespace EMS.Controllers
         /// <param name="leave_status"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("api/v1/leave/status/update")] // leave approve and reject
+        [Route("api/v2/leave/status/update")] // leave approve and reject
         public HttpResponseMessage GetApproval(LeaveStatusModel leave_status)
         {
             HttpResponseMessage response = null;
@@ -507,7 +507,7 @@ namespace EMS.Controllers
         /// <param name="employee_id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("api/v1/leave/pending/{employee_id?}")] //leave request project manager page
+        [Route("api/v2/leave/pending/{employee_id?}")] //leave request project manager page
         public HttpResponseMessage GetPendingLeaveListByReporterID(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -525,7 +525,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/typesofleaves/list")] //for leave type list dropdown
+        [Route("api/v2/typesofleaves/list")] //for leave type list dropdown
         public HttpResponseMessage GetLeaveTypesList()
         {
             HttpResponseMessage response = null;
@@ -548,7 +548,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="reportingto_id"></param>
         /// <returns></returns>
-        [Route("api/v1/leave/fullhistoryby/{reportingto_id?}")] // pending approval in hr manager
+        [Route("api/v2/leave/fullhistoryby/{reportingto_id?}")] // pending approval in hr manager
         public HttpResponseMessage GetApprovedRejectedCancelledLeave(int reportingto_id = 0)
         {
             HttpResponseMessage response = null;
@@ -570,7 +570,7 @@ namespace EMS.Controllers
         /// to get entire leave applications of all employees
         /// </summary>
         /// <returns></returns>
-        [Route("api/v1/entire/leave/history")] // leave history of all employee (HR only can view this history list)
+        [Route("api/v2/entire/leave/history")] // leave history of all employee (HR only can view this history list)
         public HttpResponseMessage GetEntireLeaveHistory()
         {
             HttpResponseMessage response = null;
@@ -593,7 +593,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="leave_id"></param>
         /// <returns></returns>
-        [Route("api/v1/get/leave/{leave_id?}")] 
+        [Route("api/v2/get/leave/{leave_id?}")] 
         public HttpResponseMessage GetLeaveHistoryList(int leave_id)
         {
             HttpResponseMessage response = null;
@@ -619,7 +619,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/dashboard/{employee_id}")]
+        [Route("api/v2/get/dashboard/{employee_id}")]
         [HttpGet]
         public HttpResponseMessage GetDashboardDetails(int employee_id)
         {

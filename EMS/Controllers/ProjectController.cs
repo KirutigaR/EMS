@@ -17,7 +17,7 @@ namespace EMS.Controllers
     {
         
         [HttpPost]
-        [Route("api/v1/project/create")]
+        [Route("api/v2/project/create")]
         public HttpResponseMessage CreateNewProject(Project project)
         {
             HttpResponseMessage Response = null;
@@ -56,7 +56,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/v1/project/list/{client_id?}/{status?}")]//project list of active client 
+        [Route("api/v2/project/list/{client_id?}/{status?}")]//project list of active client 
         public HttpResponseMessage GetProjectList(int client_id = 0, string status = null)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
@@ -74,7 +74,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/project/list/{employee_id?}")]//project list of active client 
+        [Route("api/v2/project/list/{employee_id?}")]//project list of active client 
         public HttpResponseMessage GetProjectListByEmployee(int employee_id)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
@@ -92,7 +92,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/entire/project/list/{client_id?}/{status?}")]//entire project list (include active and incative client projects )
+        [Route("api/v2/entire/project/list/{client_id?}/{status?}")]//entire project list (include active and incative client projects )
         public HttpResponseMessage GetEntireProjectList(int client_id = 0, string status = null)//c_id client_id , status project_status
         {
             HttpResponseMessage response = null;
@@ -110,7 +110,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/project/{project_id}")]
+        [Route("api/v2/get/project/{project_id}")]
         public HttpResponseMessage GetProjectById(int project_id)//p_id project_id
         {
             HttpResponseMessage response = null;
@@ -143,7 +143,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/project/edit")]
+        [Route("api/v2/project/edit")]
         public HttpResponseMessage EditProjectDetails(Project project)
         {
             HttpResponseMessage response = null;
@@ -177,7 +177,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/assign/project/role")]
+        [Route("api/v2/assign/project/role")]
         public HttpResponseMessage AssignEmployeeProjectRole(List<Project_role> project_roles)
         {
             HttpResponseMessage response = null;
@@ -203,7 +203,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/project/managerlist")]
+        [Route("api/v2/project/managerlist")]
         //project manager assignment , Team leader and manager list 
         public HttpResponseMessage GetProjectManagerList()
         {
@@ -222,7 +222,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/assigned/project_role/list/{employee_id?}/{project_id?}/{reportingto_id?}")]
+        [Route("api/v2/assigned/project_role/list/{employee_id?}/{project_id?}/{reportingto_id?}")]
         public HttpResponseMessage GetAssignedProjectRoleList(int employee_id = 0, int project_id = 0, int reportingto_id = 0)//e_id employee_id , p_id project_id
         {
             HttpResponseMessage response = null;
@@ -240,7 +240,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/edit/employee/project/role")]
+        [Route("api/v2/edit/employee/project/role")]
         public HttpResponseMessage EditEmployeeProjectRoleAssignmnet(Project_role project_roles)
         {
             HttpResponseMessage response = null;
@@ -266,7 +266,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/employee/project/role/{employee_id?}/{project_id?}/{role_id?}")]
+        [Route("api/v2/get/employee/project/role/{employee_id?}/{project_id?}/{role_id?}")]
         public HttpResponseMessage GetAssignedEmployeebyid(int employee_id, int project_id, int role_id)
         {
             HttpResponseMessage response = null;
@@ -299,7 +299,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/delete/employee/project/role/{employee_id?}/{project_id?}/{role_id?}")]
+        [Route("api/v2/delete/employee/project/role/{employee_id?}/{project_id?}/{role_id?}")]
         public HttpResponseMessage DeleteEmployeeProjectRoleAssignmnet(int employee_id, int project_id, int role_id)
         {
             HttpResponseMessage response = null;
@@ -332,7 +332,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/employee/project/list/{reporting_id?}")]//same as api/v1/project_role/list/{reportingto_id?}
+        [Route("api/v2/employee/project/list/{reporting_id?}")]//same as api/v2/project_role/list/{reportingto_id?}
         public HttpResponseMessage GetEmpProjDetailsByManager(int reporting_id)
         {
             HttpResponseMessage response = null;

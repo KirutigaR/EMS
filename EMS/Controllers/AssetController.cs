@@ -29,7 +29,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <returns>asset type id and name  </returns>
         [HttpGet]
-        [Route("api/v1/asset/type/list")]
+        [Route("api/v2/asset/type/list")]
         public HttpResponseMessage GetAssetTypeList()
         {
             HttpResponseMessage response = null;
@@ -51,7 +51,7 @@ namespace EMS.Controllers
         /// To Get AssetStatus List
         /// </summary>
         /// <returns>asset status id and status name </returns>
-        [Route("api/v1/asset/status/list")]
+        [Route("api/v2/asset/status/list")]
         [HttpGet]
         public HttpResponseMessage GetAssetStatusList()
         {
@@ -73,7 +73,7 @@ namespace EMS.Controllers
         /// To Create an Asset
         /// </summary>
         /// <returns></returns>
-        [Route("api/v1/create/asset")]
+        [Route("api/v2/create/asset")]
         [HttpPost]
         public HttpResponseMessage CreateAsset(Asset asset)
         {
@@ -105,7 +105,7 @@ namespace EMS.Controllers
         /// To Update Asset details
         /// </summary>
         /// <returns></returns>
-        [Route("api/v1/update/asset")]
+        [Route("api/v2/update/asset")]
         [HttpPost]
         public HttpResponseMessage UpdateAsset(Asset asset)
         {
@@ -141,7 +141,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="status">string value which sholud be either 'AVAILABLE' or 'ASSIGNED' or 'SCRAP'</param>
         /// <returns>list of asset object</returns>
-        [Route("api/v1/asset/list/{status?}")]
+        [Route("api/v2/asset/list/{status?}")]
         [HttpGet]
         public HttpResponseMessage GetAssetList(string status)
         {
@@ -164,7 +164,7 @@ namespace EMS.Controllers
         /// To Upload Assets details through bulk upload 
         /// </summary>
         /// <returns></returns>
-        [Route("api/v1/asset/bulkupload")]
+        [Route("api/v2/asset/bulkupload")]
         [HttpPost]
         public async Task<HttpResponseMessage> UploadAssetDetails()
         {
@@ -278,7 +278,7 @@ namespace EMS.Controllers
                             return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
                         }
                     }
-                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Assets Updated Successfully", "Assets updated successfully"));
+                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Asset Details Uploaded Successfully", "Asset Details Uploaded Successfully"));
 
                 }
                 else
@@ -317,7 +317,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="Asset_Assign_Details"></param>
         /// <returns></returns>
-        [Route("api/v1/update/asset/status")]
+        [Route("api/v2/update/asset/status")]
         [HttpPost]
         public HttpResponseMessage AssignAsset(AssetModel Asset_Assign_Details)
         {
@@ -361,7 +361,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="asset_id"></param>
         /// <returns></returns>
-        [Route("api/v1/get/asset/details/{asset_id?}")]
+        [Route("api/v2/get/asset/details/{asset_id?}")]
         [HttpGet]
         public HttpResponseMessage GetAssetDetailsByID(int asset_id)
         {
@@ -390,7 +390,7 @@ namespace EMS.Controllers
         /// </summary>
         /// <param name="employee_id"> unique id </param>
         /// <returns></returns>
-        [Route("api/v1/get/asset/{employee_id?}")]
+        [Route("api/v2/get/asset/{employee_id?}")]
         public HttpResponseMessage GetAssetByemployee_Id(int employee_id)
         {
             HttpResponseMessage response = null;

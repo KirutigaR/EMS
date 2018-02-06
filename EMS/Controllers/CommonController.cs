@@ -20,7 +20,7 @@ namespace EMS.Controllers
 {
     public class CommonController : ApiController
     {
-        [Route("api/v1/login")]
+        [Route("api/v2/login")]
         [HttpPost]
         public HttpResponseMessage Login(User user)
         {
@@ -55,7 +55,7 @@ namespace EMS.Controllers
             }
             return response;
         }
-        [Route("api/v1/forgotpassword")]
+        [Route("api/v2/forgotpassword")]
         [HttpPost]
         public HttpResponseMessage ForgotPassword(ChangePasswordModel forgotpassword)
         {
@@ -94,7 +94,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/bulkupload")]
+        [Route("api/v2/bulkupload")]
         public async Task<HttpResponseMessage> UpdateEmployeeLeaveBalance()
         {
             // Check if the request contains multipart/form-data.
@@ -234,7 +234,7 @@ namespace EMS.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_308", "Application Error",e.Message));
             }
         }
-        [Route("api/v1/changepassword")]
+        [Route("api/v2/changepassword")]
         [HttpPost]
         public HttpResponseMessage ChangePassword(ChangePasswordModel changepassword)
         {

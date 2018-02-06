@@ -15,7 +15,7 @@ namespace EMS.Controllers
     public class ClientController : ApiController
     {
         [HttpPost]
-        [Route("api/v1/create/client")]
+        [Route("api/v2/create/client")]
         public HttpResponseMessage CreateNewClient(Client client)
         {
             HttpResponseMessage Response = null;
@@ -56,7 +56,7 @@ namespace EMS.Controllers
         }
 
 
-        [Route("api/v1/client/list")]
+        [Route("api/v2/client/list")]
         public HttpResponseMessage GetClientList()
         {
             HttpResponseMessage response = null;
@@ -74,7 +74,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/active/client/list")]
+        [Route("api/v2/active/client/list")]
         public HttpResponseMessage GetActiveClientList()
         {
             HttpResponseMessage response = null;
@@ -92,7 +92,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/client/{client_id?}")]
+        [Route("api/v2/get/client/{client_id?}")]
         public HttpResponseMessage GetClientById(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
@@ -125,7 +125,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/client/edit")]
+        [Route("api/v2/client/edit")]
         public HttpResponseMessage EditClientDetails(Client client)
         {
             HttpResponseMessage response = null;
@@ -160,7 +160,7 @@ namespace EMS.Controllers
 
 
         [HttpGet]
-        [Route("api/v1/client/drop/{client_id}")]
+        [Route("api/v2/client/drop/{client_id}")]
         public HttpResponseMessage DropClient(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
@@ -193,7 +193,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/client/project/list/{client_id?}")]
+        [Route("api/v2/client/project/list/{client_id?}")]
         public HttpResponseMessage GetProjectListByClientId(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
@@ -225,7 +225,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/client/type/list")]
+        [Route("api/v2/client/type/list")]
         public HttpResponseMessage GetClientTypeList()
         {
             HttpResponseMessage response = null;

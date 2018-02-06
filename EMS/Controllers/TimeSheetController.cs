@@ -45,7 +45,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/timesheet/edit")]
+        [Route("api/v2/timesheet/edit")]
         public HttpResponseMessage EditTimeSheetRecord(Timesheet sheetdetails)
         {
             HttpResponseMessage response = null;
@@ -77,7 +77,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/timesheet/{timesheetid?}")]
+        [Route("api/v2/get/timesheet/{timesheetid?}")]
         public HttpResponseMessage GetSheetById(int timesheetid)//timesheet id
         {
             HttpResponseMessage response = null;
@@ -110,7 +110,7 @@ namespace EMS.Controllers
         }
 
 
-        [Route("api/v1/get/employee/timesheet/{employee_id?}")]
+        [Route("api/v2/get/employee/timesheet/{employee_id?}")]
         public HttpResponseMessage GetSheetByEmpId(int employee_id)//e_id employee_id
         {
             HttpResponseMessage response = null;
@@ -143,7 +143,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/project/timesheet/{project_id?}")]
+        [Route("api/v2/get/project/timesheet/{project_id?}")]
         public HttpResponseMessage GetSheetByProjId(int project_id)//p_id project_id
         {
             HttpResponseMessage response = null;
@@ -169,7 +169,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/timesheet/delete/{timesheet_id}")]
+        [Route("api/v2/timesheet/delete/{timesheet_id}")]
         public HttpResponseMessage DeleteSheetById(int timesheet_id)//s_id timesheet_id
         {
             HttpResponseMessage response = null;

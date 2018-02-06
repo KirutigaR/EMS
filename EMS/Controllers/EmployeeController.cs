@@ -18,7 +18,7 @@ namespace EMS.Controllers
     public class EmployeeController : ApiController
     {
         [HttpPost]
-        [Route("api/v1/employee/create")]
+        [Route("api/v2/employee/create")]
         public HttpResponseMessage CreateNewEmployee(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
@@ -141,7 +141,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/v1/employee/list/{reportingto_id?}/{designation_id?}")]//active employee list 
+        [Route("api/v2/employee/list/{reportingto_id?}/{designation_id?}")]//active employee list 
         public HttpResponseMessage GetEmployeeList(int reportingto_id = 0, int designation_id = 0)
         {
             HttpResponseMessage Response = null;
@@ -158,7 +158,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/v1/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
+        [Route("api/v2/employee/available/list/{reportingto_id?}/{designation_id?}")] //(available employees = employees assigned in bench[bench project id = 1])
         public HttpResponseMessage GetAvailableEmployeeList(int reportingto_id = 0, int designation_id = 0)//r_id reportingto_id, d_id designation_id 
         {
             HttpResponseMessage Response = null;
@@ -176,7 +176,7 @@ namespace EMS.Controllers
         }
 
         
-        [Route("api/v1/get/employee/{employee_id?}")]
+        [Route("api/v2/get/employee/{employee_id?}")]
         public HttpResponseMessage GetEmployeeById(int employee_id)//e_id employee_id
         {
             HttpResponseMessage Response = null;
@@ -208,7 +208,7 @@ namespace EMS.Controllers
             return Response;
         }
 
-        [Route("api/v1/get/employee/byuserid/{user_id?}")]
+        [Route("api/v2/get/employee/byuserid/{user_id?}")]
         public HttpResponseMessage GetEmployeeByUserId(int user_id)
         {
             HttpResponseMessage Response = null;
@@ -241,7 +241,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/employee/inactive/{employee_id?}")]
+        [Route("api/v2/employee/inactive/{employee_id?}")]
         public HttpResponseMessage InvalidEmployee(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -274,7 +274,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/employee/designation/list")]
+        [Route("api/v2/employee/designation/list")]
         public HttpResponseMessage GetEmpDesignationList()
         {
             HttpResponseMessage response = null;
@@ -291,7 +291,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/employee/reportingto/list")]//Manager , TeamLeader and HR list 
+        [Route("api/v2/employee/reportingto/list")]//Manager , TeamLeader and HR list 
         public HttpResponseMessage GetReportingtoList()
         {
             HttpResponseMessage response = null;
@@ -316,7 +316,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/employee/reportingto/{employee_id}")]
+        [Route("api/v2/employee/reportingto/{employee_id}")]
         public HttpResponseMessage GetReportingtoByEmpId(int employee_id)
         {
             HttpResponseMessage response = null;
@@ -334,7 +334,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/employee/update")]
+        [Route("api/v2/employee/update")]
         public HttpResponseMessage EmployeeUpdate(EmployeeModel employee_details)
         {
             HttpResponseMessage Response = null;
@@ -411,7 +411,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/get/last/employee/id")]
+        [Route("api/v2/get/last/employee/id")]
         public HttpResponseMessage GetLastEmployeeId(int employee_id = 0, string employee_name = null)
         {
             HttpResponseMessage Response = null;
@@ -429,7 +429,7 @@ namespace EMS.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/get/common/employee/details")]
+        [Route("api/v2/get/common/employee/details")]
         public HttpResponseMessage GetCommonEmployeeDetails()
         {
             HttpResponseMessage Response = null;

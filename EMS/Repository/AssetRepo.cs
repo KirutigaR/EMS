@@ -122,6 +122,9 @@ namespace EMS.Repository
                                                                        where employee_assert.asset_id == asset.id && employee_assert.released_on == null
                                                                        select employee_assert.employee_id).FirstOrDefault()
                                                  select employee.first_name + " " + employee.last_name).FirstOrDefault(),
+                                assigned_on = (from employee_assert in datacontext.Employee_Asset
+                                               where employee_assert.asset_id == asset.id && employee_assert.released_on == null
+                                               select employee_assert.assigned_on).FirstOrDefault()
                             };
                 return query.ToList();
             }
@@ -220,14 +223,15 @@ namespace EMS.Repository
                             where x.asset_id == asset_id orderby x.released_on 
                             select new AssetModel
                             {
-                                id = x.id,
+                                //id = x.id,
                                 employee_name = employee.first_name +" "+employee.last_name,
-                                asset_serial_no = asset.asset_serial_no,
-                                type_name = type.asset_type,
-                                model = asset.model,
-                                make = asset.make,
+                                //asset_serial_no = asset.asset_serial_no,
+                                //type_name = type.asset_type,
+                                //model = asset.model,
+                                //make = asset.make,
                                 assigned_on = x.assigned_on,
-                                released_on = x.released_on
+                                released_on = x.released_on,
+                                employee_id = x.employee_id
                             };
                 return query.ToList();
             }

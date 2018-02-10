@@ -29,5 +29,6 @@ namespace EMS.Models
         public int status_id { get; set; }
         public int type_id { get; set; }
         public Nullable<DateTime> released_on { get; set; }
+        public string employee_mailid { get; set; }
     }
 }

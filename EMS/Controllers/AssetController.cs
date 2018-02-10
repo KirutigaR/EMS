@@ -112,7 +112,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Asset existing_instance = AssetRepo.GetAssetInstance(asset.id);
+                AssetModel existing_instance = AssetRepo.GetAssetDetailsByID(asset.id);
                 if (asset != null)
                 {
                     if(existing_instance.warranty_period != asset.warranty_period)
@@ -319,17 +319,23 @@ namespace EMS.Controllers
         /// <returns></returns>
         [Route("api/v2/update/asset/status")]
         [HttpPost]
-        public HttpResponseMessage AssignAsset(AssetModel Asset_Assign_Details)
+        public HttpResponseMessage UpdateAssetStatus(AssetModel Asset_Assign_Details)
         {
             HttpResponseMessage response = null;
             try
             {
                 if (Asset_Assign_Details.asset_id_list.Count != 0)
                 {
-                    if(AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
+                    //user should get a mail while an asset is released from him 
+                    int current_status = AssetRepo.GetAssetDetailsByID(Asset_Assign_Details.asset_id_list[0]).status_id;
+                    if (AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
                     {
                         if (Asset_Assign_Details.status_name == "ASSIGNED")
                         {
+                            //get list of assets and its details to send it in mail 
+                            List<AssetModel> Asset_details_List = AssetRepo.GetAsserDetailstListByAssetID(Asset_Assign_Details.asset_id_list, new List<int>());
+                            //get employee mail id and user name 
+                            MailHandler.AssetMailing(Asset_details_List.FirstOrDefault().employee_name, Asset_details_List.FirstOrDefault().employee_mailid, "ASSIGNED", Asset_details_List, Asset_Assign_Details.assigned_on);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) Assigned to the employee", "Asset(S) Assigned to the employee"));
                         }
                         else
@@ -337,7 +343,14 @@ namespace EMS.Controllers
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) status updated successfully", "Asset(S) status updated successfully"));
                         }
                     }
-                    else
+                    //condition used to send mail while releasing an asset
+                    if (current_status == Constants.ASSET_STATUS_ASSIGNED)
+                    {
+                        //get list of employee mail id's to send mail
+                        //get the list of assets and its details which has been released from the user 
+                        //List<Employee_Asset> Asset_Details_List = AssetRepo.GetAsserDetailstListByAssetID(Asset_Assign_Details.asset_id_list); 
+                    }
+                    if(!(AssetRepo.UpdateAssetStatus(Asset_Assign_Details)))
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Error While Assigning Asset(s)", "Error While Assigning Asset(s)"));
                     }

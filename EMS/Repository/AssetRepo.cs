@@ -4,6 +4,8 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using EMS.Models;
+using EMS.Utility;
+using LinqKit;
 
 namespace EMS.Repository
 {
@@ -127,28 +129,6 @@ namespace EMS.Repository
                                                select employee_assert.assigned_on).FirstOrDefault()
                             };
                 return query.ToList();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-
-        public static Asset GetAssetInstance(int asset_id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from asset in datacontext.Assets
-                            where asset.id == asset_id
-                            select asset;
-                return query.FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -296,7 +276,7 @@ namespace EMS.Repository
                             join employee in datacontext.Employees on employeeasset.employee_id equals employee.id
                             join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
                             join type in datacontext.Asset_type on asset.type_id equals type.id
-                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null && asset.status_id == 5 orderby employeeasset.assigned_on
+                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null && asset.status_id == Constants.ASSET_STATUS_ASSIGNED orderby employeeasset.assigned_on
                             select new AssetModel
                             {
                                 id = employeeasset.id,
@@ -342,6 +322,59 @@ namespace EMS.Repository
                                 make = asset.make,
                                 assigned_on = employeeasset.assigned_on,
                                 released_on = employeeasset.released_on
+                            };
+                return query.ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static List<AssetModel> GetAsserDetailstListByAssetID(List<int> asset_id_list, List<int> Emp_id_List)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var predicate = LinqKit.PredicateBuilder.True<Employee_Asset>();
+                if (asset_id_list.Count != 0)
+                {
+                    predicate = predicate.And(i => i.asset_id != 0 && asset_id_list.Contains(i.asset_id));
+                }
+                if (Emp_id_List.Count != 0)
+                {
+                    predicate = predicate.And(i => i.employee_id != 0 && asset_id_list.Contains(i.employee_id));
+                }
+                var query = from employee_asset in datacontext.Employee_Asset.AsExpandable().Where(predicate)
+                            join asset in datacontext.Assets on employee_asset.asset_id equals asset.id
+                            join asset_type in datacontext.Asset_type on asset.type_id equals asset_type.id
+                            join employee in datacontext.Employees on employee_asset.employee_id equals employee.id
+                            select new AssetModel
+                            {
+                                id = asset.id,
+                                type_name = asset_type.asset_type,
+                                type_id = asset.type_id,
+                                model = asset.model,
+                                make = asset.make,
+                                purchase_date = asset.purchase_date,
+                                invoice_no = asset.invoice_no,
+                                vendor_name = asset.vendor_name,
+                                asset_serial_no = asset.asset_serial_no,
+                                status_id = asset.status_id,
+                                notes = asset.notes,
+                                scrap_date = asset.scrap_date,
+                                price = asset.price,
+                                warranty_expiry_date = asset.warranty_expiry_date,
+                                warranty_period = asset.warranty_period,
+                                employee_name = employee.first_name,
+                                employee_id = employee.id,
+                                employee_mailid = employee.email
                             };
                 return query.ToList();
             }

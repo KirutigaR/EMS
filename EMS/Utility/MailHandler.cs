@@ -5,6 +5,7 @@ using System.Web;
 using System.Net;
 using System.Net.Mail;
 using System.Diagnostics;
+using EMS.Models;
 
 namespace EMS.Utility
 {
@@ -149,6 +150,40 @@ namespace EMS.Utility
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
                 mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been changed recently, <br><br>Contact HR if it is not done by you.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                mail.IsBodyHtml = true;
+                SmtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.GetBaseException());
+                throw ex;
+            }
+        }
+
+        public static void AssetMailing(string username, string user_mail, string asset_status, List<AssetModel>Asset_Details, DateTime assignedon_date)
+        {
+            try
+            {
+                SmtpClient SmtpServer = new SmtpClient();
+                SmtpServer.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
+                SmtpServer.Port = 587;
+                SmtpServer.Host = "smtp.gmail.com";
+                SmtpServer.EnableSsl = true;
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
+                if(asset_status == "ASSIGNED")
+                {
+                    mail.To.Add(user_mail);
+                    mail.Subject = "Jaishu Consulting pvt. ltd.";
+                    mail.Body = "Hi " + username + "," + "<br><br>The following asset are assigned to your account on " + assignedon_date +".<br><br>You have to take the full responsiblity until it get released, Intimate HR if any assets assigned to you wrongly. <br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                }
+                else if(asset_status == "RELEASE")
+                {
+                    mail.To.Add(user_mail);
+                    mail.Subject = "Jaishu Consulting pvt. ltd.";
+                    mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been changed recently, <br><br>Contact HR if it is not done by you.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                }
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }

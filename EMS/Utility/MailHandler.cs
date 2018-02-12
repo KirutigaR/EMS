@@ -176,13 +176,27 @@ namespace EMS.Utility
                 {
                     mail.To.Add(user_mail);
                     mail.Subject = "Jaishu Consulting pvt. ltd.";
-                    mail.Body = "Hi " + username + "," + "<br><br>The following asset are assigned to your account on " + assignedon_date +".<br><br>You have to take the full responsiblity until it get released, Intimate HR if any assets assigned to you wrongly. <br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + username + "," + "<br><br>The following asset are assigned to your account on " + assignedon_date.ToShortDateString();
+                    mail.Body += "<br><br><table border="+1+ " width="+"80%"+ "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
+                    foreach (AssetModel asset_item in Asset_Details)
+                    {
+                        mail.Body += "<tr><td>" + asset_item.asset_serial_no+ "</td><td>"+ asset_item.type_name+ "</td><td>"+ asset_item.model+ "</td><td>"+ asset_item.make+ "</td></tr>";
+                    }
+                    mail.Body += "</table>";
+                    mail.Body += "<br><br>You have to take the full responsiblity until it get released, Intimate HR if any assets assigned to you wrongly. <br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 }
-                else if(asset_status == "RELEASE")
+                else if(asset_status == "RELEASED")
                 {
                     mail.To.Add(user_mail);
                     mail.Subject = "Jaishu Consulting pvt. ltd.";
-                    mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been changed recently, <br><br>Contact HR if it is not done by you.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                    mail.Body = "Hi " + username + "," + "<br><br>The following assts are released from your account,";
+                    mail.Body += "<br><br><table border=" + 1 + " width=" + "80%" + "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
+                    foreach (AssetModel asset_item in Asset_Details)
+                    {
+                        mail.Body += "<tr><td>" + asset_item.asset_serial_no + "</td><td>" + asset_item.type_name + "</td><td>" + asset_item.model + "</td><td>" + asset_item.make + "</td></tr>";
+                    }
+                    mail.Body += "</table>";
+                    mail.Body += "<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd."; 
                 }
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);

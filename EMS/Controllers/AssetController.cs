@@ -330,27 +330,34 @@ namespace EMS.Controllers
                     int current_status = AssetRepo.GetAssetDetailsByID(Asset_Assign_Details.asset_id_list[0]).status_id;
                     if (AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
                     {
+                        //get list of assets and its details to send it in mail 
+                        List<AssetModel> Asset_details_List = AssetRepo.GetAsserDetailstListByAssetID(Asset_Assign_Details.asset_id_list, new List<int>());
+                        //to set response msg differently while assigning asset(s) to an employee and also for mailing functionality
                         if (Asset_Assign_Details.status_name == "ASSIGNED")
                         {
-                            //get list of assets and its details to send it in mail 
-                            List<AssetModel> Asset_details_List = AssetRepo.GetAsserDetailstListByAssetID(Asset_Assign_Details.asset_id_list, new List<int>());
                             //get employee mail id and user name 
-                            MailHandler.AssetMailing(Asset_details_List.FirstOrDefault().employee_name, Asset_details_List.FirstOrDefault().employee_mailid, "ASSIGNED", Asset_details_List, Asset_Assign_Details.assigned_on);
+                            MailHandler.AssetMailing(Asset_details_List.FirstOrDefault().employee_name, Asset_details_List.FirstOrDefault().employee_mailid, "ASSIGNED", Asset_details_List, Asset_Assign_Details.assigned_on.Date);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) Assigned to the employee", "Asset(S) Assigned to the employee"));
                         }
-                        else
+                        //response msg while updating asset status other than ASSIGNED 
+                        else if(Asset_Assign_Details.status_name == "AVAILABLE" || Asset_Assign_Details.status_name == "SCRAP")
                         {
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) status updated successfully", "Asset(S) status updated successfully"));
                         }
+                        //condition used to send mail while releasing an asset ie. moving from ASSIGNED TO available or From ASSIGNED to scrap
+                        if (current_status == Constants.ASSET_STATUS_ASSIGNED)
+                        {
+                            //get list of employee mail id's to send mail
+                            //get the list of assets and its details which has been released from the user 
+                            List<int> Released_from_emp_id = Asset_details_List.Select(x => x.employee_id).Distinct().ToList();
+                            foreach(int employee in Released_from_emp_id)
+                            {
+                                List<AssetModel> Asset_released_list = Asset_details_List.Where(i => i.employee_id == employee).ToList();
+                                MailHandler.AssetMailing(Asset_released_list.FirstOrDefault().employee_name , Asset_released_list.FirstOrDefault().employee_mailid, "RELEASED", Asset_released_list, DateTime.Now.Date);
+                            }
+                        }
                     }
-                    //condition used to send mail while releasing an asset
-                    if (current_status == Constants.ASSET_STATUS_ASSIGNED)
-                    {
-                        //get list of employee mail id's to send mail
-                        //get the list of assets and its details which has been released from the user 
-                        //List<Employee_Asset> Asset_Details_List = AssetRepo.GetAsserDetailstListByAssetID(Asset_Assign_Details.asset_id_list); 
-                    }
-                    if(!(AssetRepo.UpdateAssetStatus(Asset_Assign_Details)))
+                    else//if(!(AssetRepo.UpdateAssetStatus(Asset_Assign_Details)))
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Error While Assigning Asset(s)", "Error While Assigning Asset(s)"));
                     }

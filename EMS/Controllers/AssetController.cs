@@ -369,9 +369,20 @@ namespace EMS.Controllers
             }
             catch (Exception exception)
             {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+                //Debug.WriteLine(exception.InnerException);
+                //Debug.WriteLine(exception.InnerException.GetType());Debug.WriteLine((typeof(SqlException)));
+                if (exception.InnerException.GetType().Equals(typeof(SqlException)))
+                {
+                    Debug.WriteLine(exception.Message);
+                    Debug.WriteLine(exception.GetBaseException());
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Invalid Employee ID", exception.Message));
+                }
+                else
+                {
+                    Debug.WriteLine(exception.Message);
+                    Debug.WriteLine(exception.GetBaseException());
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", exception.Message));
+                }
             }
             return response;
         }

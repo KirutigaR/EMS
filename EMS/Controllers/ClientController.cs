@@ -15,7 +15,7 @@ namespace EMS.Controllers
     public class ClientController : ApiController
     {
         [HttpPost]
-        [Route("api/v1/create/client")]
+        [Route("api/v2/create/client")]
         public HttpResponseMessage CreateNewClient(Client client)
         {
             HttpResponseMessage Response = null;
@@ -28,23 +28,23 @@ namespace EMS.Controllers
                     {
                         client.is_active = 1;
                         ClientRepo.CreateNewClient(client);
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Client added successfully", "Client added successfully"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_002", "Client added successfully", "Client added successfully"));
                     }
                     else
                     {
-                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_201", "Client already exists", "Client already exists"));
+                        Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_103", "Client already exists", "Client already exists"));
                     }
                 }
                 else
                 {
-                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Failure", "Please check the Json input"));
+                    Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_102", "Invalid Input", "Please check the Json input"));
                 }
             }
             catch (DbEntityValidationException DBexception)
             {
                 Debug.WriteLine(DBexception.Message);
                 Debug.WriteLine(DBexception.GetBaseException());
-                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_190", "Mandatory fields missing", DBexception.Message));
+                Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_104", "Mandatory fields missing", DBexception.Message));
             }
             catch (Exception exception)
             {
@@ -56,7 +56,7 @@ namespace EMS.Controllers
         }
 
 
-        [Route("api/v1/client/list")]
+        [Route("api/v2/client/list")]
         public HttpResponseMessage GetClientList()
         {
             HttpResponseMessage response = null;
@@ -74,7 +74,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/active/client/list")]
+        [Route("api/v2/active/client/list")]
         public HttpResponseMessage GetActiveClientList()
         {
             HttpResponseMessage response = null;
@@ -92,7 +92,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/get/client/{client_id?}")]
+        [Route("api/v2/get/client/{client_id?}")]
         public HttpResponseMessage GetClientById(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
@@ -107,7 +107,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", "Client ID doesnot exists", "Client ID doesnot exists"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "Client ID doesnot exists", "Client ID doesnot exists"));
                     }
                 }
                 else
@@ -125,7 +125,7 @@ namespace EMS.Controllers
         }
 
         [HttpPost]
-        [Route("api/v1/client/edit")]
+        [Route("api/v2/client/edit")]
         public HttpResponseMessage EditClientDetails(Client client)
         {
             HttpResponseMessage response = null;
@@ -137,11 +137,11 @@ namespace EMS.Controllers
                     if (existingInstance != null)
                     {
                         ClientRepo.EditClient(client);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Client details Updated successfully!", "Client details Updated successfully!"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_002", "Client details Updated successfully!", "Client details Updated successfully!"));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", " Client ID does not exists", "Invalid Client ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "Invalid Client ID", "Invalid Client ID"));
                     }
                 }
                 else
@@ -160,7 +160,7 @@ namespace EMS.Controllers
 
 
         [HttpGet]
-        [Route("api/v1/client/drop/{client_id}")]
+        [Route("api/v2/client/drop/{client_id}")]
         public HttpResponseMessage DropClient(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
@@ -176,7 +176,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_202", "Client ID doesnot exists", "Invalid Client ID"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_105", "Invalid Client ID", "Invalid Client ID"));
                     }
                 }
                 else
@@ -193,7 +193,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/client/project/list/{client_id?}")]
+        [Route("api/v2/client/project/list/{client_id?}")]
         public HttpResponseMessage GetProjectListByClientId(int client_id)//c_id client_id
         {
             HttpResponseMessage response = null;
@@ -225,7 +225,7 @@ namespace EMS.Controllers
             return response;
         }
 
-        [Route("api/v1/client/type/list")]
+        [Route("api/v2/client/type/list")]
         public HttpResponseMessage GetClientTypeList()
         {
             HttpResponseMessage response = null;

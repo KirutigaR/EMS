@@ -361,25 +361,18 @@ namespace EMS.Repository
             }
         }
         
-        public static void InactiveEmployee(Employee existinginstance)
+        public static void InactiveEmployee(int user_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                //var query = from employee in datacontext.Employees
-                //            join user in datacontext.Users
-                //            on employee.user_id equals user.id
-                //            where employee.id == e_id && user.is_active ==1
-                //            select user;
                 var query = from user in datacontext.Users
-                            where existinginstance.user_id == user.id && user.is_active==1
+                            where user_id == user.id && user.is_active == 1
                             select user;
                 User user_details = query.FirstOrDefault();
                 user_details.is_active = 0;
                 datacontext.Entry(user_details).State = EntityState.Modified;
                 datacontext.SaveChanges();
-                //datacontext.Entry(query.FirstOrDefault()).State = EntityState.Deleted;
-                //datacontext.SaveChanges();
             }
             catch(Exception exception)
             {
@@ -583,63 +576,6 @@ namespace EMS.Repository
             }
         }
 
-        public static List<EmployeeModel> SearchEmployee(int employee_id, string Employee_name)
-        {
-            EMSEntities datacontent = new EMSEntities();
-            try
-            {
-                var predicate = LinqKit.PredicateBuilder.True<Employee>();
-                if (employee_id != 0)
-                {
-                    predicate = predicate.And(i => i.id == employee_id);
-                }
-                if (Employee_name != null)
-                {
-                    predicate = predicate.And(i => i.first_name == Employee_name).Or(i=>i.last_name == Employee_name);
-                }
-                var query = from employee in datacontent.Employees.AsExpandable().Where(predicate)
-                            join userrole in datacontent.User_role on employee.user_id equals userrole.user_id
-                            join designation in datacontent.Designations on employee.designation equals designation.id
-                            join employee1 in datacontent.Employees on employee.reporting_to equals employee1.id
-                            select new EmployeeModel
-                            {
-                                id = employee.id,
-                                first_name = employee.first_name,
-                                last_name = employee.last_name,
-                                email = employee.email,
-                                //date_of_birth = employee.date_of_birth,
-                                //gender = employee.gender,
-                                //date_of_joining = employee.date_of_joining,
-                                //contact_no = employee.contact_no,
-                                //user_id = employee.user_id,
-                                //role_id = userrole.role_id,
-                                //reporting_to = employee.reporting_to,
-                                //reportingto_name = employee1.first_name + " " + employee1.last_name,
-                                Year_of_experience = employee.year_of_experience.ToString(),
-                                //pan_no = employee.pan_no,
-                                //bank_account_no = employee.bank_account_no,
-                                blood_group = employee.blood_group,
-                                //designation_id = designation.id,
-                                //designation = designation.name,
-                                emergency_contact_no = employee.emergency_contact_no,
-                                emergency_contact_person = employee.emergency_contact_person,
-                                medical_insurance_no = employee.medical_insurance_no,
-                                //PF_no = employee.PF_no,
-                            };
-                return query.ToList();
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception.Message);
-                Debug.WriteLine(exception.GetBaseException());
-                throw exception;
-            }
-            finally
-            {
-                datacontent.Dispose();
-            }
-        }
-
         public static int GetLastAddedEmployee()
         {
             EMSEntities datacontext = new EMSEntities();
@@ -648,7 +584,7 @@ namespace EMS.Repository
                 var query = from emp in datacontext.Employees 
                             join user in datacontext.Users on emp.user_id equals user.id 
                             where user.is_active == 1 orderby emp.created_on descending
-                            select emp.id;
+                            select (emp.id + 1);
                 return query.FirstOrDefault();
             }
             catch (Exception exception)

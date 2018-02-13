@@ -40,5 +40,8 @@ namespace EMS.Utility
         public static int LEAVEID_TYPE_ML = 3;
         public static int LEAVEID_TYPE_LOP = 4;
         public static int LEAVEID_TYPE_WFH = 5;
+
+        public static int ASSET_STATUS_AVAILABLE = 6;
+        public static int ASSET_STATUS_ASSIGNED = 5;
     }
 }

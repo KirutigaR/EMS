@@ -8,7 +8,7 @@ namespace EMS.Models
     public class LeaveStatusModel
     {
         public int leave_id { get; set; }
-        public int status_id { get; set; }
+        public int is_approved { get; set; }
         public string remarks { get; set; }
     }
 }

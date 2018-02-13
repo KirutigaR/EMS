@@ -56,6 +56,13 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com");
                 mail.CC.Add("praveenk@jaishu.com");
                 //Console.WriteLine("Your Message");
+                if (from_date < DateTime.Now && status == Constants.LEAVE_STATUS_APPROVED)
+                {
+                    mail.To.Add(user_mail);
+                    mail.CC.Add(reporting_to_mailid);
+                    mail.Subject = "Employee Leave Status";
+                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                }
                 if (status == Constants.LEAVE_STATUS_APPROVED)
                 {
                     mail.To.Add(user_mail);

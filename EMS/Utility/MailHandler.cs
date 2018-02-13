@@ -57,46 +57,46 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.CC.Add("praveenkk@jaishu.com");
                 //Console.WriteLine("Your Message");
-                if (from_date < DateTime.Now && status == Constants.LEAVE_STATUS_APPROVED)
+                switch(status)
                 {
-                    mail.To.Add(user_mail);
-                    mail.CC.Add(reporting_to_mailid);
-                    mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
-                }
-                if (status == Constants.LEAVE_STATUS_APPROVED)
-                {
-                    mail.To.Add(user_mail);
-                    mail.CC.Add(reporting_to_mailid);
-                    mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
-                }
-                else if (status == Constants.LEAVE_STATUS_REJECTED)
-                {
-                    mail.To.Add(user_mail);
-                    mail.CC.Add(reporting_to_mailid);
-                    mail.Subject = "Employee Leave Status";
-                    mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
-                }
-                else if (status == Constants.LEAVE_STATUS_PENDING)
-                {
-                    mail.To.Add(reporting_to_mailid);
-                    mail.CC.Add(user_mail);
-                    mail.Subject = "Employee Leave Application";
-                    mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
-                }
-                else
-                {
-                    mail.To.Add(reporting_to_mailid);
-                    mail.CC.Add(user_mail);
-                    mail.Subject = "Jaishu Leave Management";
-                    mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " cancelled a leave application from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                    case 1://LEAVE_STATUS_PENDING = 1
+                        mail.To.Add(reporting_to_mailid);
+                        mail.CC.Add(user_mail);
+                        mail.Subject = "Employee Leave Application";
+                        mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " applied leave from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                        break;
+                    case 2://Constants.LEAVE_STATUS_APPROVED = 2
+                        if (from_date < DateTime.Now)
+                        {
+                            mail.To.Add(user_mail);
+                            mail.CC.Add(reporting_to_mailid);
+                            mail.Subject = "Employee Leave Status";
+                            mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                        }
+                        else
+                        {
+                            mail.To.Add(user_mail);
+                            mail.CC.Add(reporting_to_mailid);
+                            mail.Subject = "Employee Leave Status";
+                            mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                        }
+                        break;
+                    case 3://LEAVE_STATUS_REJECTED = 3
+                        mail.To.Add(user_mail);
+                        mail.CC.Add(reporting_to_mailid);
+                        mail.Subject = "Employee Leave Status";
+                        mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + " has been rejected by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
+                        break;
+                    case 4://LEAVE_STATUS_CANCELLED = 4
+                        mail.To.Add(reporting_to_mailid);
+                        mail.CC.Add(user_mail);
+                        mail.Subject = "Jaishu Leave Management";
+                        mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " cancelled a leave application from " + from_date.ToShortDateString() + " to " + to_date.ToShortDateString() + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                        break;
                 }
                 //System.Net.Mail.Attachment attachment;
                 //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
                 //mail.Attachments.Add(attachment);
-
-
                 SmtpClient smtp = new SmtpClient();
                 smtp.Port = 587;
                 smtp.Host = "smtp.gmail.com";

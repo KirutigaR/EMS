@@ -421,7 +421,7 @@ namespace EMS.Controllers
             try
             {
                 #region Approved 
-                if (leave_status.is_approved == Constants.LEAVE_STATUS_APPROVED)
+                if (leave_status.status_id == Constants.LEAVE_STATUS_APPROVED)
                 {
                     leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                     LeaveRepo.EditLeave(leave);
@@ -431,7 +431,7 @@ namespace EMS.Controllers
                 #endregion Approved
 
                 #region Rejected and cancelled  
-                else if (leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED || leave_status.is_approved == Constants.LEAVE_STATUS_CANCELLED)
+                else if (leave_status.status_id == Constants.LEAVE_STATUS_REJECTED || leave_status.status_id == Constants.LEAVE_STATUS_CANCELLED)
                 {
                     Leavebalance_sheet leave_balance_instance = LeaveRepo.LeaveBalanceById(leave.employee_id, leave.leavetype_id);
                     string leave_type_name = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
@@ -471,7 +471,7 @@ namespace EMS.Controllers
                     LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
 
                     #region cancelled
-                    if (leave_status.is_approved == Constants.LEAVE_STATUS_CANCELLED)
+                    if (leave_status.status_id == Constants.LEAVE_STATUS_CANCELLED)
                     {
                         if((leave.from_date <= DateTime.Now.Date)||(DateTime.Now.Date >= leave.to_date))
                         {
@@ -488,7 +488,7 @@ namespace EMS.Controllers
                     #endregion cancelled
 
                     #region Rejected
-                    if (leave_status.is_approved == Constants.LEAVE_STATUS_REJECTED)
+                    if (leave_status.status_id == Constants.LEAVE_STATUS_REJECTED)
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_REJECTED;
                         LeaveRepo.EditLeave(leave);

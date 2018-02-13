@@ -335,7 +335,7 @@ namespace EMS.Controllers
                     LeaveRepo.AddLeaveHistory(leave);
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                     //Approve leaves which are in past days - phase2.0 Requirement
-                    if (leave.from_date.Date < DateTime.Now && leave_type != "WFH")
+                    if (leave.from_date.Date < DateTime.Now.Date && leave_type != "WFH")
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                         LeaveRepo.EditLeave(leave);

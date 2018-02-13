@@ -334,7 +334,16 @@ namespace EMS.Controllers
                     LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
                     LeaveRepo.AddLeaveHistory(leave);
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                    MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
+                    if (leave.from_date < DateTime.Now && leave_type != "WFH")
+                    {
+                        leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
+                        LeaveRepo.EditLeave(leave);
+                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
+                    }
+                    else
+                    {
+                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
+                    }
                 }
                 else
                 {

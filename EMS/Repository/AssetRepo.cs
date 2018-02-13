@@ -126,7 +126,10 @@ namespace EMS.Repository
                                                  select employee.first_name + " " + employee.last_name).FirstOrDefault(),
                                 assigned_on = (from employee_assert in datacontext.Employee_Asset
                                                where employee_assert.asset_id == asset.id && employee_assert.released_on == null
-                                               select employee_assert.assigned_on).FirstOrDefault()
+                                               select employee_assert.assigned_on).FirstOrDefault(),
+                                employee_id = (from employee_assert in datacontext.Employee_Asset
+                                              where employee_assert.asset_id == asset.id && employee_assert.released_on == null
+                                              select employee_assert.employee_id).FirstOrDefault()
                             };
                 return query.ToList();
             }

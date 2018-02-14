@@ -70,10 +70,12 @@ namespace EMS.Controllers
                     if (isEmail != true)
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Enter valid MailId", "Enter valid MailId"));
+                        return Response;
                     }
                     else if ((employee.date_of_birth.Year > (DateTime.Now.Year - 21)))
                     {
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_402", "Employee age is below 21 years", "Employee age is below 21 years"));
+                        return Response;
                     }
                     else
                     {

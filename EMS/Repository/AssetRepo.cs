@@ -145,15 +145,24 @@ namespace EMS.Repository
             }
         }
 
-        public static AssetModel GetAssetDetailsByID(int asset_id)
+        public static AssetModel GetAssetDetailsByID(int asset_id, string asset_serial_number)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var query = from asset in datacontext.Assets
+                var predicate = LinqKit.PredicateBuilder.True<Asset>();
+                if (asset_id != 0)
+                {
+                    predicate = predicate.And(i => i.id == asset_id);
+                }
+                if (asset_serial_number != "" && asset_serial_number != " " && asset_serial_number != null)
+                {
+                    predicate = predicate.And(i => i.asset_serial_no == asset_serial_number);
+                }
+                var query = from asset in datacontext.Assets.AsExpandable().Where(predicate)
                             join asset_type in datacontext.Asset_type on asset.type_id equals asset_type.id
                             join asset_status in datacontext.Status on asset.status_id equals asset_status.id
-                            where asset.id == asset_id
+                           // where asset.id == asset_id
                             select new AssetModel
                             {
                                 id = asset.id,
@@ -379,7 +388,7 @@ namespace EMS.Repository
                                 employee_id = employee.id,
                                 employee_mailid = employee.email
                             };
-                return query.ToList();
+                return query.GroupBy(i => i.id).Select(i=>i.FirstOrDefault()).ToList();
             }
             catch (Exception e)
             {

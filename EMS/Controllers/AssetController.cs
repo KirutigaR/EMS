@@ -82,10 +82,17 @@ namespace EMS.Controllers
             {
                 if (asset != null)
                 {
-                    asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
-                    asset.status_id = Constants.ASSET_STATUS_AVAILABLE;
-                    AssetRepo.CreateAsset(asset);
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset created successfully", "Asset created successfully"));
+                    if(AssetRepo.GetAssetDetailsByID(0, asset.asset_serial_no) != null)
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_109", "Asset serial number already exists", "Asset serial number already exists"));
+                    }
+                    else
+                    {
+                        asset.warranty_expiry_date = asset.purchase_date.AddMonths(asset.warranty_period);
+                        asset.status_id = Constants.ASSET_STATUS_AVAILABLE;
+                        AssetRepo.CreateAsset(asset);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset created successfully", "Asset created successfully"));
+                    }
                 }
                 else
                 {
@@ -112,7 +119,7 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                AssetModel existing_instance = AssetRepo.GetAssetDetailsByID(asset.id);
+                AssetModel existing_instance = AssetRepo.GetAssetDetailsByID(asset.id,null);
                 if (asset != null)
                 {
                     if(existing_instance.warranty_period != asset.warranty_period)
@@ -271,15 +278,14 @@ namespace EMS.Controllers
                         flag = true;
                     }
 
-                    if (flag)
+                    if (flag && AssetRepo.LoadAssetDataFromTable())
                     {
-                        if (!AssetRepo.LoadAssetDataFromTable())
-                        {
-                            return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
-                        }
+                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Asset details updated successfully", "Asset details updated successfully"));
                     }
-                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Asset Details Uploaded Successfully", "Asset Details Uploaded Successfully"));
-
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
+                    }
                 }
                 else
                 {
@@ -327,7 +333,7 @@ namespace EMS.Controllers
                 if (Asset_Assign_Details.asset_id_list.Count != 0)
                 {
                     //user should get a mail while an asset is released from him 
-                    int current_status = AssetRepo.GetAssetDetailsByID(Asset_Assign_Details.asset_id_list[0]).status_id;
+                    int current_status = AssetRepo.GetAssetDetailsByID(Asset_Assign_Details.asset_id_list[0],null).status_id;
                     if (AssetRepo.UpdateAssetStatus(Asset_Assign_Details))
                     {
                         //get list of assets and its details to send it in mail 
@@ -402,7 +408,7 @@ namespace EMS.Controllers
                 if(asset_id != 0)
                 {
                     Dictionary<string, object> result_set = new Dictionary<string, object>();
-                    result_set.Add("asset_details",AssetRepo.GetAssetDetailsByID(asset_id));
+                    result_set.Add("asset_details",AssetRepo.GetAssetDetailsByID(asset_id,null));
                     result_set.Add("asset_log", (AssetRepo.GetAssetLogDetails(asset_id)));
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", result_set));
                 }

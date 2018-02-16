@@ -194,15 +194,14 @@ namespace EMS.Controllers
                         flag = true;
                     }
 
-                    if (flag)
+                    if (flag && CommonRepo.LoadDataFromTable())
                     {
-                        if (!CommonRepo.LoadDataFromTable())
-                        {
-                            return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
-                        }
+                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Leave Balance updated successfully", "Leave Balance updated successfully"));
                     }
-                    return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Leave Balance updated successfully", "Leave Balance updated successfully"));
-
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_305", "Some problem in Stored Procedure", "Some problem in Stored Procedure"));
+                    }
                 }
                 else
                 {

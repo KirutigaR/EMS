@@ -289,24 +289,24 @@ namespace EMS.Controllers
                                 int El_leave_id = LeaveRepo.GetLeavetypeIdByLeavetype(Constants.LEAVE_TYPE_EL);
                                 decimal Cl_leave_balance = LeaveRepo.GetNoofDaysById(Cl_leave_id, leave.employee_id);
                                 decimal El_leave_balance = LeaveRepo.GetNoofDaysById(El_leave_id, leave.employee_id);
-                                if (Cl_leave_balance == 0 && El_leave_balance == 0)
+                                if (Cl_leave_balance == 0 && El_leave_balance < 1 )
                                 {
                                     Lop_leave_balance = Lop_leave_balance + noofdays;
                                     leave.no_of_days = (int)noofdays;
                                     leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Applied successfully", "Leave Applied successfully"));
                                 }
-                                else if (Cl_leave_balance == 0 && El_leave_balance > 0)
+                                else if (Cl_leave_balance == 0 && El_leave_balance > 1)
                                 {
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You have EL leave balance. So you can apply from that", "You have EL leave balance. So you can apply from that"));
                                     return response;
                                 }
-                                else if (El_leave_balance == 0 && Cl_leave_balance > 0)
+                                else if (El_leave_balance < 1 && Cl_leave_balance > 0)
                                 {
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_509", "You have CL leave balance. So you can apply from that", "You have CL leave balance. So you can apply from that"));
                                     return response;
                                 }
-                                else if (Cl_leave_balance > 0 && El_leave_balance > 0)
+                                else if (Cl_leave_balance > 0 && El_leave_balance >= 1)
                                 {
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_510", "You have CL, EL leave balance", "You have CL, EL leave balance"));
                                     return response;

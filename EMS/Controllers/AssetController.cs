@@ -342,6 +342,7 @@ namespace EMS.Controllers
                         if (Asset_Assign_Details.status_name == "ASSIGNED")
                         {
                             //get employee mail id and user name 
+                            Asset_details_List = Asset_details_List.Distinct().ToList();
                             MailHandler.AssetMailing(Asset_details_List.FirstOrDefault().employee_name, Asset_details_List.FirstOrDefault().employee_mailid, "ASSIGNED", Asset_details_List, Asset_Assign_Details.assigned_on.Date);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Asset(S) Assigned to the employee", "Asset(S) Assigned to the employee"));
                         }

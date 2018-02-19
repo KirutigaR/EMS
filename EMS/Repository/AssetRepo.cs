@@ -386,9 +386,12 @@ namespace EMS.Repository
                                 warranty_period = asset.warranty_period,
                                 employee_name = employee.first_name,
                                 employee_id = employee.id,
-                                employee_mailid = employee.email
+                                employee_mailid = employee.email,
+                                emp_asset_id = employee_asset.id
                             };
-                return query.GroupBy(i => i.id).Select(i=>i.FirstOrDefault()).ToList();
+                List<AssetModel> sorted_Asset_list = query.OrderByDescending(i => i.emp_asset_id).ToList();
+                return sorted_Asset_list.GroupBy(i => i.id).Select(i => i.FirstOrDefault()).ToList();
+
             }
             catch (Exception e)
             {

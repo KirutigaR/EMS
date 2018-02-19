@@ -156,7 +156,10 @@ namespace EMS.Controllers
             try
             {
                 int status_id = (status == "AVAILABLE")? 6 : (status == "ASSIGNED") ? 5 : (status == "SCRAP")? 7 : 0;
-                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", AssetRepo.GetAssetList(status_id)));
+                List<AssetModel> Asset_List  = AssetRepo.GetAssetList(status_id);
+                Asset_List = (status == "SCRAP") ? Asset_List.OrderByDescending(x => x.released_on).ToList() :
+                                        (status == "ASSIGNED") ? Asset_List.OrderByDescending(x=>x.assigned_on).ToList() : Asset_List.ToList();
+                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", Asset_List));
             }
             catch (Exception exception)
             {

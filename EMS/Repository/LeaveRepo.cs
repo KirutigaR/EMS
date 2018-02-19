@@ -664,7 +664,7 @@ namespace EMS.Repository
             EMSEntities datacontext = new EMSEntities();
             try
             {
-                var currentdate = DateTime.Now.Date;
+                var currentdate = DateTime.Now.Date.AddDays(-30);
                 var query = from l in datacontext.Leaves
                             where l.employee_id == employee_id && (l.leave_statusid == Constants.LEAVE_STATUS_APPROVED || l.leave_statusid == Constants.LEAVE_STATUS_PENDING) && l.from_date >= currentdate
                             select l;

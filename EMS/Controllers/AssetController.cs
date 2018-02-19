@@ -283,7 +283,7 @@ namespace EMS.Controllers
 
                     if (flag && AssetRepo.LoadAssetDataFromTable())
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Asset details updated successfully", "Asset details updated successfully"));
+                        return Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_306", "Asset details uploaded successfully", "Asset details uploaded successfully"));
                     }
                     else
                     {

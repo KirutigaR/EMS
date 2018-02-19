@@ -324,6 +324,7 @@ namespace EMS.Repository
                             join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
                             join type in datacontext.Asset_type on asset.type_id equals type.id
                             where employeeasset.employee_id == employee_id && employeeasset.released_on != null
+                            orderby employeeasset.released_on
                             select new AssetModel
                             {
                                 id = employeeasset.id,

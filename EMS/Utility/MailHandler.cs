@@ -55,7 +55,7 @@ namespace EMS.Utility
             {
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
-                mail.CC.Add("praveenkk@jaishu.com");
+                mail.CC.Add(/*Constants.HR_MAIL_ID*/"praveenkk@jaishu.com");
                 //Console.WriteLine("Your Message");
                 switch(status)
                 {
@@ -198,10 +198,11 @@ namespace EMS.Utility
                 SmtpServer.EnableSsl = true;
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
-                if(asset_status == "ASSIGNED")
+                mail.To.Add(user_mail);
+                mail.CC.Add(/*Constants.HR_MAIL_ID*/"praveenkk@jaishu.com");
+                mail.Subject = "Jaishu Consulting pvt. ltd.";
+                if (asset_status == "ASSIGNED")
                 {
-                    mail.To.Add(user_mail);
-                    mail.Subject = "Jaishu Consulting pvt. ltd.";
                     mail.Body = "Hi " + username + "," + "<br><br>The following Assets has been <b>Assigned</b> to you on <b>" + assignedon_date.Day + "-" + assignedon_date.ToString("MMM") + "-" + assignedon_date.Year+"</b>.";
                     mail.Body += "<br><br><table border="+1+ " width="+"80%"+ "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
                     foreach (AssetModel asset_item in Asset_Details)
@@ -213,8 +214,6 @@ namespace EMS.Utility
                 }
                 else if(asset_status == "RELEASED")
                 {
-                    mail.To.Add(user_mail);
-                    mail.Subject = "Jaishu Consulting pvt. ltd.";
                     mail.Body = "Hi " + username + "," + "<br><br>The Following Assets has been <b>Released</b> from your name on <b>" + DateTime.Now.Date.Day + "-" + DateTime.Now.Date.ToString("MMM") + "-" + DateTime.Now.Date.Year + "</b>.";
                     mail.Body += "<br><br><table border=" + 1 + " width=" + "80%" + "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
                     foreach (AssetModel asset_item in Asset_Details)

@@ -55,7 +55,7 @@ namespace EMS.Utility
             {
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
-                mail.CC.Add(/*Constants.HR_MAIL_ID*/"praveenkk@jaishu.com");
+                mail.CC.Add(Constants.HR_MAIL_ID);
                 //Console.WriteLine("Your Message");
                 switch(status)
                 {
@@ -199,7 +199,7 @@ namespace EMS.Utility
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
-                mail.CC.Add(/*Constants.HR_MAIL_ID*/"praveenkk@jaishu.com");
+                mail.CC.Add(Constants.HR_MAIL_ID);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
                 if (asset_status == "ASSIGNED")
                 {

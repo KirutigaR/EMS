@@ -583,7 +583,7 @@ namespace EMS.Repository
             {
                 var query = from emp in datacontext.Employees 
                             join user in datacontext.Users on emp.user_id equals user.id 
-                            where user.is_active == 1 orderby emp.created_on descending
+                            /*where user.is_active == 1*/ orderby emp.id descending
                             select (emp.id + 1);
                 return query.FirstOrDefault();
             }

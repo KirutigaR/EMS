@@ -288,7 +288,8 @@ namespace EMS.Repository
                             join employee in datacontext.Employees on employeeasset.employee_id equals employee.id
                             join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
                             join type in datacontext.Asset_type on asset.type_id equals type.id
-                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null && asset.status_id == Constants.ASSET_STATUS_ASSIGNED orderby employeeasset.assigned_on
+                            where employeeasset.employee_id == employee_id && employeeasset.released_on == null 
+                            && asset.status_id == Constants.ASSET_STATUS_ASSIGNED orderby employeeasset.assigned_on
                             select new AssetModel
                             {
                                 id = employeeasset.id,
@@ -324,7 +325,7 @@ namespace EMS.Repository
                             join asset in datacontext.Assets on employeeasset.asset_id equals asset.id
                             join type in datacontext.Asset_type on asset.type_id equals type.id
                             where employeeasset.employee_id == employee_id && employeeasset.released_on != null
-                            orderby employeeasset.released_on
+                            orderby employeeasset.released_on descending
                             select new AssetModel
                             {
                                 id = employeeasset.id,

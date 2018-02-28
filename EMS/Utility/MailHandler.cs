@@ -136,7 +136,7 @@ namespace EMS.Utility
             }
         }
 
-        public static void ForgotPassword(string username, string user_mail)
+        public static void ForgotPassword(string username, string user_mail, string token)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=http://192.168.1.19:8080/>here</a> to change your password...<br><br> Thank You";
+                mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=http://192.168.1.19:8080/"+token+">here</a> to change your password...<br><br> Thank You";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }

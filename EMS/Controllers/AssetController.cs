@@ -248,7 +248,7 @@ namespace EMS.Controllers
                     }
                     else
                     {
-                        string query = string.Format("Select * FROM [{0}]", sheets.FirstOrDefault());
+                        string query = string.Format("Select * FROM [{0}] Where Type_name IS NOT NULL", sheets.FirstOrDefault());
                         oda = new OleDbDataAdapter(query, excelConnection);
                         oda.Fill(ds);
                         DataTable Exceldt = ds.Tables[0];

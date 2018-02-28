@@ -62,26 +62,28 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                Employee employee = EmployeeRepo.GetEmployeeById(forgotpassword.employee_id);
+                Employee employee = CommonRepo.GetEmployeeIdByMailid(forgotpassword.employee_email);
                 User user = CommonRepo.GetuserById(employee.user_id);
-                if(user.is_active==1)
+                if(employee != null && user.is_active==1)
                 {
-                    if (forgotpassword.new_password == forgotpassword.confirm_password)
+                    Password_Token Token_instance = new Password_Token();
+                    Token_instance.Employee_Id = employee.id;
+                    Token_instance.Token = Guid.NewGuid().ToString();
+                    Token_instance.Generated_on = DateTime.Now;
+                    if (CommonRepo.AddUserToken(Token_instance))
                     {
-                        user.password = EncryptPassword.CalculateHash(forgotpassword.new_password);
-                        CommonRepo.EditUserDetails(user);
                         string user_name = employee.first_name +" "+ employee.last_name;
-                        MailHandler.ChangePasswordIntimation(user_name, employee.email);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "your password has been changed successfully", "your password has been changed successfully"));
+                        MailHandler.ForgotPassword(user_name, employee.email, Token_instance.Token);
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Sent you mail..click on the specified link to change your password", "Sent you mail..click on the specified link to change your password"));
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "New Password and Confirm Password should be same", "New Password and Confirm Password should be same"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_302", "Try again later", "Try again later"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Access Denied", "Access Denied"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid User", "Invalid User"));
                 }
             }
             catch (Exception exception)

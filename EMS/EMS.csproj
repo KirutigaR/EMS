@@ -219,6 +219,7 @@
     <Compile Include="Models\LeaveStatusModel.cs" />
     <Compile Include="Models\LeaveTypeListModel.cs" />
     <Compile Include="Models\ListModel.cs" />
+    <Compile Include="Models\Password_Token.cs" />
     <Compile Include="Models\PayslipModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\Project_role_model.cs" />
@@ -227,6 +228,9 @@
     <Compile Include="Models\SalaryStructureModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\TimeSheetModel.cs" />
+    <Compile Include="Password_Token.cs">
+      <DependentUpon>EMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Payslip.cs">
       <DependentUpon>EMSModel.tt</DependentUpon>
     </Compile>

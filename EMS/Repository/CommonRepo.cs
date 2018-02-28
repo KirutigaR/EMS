@@ -78,21 +78,21 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static int GetEmployeeIdByUserid(int id)
+        public static Employee GetEmployeeIdByMailid(string MailID)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 var query = from e in datacontext.Employees
-                            where e.user_id == id
-                            select e.id;
+                            where e.email == MailID
+                            select e;
                 return query.FirstOrDefault();
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.GetBaseException());
-                return 0;
+                throw e;
             }
             finally
             {
@@ -146,6 +146,27 @@ namespace EMS.Repository
             try
             {
                 var query = datacontext.UpdateLeaveBalance();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static bool AddUserToken(Password_Token Forgot_Password)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Password_Token.Add(Forgot_Password);
+                datacontext.SaveChanges();
                 return true;
             }
             catch (Exception e)

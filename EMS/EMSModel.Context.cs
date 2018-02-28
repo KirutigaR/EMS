@@ -51,6 +51,7 @@ namespace EMS
         public virtual DbSet<Leave> Leaves { get; set; }
         public virtual DbSet<Asset_Temp_Table> Asset_Temp_Table { get; set; }
         public virtual DbSet<Asset> Assets { get; set; }
+        public virtual DbSet<Password_Token> Password_Token { get; set; }
     
         public virtual int UpdateLeaveBalance()
         {

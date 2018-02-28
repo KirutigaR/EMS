@@ -26,6 +26,7 @@ namespace EMS
             this.Payslips = new HashSet<Payslip>();
             this.Employee_Asset = new HashSet<Employee_Asset>();
             this.Leaves = new HashSet<Leave>();
+            this.Password_Token = new HashSet<Password_Token>();
         }
     
         public int id { get; set; }
@@ -69,5 +70,7 @@ namespace EMS
         public virtual ICollection<Employee_Asset> Employee_Asset { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leave> Leaves { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Password_Token> Password_Token { get; set; }
     }
 }

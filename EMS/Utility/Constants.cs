@@ -44,6 +44,6 @@ namespace EMS.Utility
         public static int ASSET_STATUS_AVAILABLE = 6;
         public static int ASSET_STATUS_ASSIGNED = 5;
 
-        public static string HR_MAIL_ID = "praveenk@cloudix.io";
+        public static string HR_MAIL_ID = "praveenkk@cloudix.io";
     }
 }

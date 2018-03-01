@@ -65,8 +65,7 @@ namespace EMS.Utility
                         mail.Subject = "Employee Leave Application";
                         mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " applied " + leave_type + " from "
                                 //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
-                                + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
-                                + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
+                                + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                         break;
                     case 2://Constants.LEAVE_STATUS_APPROVED = 2
@@ -75,9 +74,8 @@ namespace EMS.Utility
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);
                             mail.Subject = "Employee Leave Status";
-                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date " 
-                                + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to " 
-                                + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year 
+                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
+                                + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         }
                         else
@@ -87,8 +85,7 @@ namespace EMS.Utility
                             mail.Subject = "Employee Leave Status";
                             mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
                                 //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString()
-                                + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
-                                + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
+                                + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         }
                         break;
@@ -98,8 +95,7 @@ namespace EMS.Utility
                         mail.Subject = "Employee Leave Status";
                         mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
                             //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
-                            + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
-                            + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
+                            + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                             + " has been rejected by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         break;
                     case 4://LEAVE_STATUS_CANCELLED = 4
@@ -108,8 +104,7 @@ namespace EMS.Utility
                         mail.Subject = "Jaishu Leave Management";
                         mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " cancelled " + leave_type + " from "
                             //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
-                            + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
-                            + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
+                            + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                             + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                         break;
                 }
@@ -203,7 +198,7 @@ namespace EMS.Utility
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
                 if (asset_status == "ASSIGNED")
                 {
-                    mail.Body = "Hi " + username + ",<br><br>The following Assets has been <b>Assigned</b> to you on <b>" + assignedon_date.Day + "-" + assignedon_date.ToString("MMM") + "-" + assignedon_date.Year+"</b>.";
+                    mail.Body = "Hi " + username + ",<br><br>The following Assets has been <b>Assigned</b> to you on <b>" + assignedon_date.ToString("dd-MMM-yyyy") + "</b>.";
                     mail.Body += "<br><br><table border="+1+ " width="+"80%"+ "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
                     foreach (AssetModel asset_item in Asset_Details)
                     {
@@ -214,7 +209,7 @@ namespace EMS.Utility
                 }
                 else if(asset_status == "RELEASED")
                 {
-                    mail.Body = "Hi " + username + ",<br><br>The Following Assets has been <b>Released</b> from your name on <b>" + DateTime.Now.Date.Day + "-" + DateTime.Now.Date.ToString("MMM") + "-" + DateTime.Now.Date.Year + "</b>.";
+                    mail.Body = "Hi " + username + ",<br><br>The Following Assets has been <b>Released</b> from your name on <b>" + DateTime.Now.Date.ToString("dd-MMM-yyyy") + "</b>.";
                     mail.Body += "<br><br><table border=" + 1 + " width=" + "80%" + "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
                     foreach (AssetModel asset_item in Asset_Details)
                     {

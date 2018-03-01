@@ -269,7 +269,7 @@ namespace EMS.Controllers
                                     //LeaveRepo.AddLeaveHistory(leave);
 
                                     //ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                                    //MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
+                                    //MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, reporting_to.emp_name, null);
                                     //response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Applied successfully", "Leave Applied successfully"));
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_002", "Insufficient EL blanace, Please select different leave type", "Insufficient EL blanace, Please select different leave type"));
                                     return response;
@@ -296,7 +296,7 @@ namespace EMS.Controllers
                                     leave_balance_instance.no_of_days = leave_balance_instance.no_of_days + leave.no_of_days;
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Leave Applied successfully", "Leave Applied successfully"));
                                 }
-                                else if (Cl_leave_balance == 0 && El_leave_balance > 1)
+                                else if (Cl_leave_balance == 0 && El_leave_balance >= 1)
                                 {
                                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_508", "You have EL leave balance. So you can apply from that", "You have EL leave balance. So you can apply from that"));
                                     return response;
@@ -339,11 +339,11 @@ namespace EMS.Controllers
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                         LeaveRepo.EditLeave(leave);
-                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_APPROVED, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
+                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_APPROVED, employee_instance.email, reporting_to.mailid, reporting_to.emp_name, leave_type);
                     }
                     else
                     {
-                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, null, reporting_to.emp_name);
+                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_PENDING, employee_instance.email, reporting_to.mailid, reporting_to.emp_name, leave_type);
                     }
                 }
                 else
@@ -500,7 +500,8 @@ namespace EMS.Controllers
 
                 ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
                 Employee employee = EmployeeRepo.GetEmployeeById(leave.employee_id);
-                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, leave_status.remarks, reporting_to.emp_name);
+                string leave_type = LeaveRepo.GetLeaveTypeById(leave.leavetype_id);
+                MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee.first_name, leave.leave_statusid, employee.email, reporting_to.mailid, reporting_to.emp_name, leave_type, leave_status.remarks);
             }
             catch (Exception exception)
             {

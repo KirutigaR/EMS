@@ -49,7 +49,7 @@ namespace EMS.Utility
             }
             //  }
         }
-        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string remarks, string Reportingto_name)
+        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string Reportingto_name, string leave_type, string remarks = null)
         {
             try
             {
@@ -63,19 +63,19 @@ namespace EMS.Utility
                         mail.To.Add(reporting_to_mailid);
                         mail.CC.Add(user_mail);
                         mail.Subject = "Employee Leave Application";
-                        mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " applied leave from "
+                        mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " applied " + leave_type + " from "
                                 //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
                                 + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
                                 + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
                                 + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                         break;
                     case 2://Constants.LEAVE_STATUS_APPROVED = 2
-                        if (from_date < DateTime.Now)
+                        if (from_date < DateTime.Now.Date && to_date < DateTime.Now.Date && leave_type != "WFH")
                         {
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);
                             mail.Subject = "Employee Leave Status";
-                            mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date " 
+                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date " 
                                 + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to " 
                                 + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year 
                                 + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
@@ -85,7 +85,7 @@ namespace EMS.Utility
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);
                             mail.Subject = "Employee Leave Status";
-                            mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date "
+                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
                                 //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString()
                                 + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
                                 + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
@@ -96,7 +96,7 @@ namespace EMS.Utility
                         mail.To.Add(user_mail);
                         mail.CC.Add(reporting_to_mailid);
                         mail.Subject = "Employee Leave Status";
-                        mail.Body = "Hi " + user_name + "<br><br>Your leave application from the date "
+                        mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
                             //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
                             + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
                             + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
@@ -106,7 +106,7 @@ namespace EMS.Utility
                         mail.To.Add(reporting_to_mailid);
                         mail.CC.Add(user_mail);
                         mail.Subject = "Jaishu Leave Management";
-                        mail.Body = "Hi " + Reportingto_name + "<br><br>Your team member " + user_name + " cancelled a leave application from "
+                        mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " cancelled " + leave_type + " from "
                             //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
                             + from_date.Day + "-" + from_date.ToString("MMM") + "-" + from_date.Year + " to "
                             + to_date.Day + "-" + to_date.ToString("MMM") + "-" + to_date.Year
@@ -150,7 +150,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + ".." + "<br><br>Click <a href=http://192.168.1.19:8080/"+token+">here</a> to change your password...<br><br> Thank You";
+                mail.Body = "Hi " + username + ",<br><br>Click <a href=http://192.168.1.19:8080/"+token+">here</a> to change your password...<br><br> Thank You";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }
@@ -175,7 +175,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + "," + "<br><br>Your Login password has been changed recently, <br><br>Contact HR if it is not done by you.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
+                mail.Body = "Hi " + username + ",<br><br>Your Login password has been changed recently, <br><br>Contact HR if it is not done by you.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }
@@ -203,7 +203,7 @@ namespace EMS.Utility
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
                 if (asset_status == "ASSIGNED")
                 {
-                    mail.Body = "Hi " + username + "," + "<br><br>The following Assets has been <b>Assigned</b> to you on <b>" + assignedon_date.Day + "-" + assignedon_date.ToString("MMM") + "-" + assignedon_date.Year+"</b>.";
+                    mail.Body = "Hi " + username + ",<br><br>The following Assets has been <b>Assigned</b> to you on <b>" + assignedon_date.Day + "-" + assignedon_date.ToString("MMM") + "-" + assignedon_date.Year+"</b>.";
                     mail.Body += "<br><br><table border="+1+ " width="+"80%"+ "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
                     foreach (AssetModel asset_item in Asset_Details)
                     {
@@ -214,7 +214,7 @@ namespace EMS.Utility
                 }
                 else if(asset_status == "RELEASED")
                 {
-                    mail.Body = "Hi " + username + "," + "<br><br>The Following Assets has been <b>Released</b> from your name on <b>" + DateTime.Now.Date.Day + "-" + DateTime.Now.Date.ToString("MMM") + "-" + DateTime.Now.Date.Year + "</b>.";
+                    mail.Body = "Hi " + username + ",<br><br>The Following Assets has been <b>Released</b> from your name on <b>" + DateTime.Now.Date.Day + "-" + DateTime.Now.Date.ToString("MMM") + "-" + DateTime.Now.Date.Year + "</b>.";
                     mail.Body += "<br><br><table border=" + 1 + " width=" + "80%" + "><tr><th>Asset Serial No.</th><th>Asset Type</th><th>Model</th><th>Make</th></tr>";
                     foreach (AssetModel asset_item in Asset_Details)
                     {

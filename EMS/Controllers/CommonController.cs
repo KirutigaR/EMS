@@ -72,8 +72,7 @@ namespace EMS.Controllers
                     Token_instance.Generated_on = DateTime.Now;
                     if (CommonRepo.AddUserToken(Token_instance))
                     {
-                        string user_name = employee.first_name +" "+ employee.last_name;
-                        MailHandler.ForgotPassword(user_name, employee.email, Token_instance.Token);
+                        MailHandler.ForgotPassword(employee.first_name, employee.email, Token_instance.Token);
                         response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Sent you mail..click on the specified link to change your password", "Sent you mail..click on the specified link to change your password"));
                     }
                     else
@@ -256,8 +255,7 @@ namespace EMS.Controllers
                         {
                             user_instance.password = EncryptPassword.CalculateHash(changepassword.new_password);
                             LeaveRepo.EditUserPassword(user_instance);
-                            string user_name = employee.first_name + " " + employee.last_name;
-                            MailHandler.ChangePasswordIntimation(user_name, employee.email);
+                            MailHandler.ChangePasswordIntimation(employee.first_name, employee.email);
                             response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Password changed sucessfully", "Password changed sucessfully"));
                         }
                         else

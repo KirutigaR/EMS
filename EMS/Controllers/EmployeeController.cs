@@ -119,8 +119,7 @@ namespace EMS.Controllers
                             Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_401", "Error in salary structure generation or payslip generation", "Error in salary structure generation or payslip generation"));
                             return Response;
                         }
-                        string username = employee.first_name + " " + employee.last_name;
-                        MailHandler.PasswordMailingFunction(username, employee.email, Temp_password);
+                        MailHandler.PasswordMailingFunction(employee.first_name, employee.email, Temp_password);
                         Response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Employee added Successfully", "Employee added Successfully"));
                 }
                 else

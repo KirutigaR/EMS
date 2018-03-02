@@ -23,22 +23,11 @@ namespace EMS.Utility
                 SmtpServer.EnableSsl = true;
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
-
-                //String[] addr = toemail.Split('kirutigaramesh@gmail.com'); // toemail is a string which contains many email address separated by comma
-                //mail.From = new MailAddress(toemail);
-                //Byte i;
-                //for (i = 0; i < addr.Length; i++)
                 mail.To.Add(user_mail);
-
                 mail.Subject = "Employee Login credentials";
-
-                //mail.Body = "\n HI "+emp_name+"\n\t Your Leave application has been approved and it is from "+from_date+"to "+to_date+"\n Thank You";
                 mail.Body = "Hi " + username + "," + "<br><br> Welcome to <b>Jaishu Consulting Private Limited.</b><br><br> Your Employee account has been created, please find the login credentials specified below <em><b> <br><br> Username&nbsp;:&nbsp;" + user_mail + "<br>Password&nbsp;:&nbsp;" + password + "</em></b><br><br>Click <a href=http://192.168.1.19:8080/>here</a> to Login.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
 
                 mail.IsBodyHtml = true;
-                //mail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-                //mail.ReplyTo = new MailAddress("praveenk@jaishu.com");
-                //mail.ReplyToList.Add(toemail);
                 SmtpServer.Send(mail);
             }
             catch (Exception ex)
@@ -64,7 +53,6 @@ namespace EMS.Utility
                         mail.CC.Add(user_mail);
                         mail.Subject = "Employee Leave Application";
                         mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " applied " + leave_type + " from "
-                                //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
                                 + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                         break;
@@ -74,7 +62,7 @@ namespace EMS.Utility
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);
                             mail.Subject = "Employee Leave Status";
-                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
+                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from "
                                 + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         }
@@ -83,8 +71,7 @@ namespace EMS.Utility
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);
                             mail.Subject = "Employee Leave Status";
-                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
-                                //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString()
+                            mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from "
                                 + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + " has been approved by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         }
@@ -93,8 +80,7 @@ namespace EMS.Utility
                         mail.To.Add(user_mail);
                         mail.CC.Add(reporting_to_mailid);
                         mail.Subject = "Employee Leave Status";
-                        mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from the date "
-                            //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
+                        mail.Body = "Hi " + user_name + ",<br><br>Your " + leave_type + " from "
                             + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                             + " has been rejected by " + Reportingto_name + " <br><b>Comments : </b>" + remarks + "<br><br> Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         break;
@@ -103,14 +89,10 @@ namespace EMS.Utility
                         mail.CC.Add(user_mail);
                         mail.Subject = "Jaishu Leave Management";
                         mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " cancelled " + leave_type + " from "
-                            //+ from_date.ToShortDateString() + " to " + to_date.ToShortDateString() 
                             + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                             + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                         break;
                 }
-                //System.Net.Mail.Attachment attachment;
-                //attachment = new System.Net.Mail.Attachment("c:/textfile.txt");
-                //mail.Attachments.Add(attachment);
                 SmtpClient smtp = new SmtpClient();
                 smtp.Port = 587;
                 smtp.Host = "smtp.gmail.com";
@@ -118,7 +100,6 @@ namespace EMS.Utility
                 smtp.UseDefaultCredentials = true;
                 smtp.EnableSsl = true;
                 smtp.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
-                //smtp.EnableSsl = true;
                 Console.WriteLine("Sending email...");
                 mail.IsBodyHtml = true;
                 smtp.Send(mail);
@@ -135,7 +116,6 @@ namespace EMS.Utility
         {
             try
             {
-
                 SmtpClient SmtpServer = new SmtpClient();
                 SmtpServer.Credentials = new NetworkCredential("testems32@gmail.com", "Testem$32");
                 SmtpServer.Port = 587;
@@ -145,7 +125,10 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
-                mail.Body = "Hi " + username + ",<br><br>Click <a href=http://192.168.1.19:8080/"+token+">here</a> to change your password...<br><br> Thank You";
+                mail.Body = "Hi " + username + ",<br><br>We have received a request to reset your Jaishu account password.<br><br>If you have not placed this request, you can safely ignore this email."
+                    + "<br><br>Else click <a href=http://192.168.1.19:8080/"+token+ ">here</a> to set a new password. <br><br>"
+                    + "The reset link will expire in 24 hours."
+                    + "<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
             }

@@ -12,5 +12,6 @@ namespace EMS.Models
         public string new_password { get; set; }
         public string confirm_password { get; set; }
         public string employee_email { get; set; }
+        public string token { get; set; }
     }
 }

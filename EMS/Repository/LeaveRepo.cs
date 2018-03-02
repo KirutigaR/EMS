@@ -349,46 +349,6 @@ namespace EMS.Repository
             }
         }
 
-        public static User GetUserById(int id)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                var query = from u in datacontext.Users
-                            where u.id == id
-                            select u;
-                return query.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
-        public static void EditUserPassword(User user)
-        {
-            EMSEntities datacontext = new EMSEntities();
-            try
-            {
-                datacontext.Entry(user).State = EntityState.Modified;
-                datacontext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetBaseException());
-                throw e;
-            }
-            finally
-            {
-                datacontext.Dispose();
-            }
-        }
         public static Leavebalance_sheet LeaveBalanceById(int employee_id, int leavetype_id)
         {
             EMSEntities datacontext = new EMSEntities();

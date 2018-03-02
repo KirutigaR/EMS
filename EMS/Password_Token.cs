@@ -15,10 +15,10 @@ namespace EMS
     public partial class Password_Token
     {
         public int ID { get; set; }
-        public int Employee_Id { get; set; }
+        public int User_Id { get; set; }
         public string Token { get; set; }
         public System.DateTime Generated_on { get; set; }
     
-        public virtual Employee Employee { get; set; }
+        public virtual User User { get; set; }
     }
 }

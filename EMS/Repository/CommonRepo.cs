@@ -1,10 +1,8 @@
 ﻿using EMS.Models;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
 
 namespace EMS.Repository
 {
@@ -57,7 +55,7 @@ namespace EMS.Repository
                 datacontext.Dispose();
             }
         }
-        public static int GetUserID(User user)
+        public static int GetUserIDByUserName(User user)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -100,7 +98,7 @@ namespace EMS.Repository
             }
         }
         
-        public static User GetuserById(int user_id)
+        public static User GetuserByUserId(int user_id)
         {
             EMSEntities datacontext = new EMSEntities();
             try
@@ -168,6 +166,68 @@ namespace EMS.Repository
                 datacontext.Password_Token.Add(Forgot_Password);
                 datacontext.SaveChanges();
                 return true;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static Password_Token GetActiveTokenObjectByToken (string Token)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                var query = from x in datacontext.Password_Token
+                            where x.Token == Token && x.Generated_on <= DateTime.Now && DbFunctions.AddDays(x.Generated_on, 1) >= DateTime.Now
+                            select x;
+                return query.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void EditUserPassword(User user)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Entry(user).State = EntityState.Modified;
+                datacontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.GetBaseException());
+                throw e;
+            }
+            finally
+            {
+                datacontext.Dispose();
+            }
+        }
+
+        public static void DeletePasswordToken(int User_id)
+        {
+            EMSEntities datacontext = new EMSEntities();
+            try
+            {
+                datacontext.Password_Token.RemoveRange(datacontext.Password_Token.Where(x=>x.User_Id == User_id));
+                datacontext.SaveChanges();
             }
             catch (Exception e)
             {

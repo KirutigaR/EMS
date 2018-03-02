@@ -182,7 +182,7 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Employee_Id" Type="int" Nullable="false" />
+          <Property Name="User_Id" Type="int" Nullable="false" />
           <Property Name="Token" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Generated_on" Type="datetime" Nullable="false" />
         </EntityType>
@@ -562,15 +562,15 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Password___Emplo__2EA5EC27">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+        <Association Name="FK__Password___User___43A1090D">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Password_Token" Type="Self.Password_Token" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Employee">
+            <Principal Role="Users">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Password_Token">
-              <PropertyRef Name="Employee_Id" />
+              <PropertyRef Name="User_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -849,8 +849,8 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <End Role="Leave_type" EntitySet="Leave_type" />
             <End Role="Leavebalance_sheet" EntitySet="Leavebalance_sheet" />
           </AssociationSet>
-          <AssociationSet Name="FK__Password___Emplo__2EA5EC27" Association="Self.FK__Password___Emplo__2EA5EC27">
-            <End Role="Employee" EntitySet="Employee" />
+          <AssociationSet Name="FK__Password___User___43A1090D" Association="Self.FK__Password___User___43A1090D">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Password_Token" EntitySet="Password_Token" />
           </AssociationSet>
           <AssociationSet Name="FK__Payslip__emp_id__2BFE89A6" Association="Self.FK__Payslip__emp_id__2BFE89A6">
@@ -1040,11 +1040,11 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <End Role="Employee_Asset" EntitySet="Employee_Asset" />
           </AssociationSet>
           <EntitySet Name="Password_Token" EntityType="EMSModel.Password_Token" />
-          <AssociationSet Name="FK__Password___Emplo__2EA5EC27" Association="EMSModel.FK__Password___Emplo__2EA5EC27">
-            <End Role="Employee" EntitySet="Employees" />
+          <AssociationSet Name="FK__Password___User___43A1090D" Association="EMSModel.FK__Password___User___43A1090D">
+            <End Role="User" EntitySet="Users" />
             <End Role="Password_Token" EntitySet="Password_Token" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="Holiday_List">
           <Key>
             <PropertyRef Name="id" />
@@ -1163,6 +1163,7 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="is_active" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User_role" Relationship="EMSModel.FK__User_role__user___2D27B809" FromRole="User" ToRole="User_role" />
           <NavigationProperty Name="Employees" Relationship="EMSModel.FK__Employee__user_i__5CD6CB2B" FromRole="User" ToRole="Employee" />
+          <NavigationProperty Name="Password_Token" Relationship="EMSModel.FK__Password___User___43A1090D" FromRole="User" ToRole="Password_Token" />
         </EntityType>
         <Association Name="FK__Leavebala__leave__47DBAE45">
           <End Type="EMSModel.Leave_type" Role="Leave_type" Multiplicity="1" />
@@ -1336,7 +1337,6 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
           <Property Name="created_on" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Employee_Asset" Relationship="EMSModel.FK__Employee___emplo__72C60C4A" FromRole="Employee" ToRole="Employee_Asset" />
           <NavigationProperty Name="Leaves" Relationship="EMSModel.FK__Leave__employee___09A971A2" FromRole="Employee" ToRole="Leave" />
-          <NavigationProperty Name="Password_Token" Relationship="EMSModel.FK__Password___Emplo__2EA5EC27" FromRole="Employee" ToRole="Password_Token" />
         </EntityType>
         <Association Name="FK__Employee__report__5BE2A6F2">
           <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
@@ -1681,24 +1681,24 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Employee_Id" Type="Int32" Nullable="false" />
+          <Property Name="User_Id" Type="Int32" Nullable="false" />
           <Property Name="Token" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Generated_on" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Employee" Relationship="EMSModel.FK__Password___Emplo__2EA5EC27" FromRole="Password_Token" ToRole="Employee" />
+          <NavigationProperty Name="User" Relationship="EMSModel.FK__Password___User___43A1090D" FromRole="Password_Token" ToRole="User" />
         </EntityType>
-        <Association Name="FK__Password___Emplo__2EA5EC27">
-          <End Type="EMSModel.Employee" Role="Employee" Multiplicity="1" />
+        <Association Name="FK__Password___User___43A1090D">
+          <End Type="EMSModel.User" Role="User" Multiplicity="1" />
           <End Type="EMSModel.Password_Token" Role="Password_Token" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Employee">
+            <Principal Role="User">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Password_Token">
-              <PropertyRef Name="Employee_Id" />
+              <PropertyRef Name="User_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -2031,7 +2031,7 @@ warning 6002: The table/view 'EMS_2.dbo.EMS_Leave_Balance_Temp' does not have a 
               <MappingFragment StoreEntitySet="Password_Token">
                 <ScalarProperty Name="Generated_on" ColumnName="Generated_on" />
                 <ScalarProperty Name="Token" ColumnName="Token" />
-                <ScalarProperty Name="Employee_Id" ColumnName="Employee_Id" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

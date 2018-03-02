@@ -19,6 +19,7 @@ namespace EMS
         {
             this.User_role = new HashSet<User_role>();
             this.Employees = new HashSet<Employee>();
+            this.Password_Token = new HashSet<Password_Token>();
         }
     
         public int id { get; set; }
@@ -30,5 +31,7 @@ namespace EMS
         public virtual ICollection<User_role> User_role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Password_Token> Password_Token { get; set; }
     }
 }

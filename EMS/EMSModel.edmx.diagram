@@ -53,9 +53,9 @@
         <AssociationConnector Association="EMSModel.FK__Asset__status_id__05D8E0BE" />
         <AssociationConnector Association="EMSModel.FK__Asset__type_id__04E4BC85" />
         <AssociationConnector Association="EMSModel.FK__Employee___asset__73BA3083" />
-        <EntityTypeShape EntityType="EMSModel.Password_Token" Width="1.5" PointX="5.25" PointY="32.75" />
-        <AssociationConnector Association="EMSModel.FK__Password___Emplo__2EA5EC27" />
-      </Diagram>
+        <EntityTypeShape EntityType="EMSModel.Password_Token" Width="1.5" PointX="1.5" PointY="0.625" />
+        <AssociationConnector Association="EMSModel.FK__Password___User___43A1090D" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -125,7 +125,7 @@ namespace EMS.Utility
                 mail.To.Add(user_mail);
                 mail.Subject = "Jaishu Consulting pvt. ltd.";
                 mail.Body = "Hi " + username + ",<br><br>We have received a request to reset your Jaishu account password. If you have not placed this request, you can safely ignore this email."
-                    + "<br><br>Click <a href=http://192.168.1.19:8080/"+token+ ">here</a> to set a new password. <br><br>"
+                    + "<br><br>Click <a href=http://192.168.1.21:8080/forgot_password?token=" + token+ ">here</a> to set a new password. <br><br>"
                     + "The reset link will expire in 24 hours."
                     + "<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 mail.IsBodyHtml = true;

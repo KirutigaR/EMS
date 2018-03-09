@@ -185,7 +185,7 @@ namespace EMS.Repository
             try
             {
                 var query = from x in datacontext.Password_Token
-                            where x.Token == Token && x.Generated_on <= DateTime.Now && DbFunctions.AddDays(x.Generated_on, 1) >= DateTime.Now
+                            where x.Token == Token /*&& x.Generated_on <= DateTime.Now && DbFunctions.AddDays(x.Generated_on, 1) >= DateTime.Now*/
                             select x;
                 return query.FirstOrDefault();
             }
@@ -201,13 +201,14 @@ namespace EMS.Repository
             }
         }
 
-        public static void EditUserPassword(User user)
+        public static bool EditUserPassword(User user)
         {
             EMSEntities datacontext = new EMSEntities();
             try
             {
                 datacontext.Entry(user).State = EntityState.Modified;
                 datacontext.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {

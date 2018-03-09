@@ -102,7 +102,8 @@ namespace EMS.Controllers
             HttpResponseMessage response = null;
             try
             {
-                if(CommonRepo.GetActiveTokenObjectByToken(ForgotPassword.token)!= null)
+                Password_Token TokenObject = CommonRepo.GetActiveTokenObjectByToken(ForgotPassword.token);
+                if(TokenObject != null && TokenObject.Generated_on <= DateTime.Now && TokenObject.Generated_on.AddDays(1) >= DateTime.Now)
                 {
                     response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Success", "Valid Token"));
                 }
@@ -130,17 +131,19 @@ namespace EMS.Controllers
                 if(ForgotPassword.token!= null && (ForgotPassword.new_password != null || ForgotPassword.new_password != "") && ForgotPassword.new_password == ForgotPassword.confirm_password)
                 {
                     Password_Token TokenObject = CommonRepo.GetActiveTokenObjectByToken(ForgotPassword.token);
-                    if (TokenObject != null)
+                    if (TokenObject != null && TokenObject.Generated_on <= DateTime.Now && TokenObject.Generated_on.AddDays(1) >= DateTime.Now)
                     {
                         User user_instance = CommonRepo.GetuserByUserId(TokenObject.User_Id);
                         if (user_instance.is_active == 1 && TokenObject.Generated_on <= DateTime.Now && TokenObject.Generated_on.AddDays(1) >= DateTime.Now)
                         {
-                            EmployeeModel Employee_Insatnce = EmployeeRepo.GetEmployeeDetailsByUserId(user_instance.id);
                             user_instance.password = EncryptPassword.CalculateHash(ForgotPassword.new_password);
-                            CommonRepo.EditUserPassword(user_instance);
-                            CommonRepo.DeletePasswordToken(user_instance.id);
-                            MailHandler.ChangePasswordIntimation(Employee_Insatnce.first_name, Employee_Insatnce.email);
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Password changed sucessfully", "Password changed sucessfully"));
+                            if (CommonRepo.EditUserPassword(user_instance))
+                            {
+                                CommonRepo.DeletePasswordToken(user_instance.id);
+                                EmployeeModel Employee_Insatnce = EmployeeRepo.GetEmployeeDetailsByUserId(user_instance.id);
+                                MailHandler.ChangePasswordIntimation(Employee_Insatnce.first_name, Employee_Insatnce.email);
+                                response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Password changed sucessfully", "Password changed sucessfully"));
+                            }
                         }
                         else
                         {

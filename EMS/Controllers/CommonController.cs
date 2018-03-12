@@ -64,26 +64,33 @@ namespace EMS.Controllers
             try
             {
                 Employee employee = CommonRepo.GetEmployeeIdByMailid(forgotpassword.employee_email);
-                User user = CommonRepo.GetuserByUserId(employee.user_id);
-                if(employee != null && user.is_active==1)
+                if(employee!=null)
                 {
-                    Password_Token Token_instance = new Password_Token();
-                    Token_instance.User_Id = user.id;
-                    Token_instance.Token = Guid.NewGuid().ToString();
-                    Token_instance.Generated_on = DateTime.Now;
-                    if (CommonRepo.AddUserToken(Token_instance))
+                    User user = CommonRepo.GetuserByUserId(employee.user_id);
+                    if (user.is_active == 1)
                     {
-                        MailHandler.ForgotPassword(employee.first_name, employee.email, Token_instance.Token);
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Reset password mail has been sent to your email address", "Reset password mail has been sent to your email address"));
+                        Password_Token Token_instance = new Password_Token();
+                        Token_instance.User_Id = user.id;
+                        Token_instance.Token = Guid.NewGuid().ToString();
+                        Token_instance.Generated_on = DateTime.Now;
+                        if (CommonRepo.AddUserToken(Token_instance))
+                        {
+                            MailHandler.ForgotPassword(employee.first_name, employee.email, Token_instance.Token);
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Reset password mail has been sent to your email address", "Reset password mail has been sent to your email address"));
+                        }
+                        else
+                        {
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error", "Error while creating token"));
+                        }
                     }
                     else
                     {
-                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_101", "Application Error" , "Error while creating token"));
+                        response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid User", "Invalid User"));
                     }
                 }
                 else
                 {
-                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_303", "Invalid User", "Invalid User"));
+                    response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_310", "Invalid Mail ID", "Invalid Mail ID"));
                 }
             }
             catch (Exception exception)

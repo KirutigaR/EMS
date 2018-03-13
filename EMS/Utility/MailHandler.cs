@@ -123,7 +123,7 @@ namespace EMS.Utility
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
-                mail.Subject = "Jaishu Consulting pvt. ltd.";
+                mail.Subject = "Reset Password";
                 mail.Body = "Hi " + username + ",<br><br>We have received a request to reset your Jaishu account password. If you have not placed this request, you can safely ignore this email."
                     + "<br><br>Click <a href=http://192.168.1.21:8080/forgot_password?token=" + token+ ">here</a> to set a new password. <br><br>"
                     + "The reset link will expire in 24 hours."
@@ -151,7 +151,7 @@ namespace EMS.Utility
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
-                mail.Subject = "Jaishu Consulting pvt. ltd.";
+                mail.Subject = "Your New Password on Jaishu";
                 mail.Body = "Hi " + username + ",<br><br>Your Login password has been changed recently, <br><br>Contact HR if it is not done by you.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                 mail.IsBodyHtml = true;
                 SmtpServer.Send(mail);
@@ -177,7 +177,7 @@ namespace EMS.Utility
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
                 mail.CC.Add(Constants.HR_MAIL_ID);
-                mail.Subject = "Jaishu Consulting pvt. ltd.";
+                mail.Subject = "Jaishu Asset Managment";
                 if (asset_status == "ASSIGNED")
                 {
                     mail.Body = "Hi " + username + ",<br><br>The following Assets has been <b>Assigned</b> to you on <b>" + assignedon_date.ToString("dd-MMM-yyyy") + "</b>.";

@@ -86,7 +86,7 @@ namespace EMS.Utility
                     case 4://LEAVE_STATUS_CANCELLED = 4
                         mail.To.Add(reporting_to_mailid);
                         mail.CC.Add(user_mail);
-                        mail.Subject = "Jaishu Leave Management";
+                        mail.Subject = "Employee Leave Status";
                         mail.Body = "Hi " + Reportingto_name + ",<br><br>Your team member " + user_name + " cancelled " + leave_type + " from "
                             + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                             + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to check the status.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
@@ -123,7 +123,7 @@ namespace EMS.Utility
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("testems32@gmail.com", "Jaishu EMS");
                 mail.To.Add(user_mail);
-                mail.Subject = "Reset Password";
+                mail.Subject = username + ", here's the link to reset your password";
                 mail.Body = "Hi " + username + ",<br><br>We have received a request to reset your Jaishu account password. If you have not placed this request, you can safely ignore this email."
                     + "<br><br>Click <a href=http://192.168.1.21:8080/forgot_password?token=" + token+ ">here</a> to set a new password. <br><br>"
                     + "The reset link will expire in 24 hours."

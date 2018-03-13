@@ -76,7 +76,7 @@ namespace EMS.Controllers
                         if (CommonRepo.AddUserToken(Token_instance))
                         {
                             MailHandler.ForgotPassword(employee.first_name, employee.email, Token_instance.Token);
-                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Please check your email and find the link to reset your password", "Please check your email and find the link to reset your password"));
+                            response = Request.CreateResponse(HttpStatusCode.OK, new EMSResponseMessage("EMS_001", "Reset password mail has been sent to your email address", "Reset password mail has been sent to your email address"));
                         }
                         else
                         {

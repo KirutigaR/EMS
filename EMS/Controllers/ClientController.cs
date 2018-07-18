@@ -6,13 +6,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EMS.Filters;
 using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 
 namespace EMS.Controllers
 {
-    public class ClientController : ApiController
+	[AuthenticationFilter]
+	public class ClientController : ApiController
     {
         [HttpPost]
         [Route("api/v2/create/client")]

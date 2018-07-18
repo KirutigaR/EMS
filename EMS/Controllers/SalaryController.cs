@@ -1,17 +1,18 @@
-﻿using System;
+﻿using EMS.Filters;
+using EMS.Models;
+using EMS.Repository;
+using EMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using EMS.Repository;
-using EMS.Utility;
-using EMS.Models;
 
 namespace EMS.Controllers
 {
-    public class SalaryController : ApiController
+	[AuthenticationFilter]
+	public class SalaryController : ApiController
     {
         [HttpGet]
         [Route("api/v2/salarystructure/update/{employee_id?}/{ctc?}")]

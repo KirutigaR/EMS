@@ -5,13 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using EMS.Filters;
 using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 
 namespace EMS.Controllers
 {
-    public class PayslipController : ApiController
+	[AuthenticationFilter]
+	public class PayslipController : ApiController
     {
         [Route("api/v2/payslip/generate/{employee_id?}")]
         public HttpResponseMessage GeneratePayslip(int employee_id)//e_id employee_id

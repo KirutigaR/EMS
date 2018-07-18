@@ -1,19 +1,19 @@
-﻿using EMS.Models;
+﻿using EMS.Filters;
+using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Data.Entity.Validation;
-using System.Collections;
 
 namespace EMS.Controllers
 {
-    public class LeaveController : ApiController
+	[AuthenticationFilter]
+	public class LeaveController : ApiController
     {
         [Route("api/v2/holiday/list")]
         public HttpResponseMessage GetHolidayList()
@@ -334,12 +334,12 @@ namespace EMS.Controllers
                     LeaveRepo.UpdateLeaveBalanceSheet(leave_balance_instance);
                     LeaveRepo.AddLeaveHistory(leave);
                     ReportingTo reporting_to = EmployeeRepo.GetReportingtoByEmpId(leave.employee_id);
-                    //Approve leaves which are in past days - phase2.0 Requirement
+                    //Approve leaves which are in past days except type WFH - phase2.0 Requirement
                     if (leave.from_date.Date < DateTime.Now.Date && leave.to_date < DateTime.Now.Date && leave_type != "WFH")
                     {
                         leave.leave_statusid = Constants.LEAVE_STATUS_APPROVED;
                         LeaveRepo.EditLeave(leave);
-                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_APPROVED, employee_instance.email, reporting_to.mailid, reporting_to.emp_name, leave_type);
+                        MailHandler.LeaveMailing(leave.from_date, leave.to_date, employee_instance.first_name, Constants.LEAVE_STATUS_APPROVED, employee_instance.email, reporting_to.mailid, reporting_to.emp_name, leave_type, null/*remarks*/, 1/*system_approval*/);
                     }
                     else
                     {

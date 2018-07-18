@@ -1,18 +1,19 @@
-﻿using System;
+﻿using EMS.Models;
+using EMS.Repository;
+using EMS.Utility;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using EMS.Models;
-using EMS.Repository;
-using EMS.Utility;
+using EMS.Filters;
 
 namespace EMS.Controllers
 {
-    public class TaskController : ApiController
+	[AuthenticationFilter]
+	public class TaskController : ApiController
     {
         [Route("api/v2/task/list/{project_id?}")]
         public HttpResponseMessage GetTaskList(int project_id = 0)//p_id project_id

@@ -1,21 +1,21 @@
-﻿using System;
+﻿using EMS.Filters;
+using EMS.Models;
+using EMS.Repository;
+using EMS.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using EMS.Models;
-using EMS.Repository;
-using EMS.Utility;
 
 namespace EMS.Controllers
 {
-    public class ProjectController : ApiController
+	[AuthenticationFilter]
+	public class ProjectController : ApiController
     {
-        
         [HttpPost]
         [Route("api/v2/project/create")]
         public HttpResponseMessage CreateNewProject(Project project)

@@ -1,28 +1,29 @@
-﻿using System;
+﻿using EMS.Models;
+using EMS.Repository;
+using EMS.Utility;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using EMS.Models;
-using EMS.Repository;
-using EMS.Utility;
-using System.Data.OleDb;
 using System.Threading.Tasks;
 using System.Web;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Configuration;
-using Newtonsoft.Json;
+using System.Web.Http;
+using EMS.Filters;
 
 namespace EMS.Controllers
 {
-/// <summary>
-/// Phase2.0 Requirement - Asset tracking system
-/// </summary>
-    public class AssetController : ApiController
+	[AuthenticationFilter]
+	/// <summary>
+	/// Phase2.0 Requirement - Asset tracking system
+	/// </summary>
+	public class AssetController : ApiController
     {
         /// <summary>
         /// To get the currently available asset types 

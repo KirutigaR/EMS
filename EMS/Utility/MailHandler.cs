@@ -37,7 +37,7 @@ namespace EMS.Utility
             }
             //  }
         }
-        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string Reportingto_name, string leave_type, string remarks = null)
+        public static void LeaveMailing(DateTime from_date, DateTime to_date, string user_name, int status, string user_mail, string reporting_to_mailid, string Reportingto_name, string leave_type, string remarks = null, int system_approval = 0)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace EMS.Utility
                                 + ". <br><br>Kindly login <a href=http://192.168.1.19:8080/>here</a> to approve or reject.<br><br>Regards,<br>Jaishu Consulting Pvt. Ltd.";
                         break;
                     case 2://Constants.LEAVE_STATUS_APPROVED = 2
-                        if (from_date < DateTime.Now.Date && to_date < DateTime.Now.Date && leave_type != "WFH")
+                        if (from_date < DateTime.Now.Date && to_date < DateTime.Now.Date && leave_type != "WFH" && system_approval == 1)
                         {
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);
@@ -65,7 +65,7 @@ namespace EMS.Utility
                                 + from_date.ToString("dd-MMM-yyyy") + " to " + to_date.ToString("dd-MMM-yyyy")
                                 + " is approved automatically by the system. <br><br>Regards,<br> Jaishu Consulting Pvt. Ltd.";
                         }
-                        else
+                        else if (from_date < DateTime.Now.Date && to_date < DateTime.Now.Date && leave_type != "WFH" && system_approval == 0)
                         {
                             mail.To.Add(user_mail);
                             mail.CC.Add(reporting_to_mailid);

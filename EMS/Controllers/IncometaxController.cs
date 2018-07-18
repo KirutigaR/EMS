@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using EMS.Filters;
 using EMS.Models;
 using EMS.Repository;
 using EMS.Utility;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace EMS.Controllers
 {
-    public class IncometaxController : ApiController
+	[AuthenticationFilter]
+	public class IncometaxController : ApiController
     {
         [Route("api/v2/incometax/add")]
         public HttpResponseMessage AddNewTaxDeclaration(Incometax incometax)
